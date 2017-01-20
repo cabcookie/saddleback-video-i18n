@@ -6,17 +6,17 @@ import clone from './clone';
 
 /**
  Make sense of a tab separated text file.
- 
+
  @param rawText {String} - literally the contents of a .txt file.
  @param columnPositions {Object} - the index of the required and optional fields
  @param delimiter {String} [Optional] - a delimiter between parts of a long string.
  */
-function parse(rawText, columnPositions, frameRate, delimiter, columnNameToProcess) {
+export default function parse(rawText, columnPositions, frameRate, delimiter, columnNameToProcess) {
 	delimiter = delimiter || "\t"; // Use tabs by default.
 	columnNameToProcess = columnNameToProcess || "Text";
 	var lineObj = {},
 		retArr = [];
-	
+
 	// check if the line starts and ends with a " character
 	// and delete them
 	var lineLength = rawText.length;
@@ -24,10 +24,10 @@ function parse(rawText, columnPositions, frameRate, delimiter, columnNameToProce
 	if (firstAndLastChar === '""') {
 		rawText = rawText.substring(1, lineLength - 1);
 	}
-	
+
 	// split the line into columns
 	var text = rawText.split(delimiter);
-	
+
 	// get the content of all columns from the line and put them into the right
 	// position of the object
 	lineObj.comp = text[columnPositions.compositionIndex];
@@ -44,10 +44,10 @@ function parse(rawText, columnPositions, frameRate, delimiter, columnNameToProce
 			processedTextArr = processText(colText);
 		}
 	}
-	
+
 	var startTime = timeToSeconds(text[columnPositions.startTimeIndex], frameRate);
 	var endTime = timeToSeconds(text[columnPositions.endTimeIndex], frameRate);
-	
+
 	// If the processed text was empty we just have one slide to process
 	if (processedTextArr.length === 0) {
 		lineObj.startTime = startTime;
@@ -61,7 +61,7 @@ function parse(rawText, columnPositions, frameRate, delimiter, columnNameToProce
 		for (var i = 0; i < processedTextArr.length; i++) {
 			var retObj = clone(lineObj);
 			var textLine = processedTextArr[i];
-			
+
 			// find the element where we need to replace the long text
 			for (var j = 0; j < retObj.layers.length; j++) {
 				var layer = retObj.layers[j];
@@ -69,16 +69,16 @@ function parse(rawText, columnPositions, frameRate, delimiter, columnNameToProce
 					layer.text = textLine;
 				}
 			}
-			
+
 			// now we set the right start and end time for the comp to appear
 			retObj.startTime = startTime + durationPerSlide * i;
 			retObj.endTime = startTime + durationPerSlide * (i + 1);
 			// TODO: we need something to easily change the transition between these newly created slides
-			
+
 			retArr[retArr.length] = retObj;
 		}
 	}
-	
+
 	// Return an object with the parts we need.
 	return retArr;
 }
