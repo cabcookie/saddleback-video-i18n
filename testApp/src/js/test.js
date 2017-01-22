@@ -9,10 +9,10 @@ self.app = appObj(contentAry[0]);
 
 createCompsFromTextFile(contentAry);
 
-function component (newText) {
+function component (textArr) {
   var element = document.createElement('div');
   var text = '<p>';
-  text += _.join(newText.split('\n'), '</p><p>');
+  text += _.join(textArr, '</p><p>');
   text += '</p>';
   element.innerHTML = text;
   return element;

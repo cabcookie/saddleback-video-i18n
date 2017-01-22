@@ -16,7 +16,8 @@ export default function logReport(layers) {
     return result;
   }
 
-  var logProps = ['name', 'startTime', 'inPoint', 'outPoint'];
+  var logProps = ['name', 'startTime', 'inPoint', 'outPoint'],
+    retArr = [];
 
   var result = '';
   for (var i = 0; i < layers.length; i++) {
@@ -36,8 +37,8 @@ export default function logReport(layers) {
       }
     }
 
-    result += '\n';
+    retArr[retArr.length] = result;
   }
 
-  return result;
+  return retArr;
 }
