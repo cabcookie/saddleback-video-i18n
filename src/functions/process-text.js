@@ -8,7 +8,7 @@ export default function processText(text, limit, prevArr) {
 	limit = limit || 80;
 
 	var retArr = prevArr || [],
-		textArr = text.split(' ');
+		textArr = text.split(' '),
 		seperator = '...';
 
 	if (textArr.length < limit) {
