@@ -1,3 +1,6 @@
+var PACKAGE = require('./package.json');
+var bundleName = 'SaddlebackVideoTranslation_v' + PACKAGE.version + '.jsx';
+
 module.exports = {
 	entry: './src/start.js',
 	module: {
@@ -13,6 +16,6 @@ module.exports = {
 		]
 	},
 	output: {
-		filename: 'bundle.js'
+		filename: bundleName
 	}
 }
