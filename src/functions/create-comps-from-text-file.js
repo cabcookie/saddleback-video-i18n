@@ -45,7 +45,7 @@ export default function createCompsFromTextFile(contentAry) {
 			parsedContentLine = parsedContentLineArr[j];
 			var newComp = createGermanComp(parsedContentLine.comp, i + "." + j, parentFolder);
 			placeCompInTimeline(newComp, targetComp, parsedContentLine.startTime, parsedContentLine.endTime);
-			updateTextLayers(newComp, parsedContentLine.layers);
+			updateTextLayers(newComp, parsedContentLine.layers, parentFolder);
 		}
 
 	}
