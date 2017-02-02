@@ -3,6 +3,7 @@
 import checkAndAdjustFontSize from './check-and-adjust-font-size';
 import checkFillinLayerAddresses from './check-fillin-layer-addresses';
 import createAndPositionMasksAndLines from './create-and-position-masks-and-lines';
+import configuration from './configuration';
 
 /**
 Update the text layer of a given comp.
@@ -17,18 +18,14 @@ export default function updateTextLayers(comp, textLayers, parentFolder) {
     return;
   }
 
-  // configuration data
-  var maskLayerNamePrefix = 'Mask';
-  var lineLayerNamePrefix = 'Line';
-  var fillInDelimiter = '[]';
-  var delimiterForNewLines = '{n}';
+  var fillInDelimiter = configuration().fillInDelimiter;
 
   // iterate through all expected text layers
   for (var i = 0; i < textLayers.length; i++) {
     var newText = textLayers[i].text;
 
     if (newText) {
-      newText = newText.split(delimiterForNewLines).join('\n');
+      newText = newText.split(configuration().delimiterForNewLines).join('\n');
 
       // if newText is not empty we first load the data we need to process the text
       var layerName = textLayers[i].layerName;
@@ -52,9 +49,9 @@ export default function updateTextLayers(comp, textLayers, parentFolder) {
       // if this is the case than split text layers and texts
       var arrOfMaskAddresses = checkFillinLayerAddresses(newText, textLayer, fillInDelimiter);
 
-      var maskLayerName = maskLayerNamePrefix + ' ' + layerName[layerName.length - 1];
+      var maskLayerName = configuration().maskLayerNamePrefix + ' ' + layerName[layerName.length - 1];
       var maskLayer = comp.layer(maskLayerName);
-      var lineLayerName = lineLayerNamePrefix + ' ' + layerName[layerName.length - 1];
+      var lineLayerName = configuration().lineLayerNamePrefix + ' ' + layerName[layerName.length - 1];
       var lineLayer = comp.layer(lineLayerName);
       // check if there is no fill in and hide the mask and the line
       // check if there is more than one fill in

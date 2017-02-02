@@ -3,6 +3,7 @@
 import processText from './process-text';
 import timeToSeconds from './time-to-seconds';
 import clone from './clone';
+import configuration from './configuration';
 
 /**
  Make sense of a tab separated text file.
@@ -12,8 +13,8 @@ import clone from './clone';
  @param delimiter {String} [Optional] - a delimiter between parts of a long string.
  */
 export default function parse(rawText, columnPositions, frameRate, delimiter, columnNameToProcess) {
-	delimiter = delimiter || "\t"; // Use tabs by default.
-	columnNameToProcess = columnNameToProcess || "Text";
+	delimiter = delimiter || configuration().standardCSVDelimiter;
+	columnNameToProcess = columnNameToProcess || configuration().columnNameToProcessForSplitting;
 	var lineObj = {},
 		retArr = [];
 

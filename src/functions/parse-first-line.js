@@ -1,4 +1,7 @@
 'use strict';
+
+import configuration from './configuration';
+
 /**
  Parse the first line of a tab separated text file to retrieve
  column positions for further use. The result will be an object where for each
@@ -12,20 +15,20 @@
  just add these additional layer names as columns into your text file and
  that's it. You don't need to re-program this script. Only if you want to
  change the required fields.
- 
+
  @param rawText {String} - literally the contents of a .txt file.
  @param requiredFields {Array} - the array that includes all columns that are required in the text file
  @param delimiter {String} [Optional] - a delimiter between parts of a long string.
  */
 export default function parseFirstLine(rawText, requiredFields, delimiter) {
-	delimiter = delimiter || "\t"; // Use tabs by default.
+	delimiter = delimiter || configuration().standardCSVDelimiter;
 	var text = rawText.split(delimiter);
 	var ret = {
 		layers: []
 	};
-	
+
 	// TODO: validate if a column exists twice
-	
+
 	for (var i = 0; i < text.length; i++) {
 		var requiredFound = false;
 		for (var j = 0; j < requiredFields.length; j++) {
@@ -42,7 +45,7 @@ export default function parseFirstLine(rawText, requiredFields, delimiter) {
 			});
 		}
 	}
-	
+
 	// Return an object with the parts we need.
 	return ret;
 }

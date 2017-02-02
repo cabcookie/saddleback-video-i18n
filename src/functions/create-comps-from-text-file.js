@@ -11,6 +11,7 @@ import parseFirstLine from './parse-first-line';
 import updateTextLayers from './update-text-layers';
 import placeCompInTimeline from './place-comp-in-timeline';
 import parse from './parse';
+import configuration from './configuration';
 
 export default function createCompsFromTextFile(contentAry) {
 	var content = readDocument(contentAry, 0).contentAry,
@@ -27,13 +28,13 @@ export default function createCompsFromTextFile(contentAry) {
 	var fps = targetComp.frameRate;
 
 	// retrieve the name of the comp and create the name for the footage folder
-	var parentFolderName = targetComp.name + " Footage [Script Results]";
+	var parentFolderName = targetComp.name + configuration().parentFolderFootageExtensions;
 
 	// create a parent folder for the new comps
 	var parentFolder = app.project.items.addFolder(parentFolderName);
 
 	// define the required fields in the CSV file for the script to work properly
-	var requiredFields = ['startTime', 'endTime', 'composition'];
+	var requiredFields = configuration().requiredFieldsInCSV;
 	// now parse the first line with the title names to retrieve position in text file
 	var columnPositions = parseFirstLine(content[0], requiredFields);
 

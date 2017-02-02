@@ -1,9 +1,10 @@
 'use strict';
 
+import configuration from './configuration';
+
 export default function checkAndAdjustFontSize(text, textLayer) {
   var textProp = textLayer.property("Source Text");
   var textDocument = textProp.value;
-  var maximumFontSizeChange = -0.10;
 
   // saving some data to make sure the fontSize doesn't get to small
   // and placing the mask and line for the fill ins is possible
@@ -52,7 +53,7 @@ export default function checkAndAdjustFontSize(text, textLayer) {
 
   // check if fontSize is now to small and do something
   var fontSizeChange = newFontSize / oldFontSize - 1;
-  if (fontSizeChange < maximumFontSizeChange) {
+  if (fontSizeChange < configuration().maximumFontSizeChange) {
     // TODO: do something when fontSize is reduced to much
     // maybe we need to switch from a Lower Third to a Full Screen
   }

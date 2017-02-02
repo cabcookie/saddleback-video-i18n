@@ -1,9 +1,14 @@
 'use strict';
 
+import adjustPreComposedCompSize from './adjust-pre-composed-comp-size';
+import findItemIndexByName from './find-item-index-by-name';
+import configuration from './configuration';
+
 export default function createAndPositionMasksAndLines(maskAddr, mask, line, base, parentFolder) {
-  var animationProtectionTime = 2;
-  var tolerancePx = 4;
-  var compLayers = mask.containingComp.layers;
+  var tolerancePx = configuration().tolerancePxForMaskPositioning;
+  var contComp = mask.containingComp;
+  var preComposePrefix = contComp.name.substring(0,7) + configuration().preComposedMaskLayerExtension;
+  var compLayers = contComp.layers;
   var masksForPreCompose = [];
   var parentLayer = mask.parent;
 
@@ -42,7 +47,7 @@ export default function createAndPositionMasksAndLines(maskAddr, mask, line, bas
     maskPropPos.setValue(posMask);
 
     var maskPropScale = currMask.property("Scale");
-    var orgMaskWidth = currMask.sourceRectAtTime(animationProtectionTime, true).width;
+    var orgMaskWidth = currMask.sourceRectAtTime(configuration().animationProtectionTime, true).width;
     var newScale = maskPropScale.value;
     newScale[0] = width / orgMaskWidth * newScale[0];
     maskPropScale.setValue(newScale);
@@ -54,21 +59,17 @@ export default function createAndPositionMasksAndLines(maskAddr, mask, line, bas
     for (var t = 0; t < masksForPreCompose.length; t++) {
       items.push(masksForPreCompose[t].index);
     }
-    var newCompName = mask.name + '-composed';
+    var newCompName = preComposePrefix + mask.name;
     var newComp = compLayers.precompose(items, newCompName);
-    newComp.parentFolder = parentFolder;
+    // var compLayers = app.project.item(findItemIndexByName(contCompName));
+    // newComp.parentFolder = parentFolder;
     var precomposedLayer = compLayers.byName(newCompName);
     precomposedLayer.enabled = false;
 
-    // extend the size of the new comp (3 times larger)
-    newComp.width *= 3;
-    newComp.height *= 3;
-
     // set the parent of the layer to the text
     precomposedLayer.parent = parentLayer;
+
+    // adjust the size of the new comp
+    adjustPreComposedCompSize2(newComp, precomposedLayer);
   }
-
-  // make sure the structure of layers isn't messed up
-  // (lines together, mask on top of the text layer)
-
 }

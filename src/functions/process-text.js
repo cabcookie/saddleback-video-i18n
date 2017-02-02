@@ -1,15 +1,17 @@
 'use strict';
 
+import configuration from './configuration';
+
 export default function processText(text, limit, prevArr) {
 	if (text.length === 0) {
 		return [];
 	}
 
-	limit = limit || 80;
+	limit = limit || configuration().numberOfWordsBeforeSplitting;
 
 	var retArr = prevArr || [],
 		textArr = text.split(' '),
-		seperator = '...';
+		seperator = configuration().seperatorForSplitting;
 
 	if (textArr.length < limit) {
 		retArr[retArr.length] = text;
