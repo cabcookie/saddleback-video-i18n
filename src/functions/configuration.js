@@ -33,15 +33,39 @@ export default function configuration() {
             folderName: 'Sermon',
             compositionsConfig: [{
                 name: 'German Service',
-                'German': 1,
-                'English': 2
+                columnsToSwap: {
+                    'German': 1,
+                    'English': 2
+                },
+                audioSettings: {
+                    'Left Level': 100,
+                    'Right Level': 100,
+                    'Left Pan': 100,
+                    'Right Pan': -100
+                }
             }, {
                 name: 'English Service',
-                'German': 2,
-                'English': 1
+                columnsToSwap: {
+                    'German': 2,
+                    'English': 1
+                },
+                audioSettings: {
+                    'Left Level': 100,
+                    'Right Level': 100,
+                    'Left Pan': -100,
+                    'Right Pan': 100
+                }
             }, {
                 name: 'German YouTube',
-                'German': 1
+                columnsToSwap: {
+                    'German': 1
+                },
+                audioSettings: {
+                    'Left Level': 0,
+                    'Right Level': 100,
+                    'Left Pan': 0,
+                    'Right Pan': 0
+                }
             }],
             dateFormat: 'dd.mm.yyyy'
         },

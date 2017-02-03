@@ -12,6 +12,7 @@ import createMainCompFolder from './create-main-comp-folder';
 import createMainCompAndFootageFolder from './create-main-comp-and-footage-folder';
 import cloneColumnPositionsForMainComp from './clone-column-positions-for-main-comp';
 import adjustCompTypeIfNeeded from './adjust-comp-type-if-needed';
+import masteringComp from './mastering-comp';
 import isEmpty from './is-empty';
 import clone from './clone';
 import configuration from './configuration';
@@ -34,6 +35,9 @@ export default function createCompsFromTextFile(contentAry) {
 	if (mediaFootage) {
 		// get the frameRate of the selected file
 		var fps = mediaFootage.frameRate;
+
+		// load render queue for later rendering of main compositions
+		var renderQueue = app.project.renderQueue;
 
 		// define the required fields in the CSV file for the script to work properly
 		// now parse the first line with the title names to retrieve position in text file
@@ -72,6 +76,10 @@ export default function createCompsFromTextFile(contentAry) {
 					updateTextLayers(newComp, parsedContentLine.layers, main.footageFolder);
 				}
 			}
+
+			// master the audio and add the main comp to the render queue
+			masteringComp(main.comp);
+			renderQueue.items.add(main.comp);
 		}
 	}
 }
