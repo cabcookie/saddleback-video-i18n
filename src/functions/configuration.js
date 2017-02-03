@@ -6,24 +6,47 @@ This function is to emulate a config file for now
 export default function configuration() {
     var settings = {
         compositionYouTubeNameExtension: ' YouTube',
-        compositionTemplates: [{
-            name: 'Lower Third',
-            youtubeAlternative: true,
-            isSizeAlternative: true,
-            sizeAlternative: 'Full Screen'
-        }, {
-            name: 'Full Screen',
-            youtubeAlternative: true,
-            isSizeAlternative: false
-        }, {
-            name: 'Scripture',
-            youtubeAlternative: false,
-            isSizeAlternative: false
-        }, {
-            name: 'Two Columns',
-            youtubeAlternative: true,
-            isSizeAlternative: false
-        }],
+        compositionTemplates: {
+            'Lower Third': {
+                youtubeAlternative: true,
+                isSizeAlternative: true,
+                sizeAlternative: 'Full Screen'
+            },
+            'Full Screen': {
+                youtubeAlternative: true,
+                isSizeAlternative: true
+            },
+            'Full Screen YouTube': {
+                youtubeAlternative: false,
+                isSizeAlternative: false
+            },
+            'Scripture': {
+                youtubeAlternative: false,
+                isSizeAlternative: false
+            },
+            'Two Columns': {
+                youtubeAlternative: true,
+                isSizeAlternative: false
+            }
+        },
+        mainCompositionsToBuild: {
+            folderName: 'Sermon',
+            compositionsConfig: [{
+                name: 'German Service',
+                'German': 1,
+                'English': 2
+            }, {
+                name: 'English Service',
+                'German': 2,
+                'English': 1
+            }, {
+                name: 'German YouTube',
+                'German': 1
+            }],
+            dateFormat: 'dd.mm.yyyy'
+        },
+        minimumSermonDurationInMin: 10,
+        preferredSermonFormat: 'PRPROJ',
         parentFolderFootageExtensions: " Footage [Script Results]",
         requiredFieldsInCSV: ['startTime', 'endTime', 'composition'],
         standardCSVDelimiter: "\t",
@@ -40,5 +63,6 @@ export default function configuration() {
         seperatorForSplitting: '...',
         seperatorForTimeStrings: ":",
     };
+    settings.compositionTemplates['Full Screen'].isSizeAlternative = 'Full Screen' + settings.compositionYouTubeNameExtension;
     return settings;
 }

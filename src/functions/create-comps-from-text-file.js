@@ -1,9 +1,4 @@
-/**
- Create all compositions from a given text file based on templates.
-
- @IMPORTANT: You MUST have a default template composition for the different
- "types" of compositions => "Scripture", "Lower Third", etc.
- */
+'use strict';
 
 import createGermanComp from './create-german-comp';
 import readDocument from './read-document';
@@ -11,8 +6,22 @@ import parseFirstLine from './parse-first-line';
 import updateTextLayers from './update-text-layers';
 import placeCompInTimeline from './place-comp-in-timeline';
 import parse from './parse';
+import dateFormatted from './date-formatted';
+import loadVideoFootage from './load-video-footage';
+import createMainCompFolder from './create-main-comp-folder';
+import createMainCompAndFootageFolder from './create-main-comp-and-footage-folder';
+import cloneColumnPositionsForMainComp from './clone-column-positions-for-main-comp';
+import adjustCompTypeIfNeeded from './adjust-comp-type-if-needed';
+import isEmpty from './is-empty';
+import clone from './clone';
 import configuration from './configuration';
 
+/**
+ Create all compositions from a given text file based on templates.
+
+ @IMPORTANT: You MUST have a default template composition for the different
+ "types" of compositions => "Scripture", "Lower Third", etc.
+ */
 export default function createCompsFromTextFile(contentAry) {
 	var content = readDocument(contentAry, 0).contentAry,
 		contentLength = content.length,
@@ -20,34 +29,49 @@ export default function createCompsFromTextFile(contentAry) {
 		parsedContentLine,
 		parsedContentLineArr;
 
-	// retrieve the current selected comp from the project
-	// this will be the comp where we add the duplicated comps
-	var targetComp = app.project.activeItem;
+	var mediaFootage = loadVideoFootage();
 
-	// get the frameRate of the selected comp
-	var fps = targetComp.frameRate;
+	if (mediaFootage) {
+		// get the frameRate of the selected file
+		var fps = mediaFootage.frameRate;
 
-	// retrieve the name of the comp and create the name for the footage folder
-	var parentFolderName = targetComp.name + configuration().parentFolderFootageExtensions;
+		// define the required fields in the CSV file for the script to work properly
+		// now parse the first line with the title names to retrieve position in text file
+		var columnPositions = parseFirstLine(content[0], configuration().requiredFieldsInCSV);
 
-	// create a parent folder for the new comps
-	var parentFolder = app.project.items.addFolder(parentFolderName);
+		var mainCompFolder = createMainCompFolder();
 
-	// define the required fields in the CSV file for the script to work properly
-	var requiredFields = configuration().requiredFieldsInCSV;
-	// now parse the first line with the title names to retrieve position in text file
-	var columnPositions = parseFirstLine(content[0], requiredFields);
+		// iterate through all comps that needs to be created and adjust
+		// the relevant columns of CSV file
+		var mc = configuration().mainCompositionsToBuild;
+		var cc = mc.compositionsConfig;
+		for (var i = 0; i < cc.length; i++) {
+			var tcConf = cc[i];
 
-	for (var i = 1; i < contentLength; i++) {
-		currentLine = content[i];
-		parsedContentLineArr = parse(currentLine, columnPositions, fps);
+			var main = createMainCompAndFootageFolder(mainCompFolder, tcConf, mediaFootage);
+				// comp: targetComp,
+				// footageFolder: compFootageFolder
 
-		for (var j = 0; j < parsedContentLineArr.length; j++) {
-			parsedContentLine = parsedContentLineArr[j];
-			var newComp = createGermanComp(parsedContentLine.comp, i + "." + j, parentFolder);
-			placeCompInTimeline(newComp, targetComp, parsedContentLine.startTime, parsedContentLine.endTime);
-			updateTextLayers(newComp, parsedContentLine.layers, parentFolder);
+			var colPos = cloneColumnPositionsForMainComp(columnPositions, tcConf);
+
+			main.comp.openInViewer();
+
+			// now process all activities to create comps from template
+			// place the comps in the timeline and modify the text layers
+			for (var c = 1; c < content.length; c++) {
+				currentLine = content[c];
+				parsedContentLineArr = parse(currentLine, colPos, fps);
+
+				for (var j = 0; j < parsedContentLineArr.length; j++) {
+					parsedContentLine = parsedContentLineArr[j];
+
+					adjustCompTypeIfNeeded(tcConf, parsedContentLine);
+
+					var newComp = createGermanComp(parsedContentLine.comp, c + "." + j, main.footageFolder);
+					placeCompInTimeline(newComp, main.comp, parsedContentLine.startTime, parsedContentLine.endTime);
+					updateTextLayers(newComp, parsedContentLine.layers, main.footageFolder);
+				}
+			}
 		}
-
 	}
 }

@@ -70,6 +70,6 @@ export default function createAndPositionMasksAndLines(maskAddr, mask, line, bas
     precomposedLayer.parent = parentLayer;
 
     // adjust the size of the new comp
-    adjustPreComposedCompSize2(newComp, precomposedLayer);
+    adjustPreComposedCompSize(newComp, precomposedLayer);
   }
 }

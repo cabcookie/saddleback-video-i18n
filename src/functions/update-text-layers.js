@@ -30,39 +30,42 @@ export default function updateTextLayers(comp, textLayers, parentFolder) {
       // if newText is not empty we first load the data we need to process the text
       var layerName = textLayers[i].layerName;
       var textLayer = comp.layer(layerName);
-      var resultText = newText.replace(fillInDelimiter[0],'').replace(fillInDelimiter[1],'');
 
-      // store baselines assuming the mask and line start at the very
-      // left of the template text and we only need to know how far
-      // it will be moved left or right
-      var bl = textLayer.property("Source Text").value.baselineLocs;
-      var baselines = {
-        x: bl[0],
-        y: bl[1]
-      };
+      if (textLayer) {
+          var resultText = newText.replace(fillInDelimiter[0],'').replace(fillInDelimiter[1],'');
 
-      // adjust the fontSize if the text doesn't fit into the text field
-      checkAndAdjustFontSize(resultText, textLayer);
+          // store baselines assuming the mask and line start at the very
+          // left of the template text and we only need to know how far
+          // it will be moved left or right
+          var bl = textLayer.property("Source Text").value.baselineLocs;
+          var baselines = {
+            x: bl[0],
+            y: bl[1]
+          };
 
-      // evaluate if there is more than one fill in
-      // or a fill in is splitted over lines
-      // if this is the case than split text layers and texts
-      var arrOfMaskAddresses = checkFillinLayerAddresses(newText, textLayer, fillInDelimiter);
+          // adjust the fontSize if the text doesn't fit into the text field
+          checkAndAdjustFontSize(resultText, textLayer);
 
-      var maskLayerName = configuration().maskLayerNamePrefix + ' ' + layerName[layerName.length - 1];
-      var maskLayer = comp.layer(maskLayerName);
-      var lineLayerName = configuration().lineLayerNamePrefix + ' ' + layerName[layerName.length - 1];
-      var lineLayer = comp.layer(lineLayerName);
-      // check if there is no fill in and hide the mask and the line
-      // check if there is more than one fill in
-      if (arrOfMaskAddresses.length === 0) {
-        textLayer.trackMatteType = TrackMatteType.NO_TRACK_MATTE;
-        if (lineLayer) {
-            lineLayer.remove();
-        }
-      } else {
-        // fill ins found, so we need to create and position the mask layers
-        createAndPositionMasksAndLines(arrOfMaskAddresses, maskLayer, lineLayer, baselines, parentFolder);
+          // evaluate if there is more than one fill in
+          // or a fill in is splitted over lines
+          // if this is the case than split text layers and texts
+          var arrOfMaskAddresses = checkFillinLayerAddresses(newText, textLayer, fillInDelimiter);
+
+          var maskLayerName = configuration().maskLayerNamePrefix + ' ' + layerName[layerName.length - 1];
+          var maskLayer = comp.layer(maskLayerName);
+          var lineLayerName = configuration().lineLayerNamePrefix + ' ' + layerName[layerName.length - 1];
+          var lineLayer = comp.layer(lineLayerName);
+          // check if there is no fill in and hide the mask and the line
+          // check if there is more than one fill in
+          if (arrOfMaskAddresses.length === 0) {
+            textLayer.trackMatteType = TrackMatteType.NO_TRACK_MATTE;
+            if (lineLayer) {
+                lineLayer.remove();
+            }
+          } else {
+            // fill ins found, so we need to create and position the mask layers
+            createAndPositionMasksAndLines(arrOfMaskAddresses, maskLayer, lineLayer, baselines, parentFolder);
+          }
       }
     }
   }
