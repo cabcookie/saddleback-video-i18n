@@ -18,7 +18,7 @@ export default function checkFillinLayerAddresses(text, textLayer, delimiter) {
   };
   var maskAddressAry = [];
 
-  for (var i = 1; i < textAry.length; i++) {
+  for (var i = 1, tl = textAry.length; i < tl; i++) {
     // we split the fill in from the text behind it and evaluate
     // if there is a line break within the fill in
     var elem = textAry[i].split(delimiter[1]);

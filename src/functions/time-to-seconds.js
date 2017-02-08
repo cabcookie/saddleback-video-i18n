@@ -9,9 +9,12 @@ import configuration from './configuration';
  @param fps {float} - the frames per seconds to consider
  */
 export default function timeToSeconds(timeStr, fps) {
-	var time = timeStr.split(configuration().seperatorForTimeStrings);
-	var seconds = parseInt(time[1]);
-	seconds += parseInt(time[0]) * 60;
-	seconds += parseInt(time[2]) / fps;
+	var time,seconds=0;
+	time = timeStr.split(";");
+
+	seconds += parseInt(time[0]) * 60 * 60; // hours
+	seconds += parseInt(time[1]) * 60; // minutes
+	seconds += parseInt(time[2]); // seconds
+	seconds += parseInt(time[3]) / fps; // frames
 	return seconds;
 }

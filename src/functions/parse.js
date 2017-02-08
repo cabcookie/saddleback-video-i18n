@@ -35,7 +35,7 @@ export default function parse(rawText, columnPositions, frameRate, delimiter, co
 		lineObj.comp = text[columnPositions.compositionIndex];
 		lineObj.layers = [];
 		var processedTextArr = [];
-		for (var i = 0; i < columnPositions.layers.length; i++) {
+		for (var i = 0, cpll = columnPositions.layers.length; i < cpll; i++) {
 			var layer = columnPositions.layers[i];
 			var colText = text[layer.layerIndex];
 			lineObj.layers.push({
@@ -60,12 +60,12 @@ export default function parse(rawText, columnPositions, frameRate, delimiter, co
 			// we create an array of items per slide/line with all the other
 			// values of the original comp (like compName)
 			var durationPerSlide = (endTime - startTime) / processedTextArr.length;
-			for (var i = 0; i < processedTextArr.length; i++) {
+			for (var i = 0, ptl = processedTextArr.length; i < ptl; i++) {
 				var retObj = clone(lineObj);
 				var textLine = processedTextArr[i];
 
 				// find the element where we need to replace the long text
-				for (var j = 0; j < retObj.layers.length; j++) {
+				for (var j = 0, rl = retObj.layers.length; j < rl; j++) {
 					var layer = retObj.layers[j];
 					if (layer.layerName === columnNameToProcess) {
 						layer.text = textLine;

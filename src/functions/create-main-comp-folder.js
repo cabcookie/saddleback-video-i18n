@@ -8,7 +8,7 @@ export default function createMainCompFolder() {
     // if not create it
     var mainCompFolder = {};
     var items = app.project.items;
-    for (var i = 1; i <= items.length; i++) {
+    for (var i = 1, il = items.length; i <= il; i++) {
         var it = items[i];
         if (it instanceof FolderItem) {
             if (it.name === configuration().mainCompositionsToBuild.folderName) {

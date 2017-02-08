@@ -17,7 +17,7 @@ export default function adjustPreComposedCompSize(comp, pcLayer) {
             comp.width *= 3;
             comp.height *= 3;
 
-            for (var l = 1; l <= comp.layers.length; l++) {
+            for (var l = 1, cl = comp.layers.length; l <= cl; l++) {
                 var lay = comp.layers[l];
                 var posProp = lay.property("Position");
                 var pos = posProp.value;

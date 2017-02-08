@@ -29,9 +29,9 @@ export default function parseFirstLine(rawText, requiredFields, delimiter) {
 
 	// TODO: validate if a column exists twice
 
-	for (var i = 0; i < text.length; i++) {
+	for (var i = 0, tl = text.length; i < tl; i++) {
 		var requiredFound = false;
-		for (var j = 0; j < requiredFields.length; j++) {
+		for (var j = 0, rfl = requiredFields.length; j < rfl; j++) {
 			if (text[i].toUpperCase() === requiredFields[j].toUpperCase()) {
 				var attributeName = requiredFields[j] + "Index";
 				ret[attributeName] = i;

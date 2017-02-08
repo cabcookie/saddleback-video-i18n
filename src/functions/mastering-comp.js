@@ -14,7 +14,7 @@ export default function masteringComp(comp) {
 
     // find the audioSettings for the current comp
     var audioSettings;
-    for (var i = 0; i < cc.length; i++) {
+    for (var i = 0, ccl = cc.length; i < ccl; i++) {
         var n = cc[i].name;
         if (comp.name.indexOf(n) === 0) {
             audioSettings = cc[i].audioSettings;

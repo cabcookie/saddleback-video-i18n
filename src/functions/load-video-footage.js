@@ -5,7 +5,7 @@ export default function loadVideoFootage() {
     // or for a Dynamic Link file
     var items = app.project.items;
     var mediaResult = [];
-    for (var i = 1; i <= items.length; i++) {
+    for (var i = 1, il = items.length; i <= il; i++) {
         var it = items[i];
         if (it instanceof FootageItem) {
             if (it.hasAudio && it.hasVideo && it.duration > configuration().minimumSermonDurationInMin*60) {
@@ -35,7 +35,7 @@ export default function loadVideoFootage() {
         message += 'There seems to be more than one footage for the sermon. We recommend to go in with this footage:\n';
         message += mediaResult[0].fileName;
         message += '\n\nBut there are these other files found as well:\n';
-        for (var m = 1; m < mediaResult.length; m++) {
+        for (var m = 1, mrl = mediaResult.length; m < mrl; m++) {
             message += mediaResult[m].fileName;
             message += '\n';
         }

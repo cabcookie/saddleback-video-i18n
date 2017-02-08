@@ -56,7 +56,7 @@ export default function createAndPositionMasksAndLines(maskAddr, mask, line, bas
   // put all masks into a precomp
   if (maskAddr.length > 1) {
     var items = [];
-    for (var t = 0; t < masksForPreCompose.length; t++) {
+    for (var t = 0, ml = masksForPreCompose.length; t < ml; t++) {
       items.push(masksForPreCompose[t].index);
     }
     var newCompName = preComposePrefix + mask.name;
