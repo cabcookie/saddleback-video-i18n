@@ -93,8 +93,8 @@ export default function createCompsFromTextFile(contentAry) {
 							templateOkay = updateTextLayers(newComp, parsedContentLine.layers, main.footageFolder);
 							cfg = configuration().compositionTemplates[parsedContentLine.comp];
 							if (!templateOkay) {
-								newComp.remove();
 								if (cfg.isSizeAlternative) {
+									newComp.remove();
 									parsedContentLine.comp = cfg.sizeAlternative;
 								} else {
 									// we were not able to find an alternative for the current template

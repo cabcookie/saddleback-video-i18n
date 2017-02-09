@@ -13,6 +13,11 @@ export default function configuration() {
                     isSizeAlternative: true,
                     sizeAlternative: 'Full Screen'
                 },
+                'Lower Third YouTube': {
+                    youtubeAlternative: false,
+                    isSizeAlternative: true,
+                    sizeAlternative: 'Full Screen YouTube'
+                },
                 'Full Screen': {
                     youtubeAlternative: true,
                     isSizeAlternative: true
