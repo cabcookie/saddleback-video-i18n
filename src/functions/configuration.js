@@ -33,18 +33,6 @@ export default function configuration() {
             mainCompositionsToBuild: {
                 folderName: 'Sermon  - DELETE NEXT SCRIPT START',
                 compositionsConfig: [{
-                    name: 'German Service',
-                    columnsToSwap: {
-                        'German': 1,
-                        'English': 2
-                    },
-                    audioSettings: {
-                        'Left Level': 100,
-                        'Right Level': 100,
-                        'Left Pan': 100,
-                        'Right Pan': -100
-                    }
-                }, {
                     name: 'English Service',
                     columnsToSwap: {
                         'German': 2,
