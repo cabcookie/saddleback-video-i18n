@@ -4,7 +4,13 @@
 This function is to emulate a config file for now
 */
 export default function configuration() {
-    if (this.settings === undefined) {
+    var toCreate = true;
+    if ("settings" in this) {
+        if ("compositionTemplates" in this.settings) {
+            toCreate = false;
+        }
+    }
+    if (toCreate) {
         this.settings = {
             compositionYouTubeNameExtension: ' YouTube',
             compositionTemplates: {
@@ -28,10 +34,6 @@ export default function configuration() {
                 },
                 'Scripture': {
                     youtubeAlternative: false,
-                    isSizeAlternative: false
-                },
-                'Two Columns': {
-                    youtubeAlternative: true,
                     isSizeAlternative: false
                 }
             },
@@ -80,7 +82,7 @@ export default function configuration() {
             numberOfWordsBeforeSplitting: 80,
             seperatorForSplitting: '...',
         };
-        var replaceWithYoutube = ['Full Screen', 'Two Columns'];
+        var replaceWithYoutube = ['Full Screen'];
         for (var i = 0, l = replaceWithYoutube.length; i < l; i++) {
             var name = replaceWithYoutube[i];
             this.settings.compositionTemplates[name].sizeAlternative = name + this.settings.compositionYouTubeNameExtension;

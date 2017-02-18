@@ -10,7 +10,7 @@ export default function checkMarkersInTemplates() {
     var markersNeeded = 2;
     var ytext = configuration().compositionYouTubeNameExtension;
     var ctemp = configuration().compositionTemplates;
-    var comp, markers, cfg, ytname, ytsa, name;
+    var comp, markers, cfg, ytname, ytsa, name, index;
     var compWithoutMarkers = [];
     var compTemps = [];
     var comps = [];
@@ -36,7 +36,17 @@ export default function checkMarkersInTemplates() {
         if(u.hasOwnProperty(compTemps[i])) {
             continue;
         }
-        comps.push(app.project.item(findItemIndexByName(compTemps[i])));
+        index = findItemIndexByName(compTemps[i]);
+        if (index === null) {
+            var message = "";
+            message += "Missing Composition\n";
+            message += "Composition '";
+            message += compTemps[i];
+            message += "' is missing. Make sure to create it or remove it from the composition settings.";
+            alert(message);
+            return false;
+        }
+        comps.push(app.project.item(index));
         u[compTemps[i]] = 1;
     }
 

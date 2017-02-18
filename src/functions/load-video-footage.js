@@ -4,11 +4,12 @@ export default function loadVideoFootage() {
     // search for a video file with the mininum duration
     // or for a Dynamic Link file
     var items = app.project.items;
+    var minDuration = configuration().minimumSermonDurationInMin*60;
     var mediaResult = [];
     for (var i = 1, il = items.length; i <= il; i++) {
         var it = items[i];
         if (it instanceof FootageItem) {
-            if (it.hasAudio && it.hasVideo && it.duration > configuration().minimumSermonDurationInMin*60) {
+            if (it.hasAudio && it.hasVideo && it.duration > minDuration) {
                 // when we found a video footage we push it into a result array
                 // for further review later
                 var ext = it.name.split('.');

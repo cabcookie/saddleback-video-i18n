@@ -52,13 +52,14 @@ export default function updateTextLayers(comp, textLayers, parentFolder) {
                 }
                 // evaluate if there is more than one fill in
                 // or a fill in is splitted over lines
-                // if this is the case than split text layers and texts
+                // if this is the case than duplicate masks and lines and precompose them
                 var arrOfMaskAddresses = checkFillinLayerAddresses(newText, textLayer, fillInDelimiter);
 
                 var maskLayerName = configuration().maskLayerNamePrefix + ' ' + layerName[layerName.length - 1];
                 var maskLayer = comp.layer(maskLayerName);
                 var lineLayerName = configuration().lineLayerNamePrefix + ' ' + layerName[layerName.length - 1];
                 var lineLayer = comp.layer(lineLayerName);
+
                 // check if there is no fill in and hide the mask and the line
                 // check if there is more than one fill in
                 if (arrOfMaskAddresses.length === 0) {
@@ -67,8 +68,36 @@ export default function updateTextLayers(comp, textLayers, parentFolder) {
                         lineLayer.remove();
                     }
                 } else {
-                    // fill ins found, so we need to create and position the mask layers
-                    createAndPositionMasksAndLines(arrOfMaskAddresses, maskLayer, lineLayer, baselines, parentFolder);
+                    if (maskLayer) {
+                        if (lineLayer) {
+                            // fill ins found, so we need to create and position the mask layers
+                            createAndPositionMasksAndLines(arrOfMaskAddresses, maskLayer, lineLayer, baselines, parentFolder);
+                        } else {
+                            // if lineLayer doesn't exist something is wrong with the template
+                            var message = "";
+                            message += "Template Error\n";
+                            message += "The current composition '";
+                            message += comp.name;
+                            message += "' shows that the layer '";
+                            message += lineLayerName;
+                            message += "' is missing. Please correct and run the script again.\n\n";
+                            message += "The script will continue to execute.";
+                            alert(message);
+                            return true;
+                        }
+                    } else {
+                        // if maskLayer doesn't exist something is wrong with the template
+                        var message = "";
+                        message += "Template Error\n";
+                        message += "The current composition '";
+                        message += comp.name;
+                        message += "' shows that the layer '";
+                        message += maskLayerName;
+                        message += "' is missing. Please correct and run the script again.\n\n";
+                        message += "The script will continue to execute.";
+                        alert(message);
+                        return true;
+                    }
                 }
             }
         }
