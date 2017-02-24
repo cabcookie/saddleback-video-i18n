@@ -33,6 +33,10 @@ export default function configuration() {
                     isSizeAlternative: false
                 },
                 'Scripture': {
+                    youtubeAlternative: true,
+                    isSizeAlternative: true
+                },
+                'Scripture YouTube': {
                     youtubeAlternative: false,
                     isSizeAlternative: false
                 }
@@ -82,7 +86,7 @@ export default function configuration() {
             numberOfWordsBeforeSplitting: 80,
             seperatorForSplitting: '...',
         };
-        var replaceWithYoutube = ['Full Screen'];
+        var replaceWithYoutube = ['Full Screen', 'Scripture'];
         for (var i = 0, l = replaceWithYoutube.length; i < l; i++) {
             var name = replaceWithYoutube[i];
             this.settings.compositionTemplates[name].sizeAlternative = name + this.settings.compositionYouTubeNameExtension;
