@@ -13,94 +13,116 @@ Update the text layer of a given comp.
 @param textLayers {Array} - an array of text layers with its name and new content.
 @param parentFolder {Object} - the parentFolder where pre-composed layers will be consolidated
 */
-export default function updateTextLayers(comp, textLayers, parentFolder) {
+export default function updateTextLayers(comp, parsedContentLine, parentFolder) {
     if (!comp) {
-        return;
+        return [];
     }
 
-    var fillInDelimiter = configuration().fillInDelimiter;
-    var templateOkay;
+    var textLayers, textLayer, fillInDelimiter, resultingTextLayers,
+        newText, layerName, resultText, originalFontSize, maxFontSizeChange, originalLayerName,
+        textProp, textDocument, bl, baselines, templateCompName, textForLayer,
+        arrOfMaskAddresses, maskLayerName, maskLayer, lineLayer, lineLayerName,
+        message, textIsSplittable;
+
+    textLayers = parsedContentLine.layers;
+    fillInDelimiter = configuration().fillInDelimiter;
 
     // iterate through all expected text layers
     for (var i = 0, tl = textLayers.length; i < tl; i++) {
-        var newText = textLayers[i].text;
+        newText = textLayers[i].text;
 
         if (newText) {
             newText = newText.split(configuration().delimiterForNewLines).join('\n');
 
             // if newText is not empty we first load the data we need to process the text
-            var layerName = textLayers[i].layerName;
-            var textLayer = comp.layer(layerName);
+            layerName = textLayers[i].layerName;
+            originalLayerName = textLayers[i].originalLayerName;
+            textLayer = comp.layer(layerName);
 
             if (textLayer) {
-                var resultText = newText.replace(fillInDelimiter[0],'').replace(fillInDelimiter[1],'');
+                resultText = newText.replace(fillInDelimiter[0],'').replace(fillInDelimiter[1],'');
 
                 // store baselines assuming the mask and line start at the very
                 // left of the template text and we only need to know how far
                 // it will be moved left or right
-                var bl = textLayer.property("Source Text").value.baselineLocs;
-                var baselines = {
+                textProp = textLayer.property("Source Text");
+                textDocument = textProp.value;
+                bl = textDocument.baselineLocs;
+                baselines = {
                     x: bl[0],
                     y: bl[1]
                 };
 
-                // adjust the fontSize if the text doesn't fit into the text field
-                templateOkay = checkAndAdjustFontSize(resultText, textLayer);
+                // let's check if we have permission to split the text
+                templateCompName = comp.name.split(" ");
+                templateCompName.shift();
+                templateCompName = templateCompName.join(" ");
+                textIsSplittable = configuration().compositionTemplates[templateCompName].splitLongTexts;
 
-                if (!templateOkay) {
-                    return false;
+                // try to fit the text into the layer by adjusting the fontSize
+                resultingTextLayers = checkAndAdjustFontSize(resultText, textLayer, originalLayerName, textIsSplittable);
+
+                if (resultingTextLayers.length == 0) {
+                    return [];
                 }
-                // evaluate if there is more than one fill in
-                // or a fill in is splitted over lines
-                // if this is the case than duplicate masks and lines and precompose them
-                var arrOfMaskAddresses = checkFillinLayerAddresses(newText, textLayer, fillInDelimiter);
 
-                var maskLayerName = configuration().maskLayerNamePrefix + ' ' + layerName[layerName.length - 1];
-                var maskLayer = comp.layer(maskLayerName);
-                var lineLayerName = configuration().lineLayerNamePrefix + ' ' + layerName[layerName.length - 1];
-                var lineLayer = comp.layer(lineLayerName);
+                // the script can't handle text where layers are splitted
+                // so the template should not have any masks and layers
+                // so we make sure we don't check for fill ins and thus
+                // replace the splitted text with the full text again
+                if (!textIsSplittable) {
+                    // evaluate if there is more than one fill in
+                    // or a fill in is splitted over lines
+                    // if this is the case than duplicate masks and lines and precompose them
+                    arrOfMaskAddresses = checkFillinLayerAddresses(newText, textLayer, fillInDelimiter);
 
-                // check if there is no fill in and hide the mask and the line
-                // check if there is more than one fill in
-                if (arrOfMaskAddresses.length === 0) {
-                    textLayer.trackMatteType = TrackMatteType.NO_TRACK_MATTE;
-                    if (lineLayer) {
-                        lineLayer.remove();
-                    }
-                } else {
-                    if (maskLayer) {
+                    maskLayerName = configuration().maskLayerNamePrefix + ' ' + layerName[layerName.length - 1];
+                    maskLayer = comp.layer(maskLayerName);
+                    lineLayerName = configuration().lineLayerNamePrefix + ' ' + layerName[layerName.length - 1];
+                    lineLayer = comp.layer(lineLayerName);
+
+                    // check if there is no fill in and hide the mask and the line
+                    // check if there is more than one fill in
+                    if (arrOfMaskAddresses.length === 0) {
+                        textLayer.trackMatteType = TrackMatteType.NO_TRACK_MATTE;
                         if (lineLayer) {
-                            // fill ins found, so we need to create and position the mask layers
-                            createAndPositionMasksAndLines(arrOfMaskAddresses, maskLayer, lineLayer, baselines, parentFolder);
+                            lineLayer.remove();
+                        }
+                    } else {
+                        if (maskLayer) {
+                            if (lineLayer) {
+                                // fill ins found, so we need to create and position the mask layers
+                                createAndPositionMasksAndLines(arrOfMaskAddresses, maskLayer, lineLayer, baselines, parentFolder);
+                            } else {
+                                // if lineLayer doesn't exist something is wrong with the template
+                                message = "";
+                                message += "Template Error\n";
+                                message += "The current composition '";
+                                message += comp.name;
+                                message += "' shows that the layer '";
+                                message += lineLayerName;
+                                message += "' is missing. Please correct and run the script again.\n\n";
+                                message += "The script will continue to execute.";
+                                alert(message);
+                                return resultingTextLayers;
+                            }
                         } else {
-                            // if lineLayer doesn't exist something is wrong with the template
-                            var message = "";
+                            // if maskLayer doesn't exist something is wrong with the template
+                            message = "";
                             message += "Template Error\n";
                             message += "The current composition '";
                             message += comp.name;
                             message += "' shows that the layer '";
-                            message += lineLayerName;
+                            message += maskLayerName;
                             message += "' is missing. Please correct and run the script again.\n\n";
                             message += "The script will continue to execute.";
                             alert(message);
-                            return true;
+                            return resultingTextLayers;
                         }
-                    } else {
-                        // if maskLayer doesn't exist something is wrong with the template
-                        var message = "";
-                        message += "Template Error\n";
-                        message += "The current composition '";
-                        message += comp.name;
-                        message += "' shows that the layer '";
-                        message += maskLayerName;
-                        message += "' is missing. Please correct and run the script again.\n\n";
-                        message += "The script will continue to execute.";
-                        alert(message);
-                        return true;
                     }
                 }
             }
         }
     }
-    return true;
+    return resultingTextLayers;
 }

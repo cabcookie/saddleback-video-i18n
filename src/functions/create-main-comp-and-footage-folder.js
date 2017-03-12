@@ -2,6 +2,7 @@
 
 import dateFormatted from './date-formatted';
 import configuration from './configuration';
+import findItemIndexByName from './find-item-index-by-name';
 
 export default function createMainCompAndFootageFolder(mainCompFolder, tcConf, mediaFootage) {
     var sunday = new Date();
@@ -9,6 +10,15 @@ export default function createMainCompAndFootageFolder(mainCompFolder, tcConf, m
 
     var compName = tcConf.name + ' ' + dateFormatted(sunday);
     var targetComp = app.project.items.addComp(compName, mediaFootage.width, mediaFootage.height, mediaFootage.pixelAspect, mediaFootage.duration, mediaFootage.frameRate);
+
+    // we check for the first template composition weather it has a drop frame timecode
+    var firstTemplateName = '';
+    for (firstTemplateName in configuration().compositionTemplates) {
+        break;
+    }
+    var index = findItemIndexByName(firstTemplateName);
+    targetComp.dropFrame = app.project.item(index).dropFrame;
+
     targetComp.layers.add(mediaFootage);
     targetComp.parentFolder = mainCompFolder;
     // this will be the comp where we add the duplicated comps

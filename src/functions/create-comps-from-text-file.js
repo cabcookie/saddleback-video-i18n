@@ -29,7 +29,6 @@ export default function createCompsFromTextFile(contentAry) {
 		contentLength = content.length,
 		currentLine,
 		parsedContentLine,
-		parsedContentLineArr,
 		mediaFootage,
 		fps,
 		renderQueue,
@@ -37,7 +36,7 @@ export default function createCompsFromTextFile(contentAry) {
 		columnPositions,
 		mainCompFolder,
 		newComp,
-		templateOkay,
+		resultingTextLayers,
 		message;
 
 	mediaFootage = loadVideoFootage();
@@ -77,49 +76,47 @@ export default function createCompsFromTextFile(contentAry) {
 				// place the comps in the timeline and modify the text layers
 				for (var c = 1, col = content.length; c < col; c++) {
 					currentLine = content[c];
-					parsedContentLineArr = parse(currentLine, colPos, fps);
+					parsedContentLine = parse(currentLine, colPos, fps);
 
-					for (var j = 0, pcll = parsedContentLineArr.length; j < pcll; j++) {
-						parsedContentLine = parsedContentLineArr[j];
-						adjustCompTypeIfNeeded(tcConf, parsedContentLine);
+					adjustCompTypeIfNeeded(tcConf, parsedContentLine);
 
-						// we try to use the requested template
-						// if the text is too long for this template we
-						// need to switch to an alternative template
-						// if there is none we inform the user and stop the script
-						templateOkay = false;
-						while (!templateOkay) {
-							newComp = createGermanComp(parsedContentLine.comp, c + "." + j, main.footageFolder);
-							templateOkay = updateTextLayers(newComp, parsedContentLine.layers, main.footageFolder);
-							cfg = configuration().compositionTemplates[parsedContentLine.comp];
-							if (!templateOkay) {
-								if (cfg.isSizeAlternative) {
-									newComp.remove();
-									parsedContentLine.comp = cfg.sizeAlternative;
-								} else {
-									// we were not able to find an alternative for the current template
-									// however the text is too long for this template and therefor
-									// we inform the user and stop the script
-									message = "Text too long for template\n";
-									message += "The template \n";
-									message += "    '"+ parsedContentLine.comp +"'\n\n";
-									message += "has text layers where the expected text doesn't fit. Thus the composition \n";
-									message += "    '"+ c+"."+j + " "+ parsedContentLine.comp +"'\n\n";
-									message += "could not be created in the main comp \n";
-									message += "    '"+ main.comp.name +"'.\n\n";
-									message += "You should create a new template where the text may fit and adjust the CSV file accordingly.";
-									alert(message);
-									return;
-								}
+					// we try to use the requested template
+					// if the text is too long for this template we
+					// need to switch to an alternative template
+					// if there is none we inform the user and stop the script
+					resultingTextLayers = [];
+					while (resultingTextLayers.length == 0) {
+						newComp = createGermanComp(parsedContentLine.comp, c, main.footageFolder);
+						resultingTextLayers = updateTextLayers(newComp, parsedContentLine, main.footageFolder);
+						cfg = configuration().compositionTemplates[parsedContentLine.comp];
+						if (resultingTextLayers.length == 0) {
+							if (cfg.isSizeAlternative) {
+								newComp.remove();
+								parsedContentLine.comp = cfg.sizeAlternative;
+							} else {
+								// we were not able to find an alternative for the current template
+								// however the text is too long for this template and therefor
+								// we inform the user and stop the script
+								message = "Text too long for template\n";
+								message += "The template \n";
+								message += "    '"+ parsedContentLine.comp +"'\n\n";
+								message += "has text layers where the expected text doesn't fit. Thus the composition \n";
+								message += "    '"+ c+"."+j + " "+ parsedContentLine.comp +"'\n\n";
+								message += "could not be created in the main comp \n";
+								message += "    '"+ main.comp.name +"'.\n\n";
+								message += "You should create a new template where the text may fit and adjust the CSV file accordingly.";
+								alert(message);
+								return;
 							}
 						}
-
-						// adjust comp start and end times by using the configuration information
-						// for the template comp (inBgFullyCovered and outBgFullyCovered)
-						startTime = parsedContentLine.startTime - cfg.inBgFullyCovered;
-						endTime = parsedContentLine.endTime + cfg.outBgFullyCovered;
-						placeCompInTimeline(newComp, main.comp, startTime, endTime);
 					}
+
+					// adjust comp start and end times by using the configuration information
+					// for the template comp (inBgFullyCovered and outBgFullyCovered)
+					startTime = parsedContentLine.startTime - cfg.inBgFullyCovered;
+					endTime = parsedContentLine.endTime + cfg.outBgFullyCovered;
+					placeCompInTimeline(newComp, main.comp, startTime, endTime);
+					// TODO: if layers are splitted we need to adjust the timing in the timeline
 				}
 
 				// master the audio and add the main comp to the render queue

@@ -1,10 +1,11 @@
 'use strict';
 
 import configuration from './configuration';
+import splitTextIntoLayers from './split-text-into-layers';
 
-export default function checkAndAdjustFontSize(text, textLayer) {
+export default function checkAndAdjustFontSize(text, textLayer, originalLayerName, textIsSplittable) {
     var textProp, textDocument, oldLinePosition, oldFontSize, numLines, numAry;
-    var heightOfLines, newFontSize, fontSizeChange, maxFontSizeChange;
+    var heightOfLines, newFontSize, fontSizeChange, maxFontSizeChange, splittedLayers;
 
     textProp = textLayer.property("Source Text");
     textDocument = textProp.value;
@@ -52,13 +53,25 @@ export default function checkAndAdjustFontSize(text, textLayer) {
         newFontSize -= 1;
         fontSizeChange = newFontSize / oldFontSize - 1;
 
-        // if fontSizeChange is to high than stop and return false
+        // if fontSizeChange is to high than stop and try to split the layers
+        // or return an empty array
+        // an empty array means we were not succesfull to put the text into the layer
         if (fontSizeChange < maxFontSizeChange) {
-            return false;
+            if (textIsSplittable) {
+                // we can split the text in the layers for this comp
+                // but first we reset to a moderate fontSize
+                textDocument.fontSize = oldFontSize * (maxFontSizeChange / 2 + 1);
+                textProp.setValue(textDocument);
+
+                splittedLayers = splitTextIntoLayers(text, textLayer, originalLayerName, numLines);
+                return splittedLayers;
+            } else {
+                return [];
+            }
         }
         textDocument.fontSize = newFontSize;
         textProp.setValue(textDocument);
         textDocument = textProp.value;
     }
-    return true;
+    return [text];
 }

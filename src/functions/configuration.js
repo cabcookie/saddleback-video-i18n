@@ -32,17 +32,33 @@ export default function configuration() {
                     youtubeAlternative: false,
                     isSizeAlternative: false
                 },
-                'Scripture': {
+                'Two Columns': {
                     youtubeAlternative: true,
                     isSizeAlternative: true
                 },
-                'Scripture YouTube': {
+                'Two Columns YouTube': {
                     youtubeAlternative: false,
                     isSizeAlternative: false
+                },
+                'Scripture': {
+                    youtubeAlternative: true,
+                    isSizeAlternative: false,
+                    splitLongTexts: true
+                },
+                'Scripture YouTube': {
+                    youtubeAlternative: false,
+                    isSizeAlternative: false,
+                    splitLongTexts: true
                 }
             },
+            splitLongTexts: {
+                allTexts: ['. ', '? ', '! ', '; ', ', ', ' - ', ' – ', '…'],
+                'Text German': ['und'],
+                'Text English': ['and', 'than', 'then'],
+            },
+            seperatorForSplitting: '…',
             mainCompositionsToBuild: {
-                folderName: 'Sermon  - DELETE NEXT SCRIPT START',
+                folderName: 'Sermon  - DELETE BEFORE NEXT SCRIPT START',
                 compositionsConfig: [{
                     name: 'English Service',
                     columnsToSwap: {
@@ -82,11 +98,8 @@ export default function configuration() {
             animationProtectionTime: 2,
             tolerancePxForMaskPositioning: 4,
             preComposedMaskLayerExtension: '-composed-',
-            columnNameToProcessForSplitting: 'Text',
-            numberOfWordsBeforeSplitting: 80,
-            seperatorForSplitting: '...',
         };
-        var replaceWithYoutube = ['Full Screen', 'Scripture'];
+        var replaceWithYoutube = ['Full Screen', 'Two Columns'];
         for (var i = 0, l = replaceWithYoutube.length; i < l; i++) {
             var name = replaceWithYoutube[i];
             this.settings.compositionTemplates[name].sizeAlternative = name + this.settings.compositionYouTubeNameExtension;
