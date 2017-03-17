@@ -60,6 +60,7 @@ export default function configuration() {
                 seperatorForSplitting: '…',
                 markerForSplitPositions: '*{}*',
                 bracketsForLayerCounting: '{#}',
+                markSplittedCompsWith: ' [splitted layers]',
             },
             mainCompositionsToBuild: {
                 folderName: 'Sermon  - DELETE BEFORE NEXT SCRIPT START',

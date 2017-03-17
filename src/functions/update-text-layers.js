@@ -27,11 +27,20 @@ export default function updateTextLayers(comp, parsedContentLine, parentFolder) 
         newText, layerName, resultText, originalFontSize, maxFontSizeChange, originalLayerName,
         textProp, textDocument, bl, baselines, templateCompName, textForLayer,
         arrOfMaskAddresses, maskLayerName, maskLayer, lineLayer, lineLayerName,
-        message, textIsSplittable;
+        message, textIsSplittable, textWasSplitted;
 
     textLayers = parsedContentLine.layers;
     fillInDelimiter = configuration().fillInDelimiter;
     resultingTextLayers = [];
+
+    // let's check if we have permission to split the text
+    templateCompName = comp.name.split(" ");
+    templateCompName.shift();
+    templateCompName = templateCompName.join(" ");
+    textIsSplittable = configuration().compositionTemplates[templateCompName].splitLongTexts;
+
+    // we keep track if at least one layer was splitted
+    textWasSplitted = false;
 
     // iterate through all expected text layers
     for (var i = 0, tl = textLayers.length; i < tl; i++) {
@@ -59,18 +68,16 @@ export default function updateTextLayers(comp, parsedContentLine, parentFolder) 
                     y: bl[1]
                 };
 
-                // let's check if we have permission to split the text
-                templateCompName = comp.name.split(" ");
-                templateCompName.shift();
-                templateCompName = templateCompName.join(" ");
-                textIsSplittable = configuration().compositionTemplates[templateCompName].splitLongTexts;
-
                 // try to fit the text into the layer by adjusting the fontSize
                 resultingTextLayer = {
                     layerName: layerName,
                     texts: checkAndAdjustFontSize(resultText, textLayer, originalLayerName, textIsSplittable)
                 };
                 resultingTextLayers.push(resultingTextLayer);
+
+                if (!textWasSplitted && resultingTextLayer.texts.length > 1) {
+                    textWasSplitted = true;
+                }
 
                 // the script can't handle text where layers are splitted
                 // so the template should not have any masks and layers
@@ -130,6 +137,9 @@ export default function updateTextLayers(comp, parsedContentLine, parentFolder) 
                 }
             }
         }
+    }
+    if (textWasSplitted) {
+        comp.name += configuration().splitSettings.markSplittedCompsWith;
     }
     return resultingTextLayers;
 }
