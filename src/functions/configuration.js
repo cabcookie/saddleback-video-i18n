@@ -51,12 +51,16 @@ export default function configuration() {
                     splitLongTexts: true
                 }
             },
-            splitLongTexts: {
-                allTexts: ['. ', '? ', '! ', '; ', ', ', ' - ', ' – ', '…'],
-                'Text German': ['und'],
-                'Text English': ['and', 'than', 'then'],
+            splitSettings: {
+                splitPositions: {
+                    allTexts: ['. ', '? ', '! ', '; ', ', ', ' - ', ' – ', '…'],
+                    'Text German': ['und'],
+                    'Text English': ['and', 'than', 'then'],
+                },
+                seperatorForSplitting: '…',
+                markerForSplitPositions: '*{}*',
+                bracketsForLayerCounting: '{#}',
             },
-            seperatorForSplitting: '…',
             mainCompositionsToBuild: {
                 folderName: 'Sermon  - DELETE BEFORE NEXT SCRIPT START',
                 compositionsConfig: [{
@@ -86,6 +90,7 @@ export default function configuration() {
                 dateFormat: 'dd.mm.yyyy'
             },
             minimumSermonDurationInMin: 10,
+            markersNeededInTemplateComps: 2,
             preferredSermonFormat: 'PRPROJ',
             parentFolderFootageExtensions: " Footage [Script Results]",
             requiredFieldsInCSV: ['startTime', 'endTime', 'composition'],
@@ -98,6 +103,7 @@ export default function configuration() {
             animationProtectionTime: 2,
             tolerancePxForMaskPositioning: 4,
             preComposedMaskLayerExtension: '-composed-',
+            timeSeperator: ';',
         };
         var replaceWithYoutube = ['Full Screen', 'Two Columns'];
         for (var i = 0, l = replaceWithYoutube.length; i < l; i++) {

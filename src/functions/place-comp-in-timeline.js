@@ -12,9 +12,9 @@ it will be splitted in three parts: beginning, middle and end.
 @param targetComp {Object} - the comp where the given comp needs to be placed in the timeline
 @param startTime {String} - where the comp should start on the timeline of the targetComp
 @param endTime {String} - where the comp should end on the timeline of the targetComp
-@parem protection {int} - the parts in seconds of the start and end that should not be splitted
+@param splittedTextLayers {Array} - layers where text was splitted and now needs timeline adjustments
 */
-export default function placeCompInTimeline(comp, targetComp, startTime, endTime, protection) {
+export default function placeCompInTimeline(comp, targetComp, startTime, endTime, splittedTextLayers) {
 	if (!comp) {
 		return;
 	}
@@ -24,7 +24,7 @@ export default function placeCompInTimeline(comp, targetComp, startTime, endTime
 	shouldCompDuration = endTime - startTime;
 	compDuration = comp.duration;
 	if (shouldCompDuration != compDuration) {
-		extendCompDuration(comp, shouldCompDuration, protection);
+		extendCompDuration(comp, shouldCompDuration, splittedTextLayers, configuration().animationProtectionTime);
 	}
 
 	targetLayer = targetComp.layers.add(comp);

@@ -8,7 +8,6 @@ export default function appObj(firstLine) {
 
   var comps = [];
 
-  // TODO: define targetComp
   var targetComp = {
     frameRate: 29.97,
     name: 'English Service',
@@ -91,7 +90,6 @@ export default function appObj(firstLine) {
   };
 
   app.project.items.addFolder = function (parentFolderName) {
-    // TODO: was muss geliefert werden?
     var parentFolder = parentFolderName;
     return parentFolder;
   }

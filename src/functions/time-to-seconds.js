@@ -10,7 +10,7 @@ import configuration from './configuration';
  */
 export default function timeToSeconds(timeStr, fps) {
 	var time,seconds=0;
-	time = timeStr.split(";");
+	time = timeStr.split(configuration().timeSeperator);
 
 	seconds += parseInt(time[0]) * 60 * 60; // hours
 	seconds += parseInt(time[1]) * 60; // minutes

@@ -2,104 +2,70 @@
 
 import configuration from './configuration';
 import findItemIndexByName from './find-item-index-by-name';
+import RuntimeError from './runtime-error';
 
 /**
-This function is to emulate a config file for now
+This functions takes a list of compositions and checks if they have the
+expected number of composition markers for identifying in and out animations.
+If all compositions have these markers it will store the positions in the
+configuration settings of the certain composition name.
+If 1+ compositions doesn't have the expected number of markers, it will return
+an array of composition names where the markers are missing.
 */
-export default function checkMarkersInTemplates() {
-    var markersNeeded = 2;
-    var ytext = configuration().compositionYouTubeNameExtension;
-    var ctemp = configuration().compositionTemplates;
-    var comp, markers, cfg, ytname, ytsa, name, index;
-    var compWithoutMarkers = [];
-    var compTemps = [];
-    var comps = [];
+export default function checkMarkersInTemplates(templates) {
+    // prepare some vars
+    var template, markers, markersNeeded, templatesWithoutMarkers;
+    var tempNull, tempPos, exp, cfg;
+    var cfgTemplates;
 
-    // first we create a list of all names for the composition templates
-    // which we need to check for in and out animations
-    for (name in ctemp) {
-        compTemps.push(name);
-        cfg = ctemp[name];
-        if (cfg.youtubeAlternative) {
-            ytname = name + ytext;
-            compTemps.push(ytname);
-        }
-        if (cfg.isSizeAlternative) {
-            ytsa = cfg.sizeAlternative;
-            compTemps.push(ytsa);
-        }
-    }
+    markersNeeded = configuration().markersNeededInTemplateComps; // script can only handle 2; otherwise reprogramming needed
+    cfgTemplates = configuration().compositionTemplates;
 
-    // we make the array with composition names unique
-    var u = {};
-    for(var i = 0, l = compTemps.length; i < l; ++i){
-        if(u.hasOwnProperty(compTemps[i])) {
-            continue;
-        }
-        index = findItemIndexByName(compTemps[i]);
-        if (index === null) {
-            var message = "";
-            message += "Missing Composition\n";
-            message += "Composition '";
-            message += compTemps[i];
-            message += "' is missing. Make sure to create it or remove it from the composition settings.";
-            alert(message);
-            return false;
-        }
-        comps.push(app.project.item(index));
-        u[compTemps[i]] = 1;
-    }
-
-    // now we iterate through the list and check for composition markers
-    for (var i = 0, cl = comps.length; i < cl; i++) {
-        comp = comps[i];
-        markers = comp.markerProperty;
+    // we iterate through the list of templates and check for composition markers
+    for (var i = 0, cl = templates.length; i < cl; i++) {
+        template = templates[i];
+        markers = template.markerProperty;
         if (!(markers.numKeys == markersNeeded)) {
             // we found a composition template with more or less than two markers
             // we need these two markers to identify the in and out animations
             // so we will prevent the script to continue if the templates
             // are not setup correctly
-            compWithoutMarkers.push(comp);
+            throw new RuntimeError({
+                func: "checkMarkersInTemplates",
+                title: "Missing Composition Markers for Animations",
+                message: "All compositions need to have exactly %1 markers. The composition %2 does not fullfill this requirement.",
+                params: [
+                    markersNeeded,
+                    template.name
+                ]
+            });
         }
     }
 
-    if (compWithoutMarkers.length == 0) {
-        // iterate through the comp names and extract the markers times
-        var tempNull, tempPos, exp;
-        for (var i = 0, cl = comps.length; i < cl; i++) {
-            comp = comps[i];
-            tempNull = comp.layers.addNull(comp.duration);
-            tempNull.name = "IF THIS IS HERE SOMETHING WENT WRONG - JUST DELETE IT";
+    // iterate through the comp names and extract the markers times
+    for (var i = 0, cl = templates.length; i < cl; i++) {
+        template = templates[i];
+        tempNull = template.layers.addNull(template.duration);
+        tempNull.name = "IF THIS IS HERE SOMETHING WENT WRONG - JUST DELETE IT";
 
-            // it is a bit tricky to access comp markers
-            // according to https://forums.adobe.com/message/4671642#4671642
-            // we can do it by creating a temp layer and adding an Expression to it
-            tempPos = tempNull.property("Position");
-            exp = "";
-            exp += "x = thisComp.marker.key(1).time;";
-            exp += "y = thisComp.marker.key(2).time;";
-            exp += "[x,y]";
-            tempPos.expression = exp;
-            cfg = ctemp[comp.name];
-            if (cfg === undefined) {
-                cfg = ctemp[comp.name] = {};
-            }
-            cfg.inBgFullyCovered = tempPos.value[0];
-            cfg.outBgFullyCovered = comp.duration - tempPos.value[1];
+        // it is a bit tricky to access comp markers
+        // according to https://forums.adobe.com/message/4671642#4671642
+        // we can do it by creating a temp layer and adding an Expression to it
+        tempPos = tempNull.property("Position");
+        exp = "";
+        exp += "x = thisComp.marker.key(1).time;";
+        exp += "y = thisComp.marker.key(2).time;";
+        exp += "[x,y]";
+        tempPos.expression = exp;
+        cfg = cfgTemplates[template.name];
+        if (cfg === undefined) {
+            cfg = cfgTemplates[template.name] = {};
+        }
+        cfg.inBgFullyCovered = tempPos.value[0];
+        cfg.outBgFullyCovered = template.duration - tempPos.value[1];
 
-            // at the end we remove the temp layer
-            tempNull.remove();
-        }
-        return true;
-    } else {
-        var message = "";
-        message += "Missing Composition Markers for Animations\n";
-        message += "All compositions need to have exactly "+markersNeeded+" markers. ";
-        message += "The following compositions do not fullfill this requirement:";
-        for (var i = 0, cwml = compWithoutMarkers.length; i < cwml; i++) {
-            message += "\n"+ compWithoutMarkers[i].name;
-        }
-        alert(message);
-        return false;
+        // at the end we remove the temp layer
+        tempNull.remove();
     }
+    return true;
 }

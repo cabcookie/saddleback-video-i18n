@@ -2,6 +2,7 @@
 
 import configuration from './configuration';
 import splitTextIntoLayers from './split-text-into-layers';
+import FontToSmallError from './font-to-small-error';
 
 export default function checkAndAdjustFontSize(text, textLayer, originalLayerName, textIsSplittable) {
     var textProp, textDocument, oldLinePosition, oldFontSize, numLines, numAry;
@@ -66,7 +67,7 @@ export default function checkAndAdjustFontSize(text, textLayer, originalLayerNam
                 splittedLayers = splitTextIntoLayers(text, textLayer, originalLayerName, numLines);
                 return splittedLayers;
             } else {
-                return [];
+                throw new FontToSmallError("Font gets too small and text is not splittable");
             }
         }
         textDocument.fontSize = newFontSize;

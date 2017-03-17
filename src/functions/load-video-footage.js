@@ -1,10 +1,12 @@
 'use strict';
+import configuration from './configuration';
+import RuntimeError from './runtime-error';
 
-export default function loadVideoFootage() {
+export default function loadVideoFootage(minDuration) {
     // search for a video file with the mininum duration
     // or for a Dynamic Link file
     var items = app.project.items;
-    var minDuration = configuration().minimumSermonDurationInMin*60;
+    minDuration = minDuration*60;
     var mediaResult = [];
     for (var i = 1, il = items.length; i <= il; i++) {
         var it = items[i];
@@ -28,11 +30,15 @@ export default function loadVideoFootage() {
         }
     }
 
-    var continueCompCreation = true;
-    if (mediaResult.length > 1) {
+    var continueCompCreation = false;
+    var message;
+
+    if (mediaResult.length == 1) {
+        continueCompCreation = true;
+    } else if (mediaResult.length > 1) {
         // alert to user that it seems to be more than one sermon footage in the project
         // the user should decide if he wants to continue
-        var message = 'More than one footage for sermon found\n';
+        message = 'More than one footage for sermon found\n';
         message += 'There seems to be more than one footage for the sermon. We recommend to go in with this footage:\n';
         message += mediaResult[0].fileName;
         message += '\n\nBut there are these other files found as well:\n';
@@ -44,9 +50,16 @@ export default function loadVideoFootage() {
         continueCompCreation = confirm(message);
     }
 
-    if (continueCompCreation) {
-        return mediaResult[0].footage;
-    } else {
-        return false;
+    if (!continueCompCreation) {
+        throw new RuntimeError({
+            func: "loadVideoFootage",
+            title: "No Media Footage found",
+            message: "Unfortunately there was no video file found with a minimum duration of %1 Minutes. Please review your footage and import the video before running the script again.",
+            params: [
+                minimumSermonDurationInMin
+            ]
+        });
     }
+
+    return mediaResult[0].footage;
 }

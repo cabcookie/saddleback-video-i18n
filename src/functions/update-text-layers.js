@@ -4,6 +4,8 @@ import checkAndAdjustFontSize from './check-and-adjust-font-size';
 import checkFillinLayerAddresses from './check-fillin-layer-addresses';
 import createAndPositionMasksAndLines from './create-and-position-masks-and-lines';
 import configuration from './configuration';
+import RuntimeError from './runtime-error';
+import FontToSmallError from './font-to-small-error';
 
 /**
 Update the text layer of a given comp.
@@ -15,10 +17,13 @@ Update the text layer of a given comp.
 */
 export default function updateTextLayers(comp, parsedContentLine, parentFolder) {
     if (!comp) {
-        return [];
+        throw new RuntimeError({
+            func: "updateTextLayers",
+            title: "Composition wasn't provided"
+        });
     }
 
-    var textLayers, textLayer, fillInDelimiter, resultingTextLayers,
+    var textLayers, textLayer, fillInDelimiter, resultingTextLayers, resultingTextLayer,
         newText, layerName, resultText, originalFontSize, maxFontSizeChange, originalLayerName,
         textProp, textDocument, bl, baselines, templateCompName, textForLayer,
         arrOfMaskAddresses, maskLayerName, maskLayer, lineLayer, lineLayerName,
@@ -26,6 +31,7 @@ export default function updateTextLayers(comp, parsedContentLine, parentFolder) 
 
     textLayers = parsedContentLine.layers;
     fillInDelimiter = configuration().fillInDelimiter;
+    resultingTextLayers = [];
 
     // iterate through all expected text layers
     for (var i = 0, tl = textLayers.length; i < tl; i++) {
@@ -60,11 +66,11 @@ export default function updateTextLayers(comp, parsedContentLine, parentFolder) 
                 textIsSplittable = configuration().compositionTemplates[templateCompName].splitLongTexts;
 
                 // try to fit the text into the layer by adjusting the fontSize
-                resultingTextLayers = checkAndAdjustFontSize(resultText, textLayer, originalLayerName, textIsSplittable);
-
-                if (resultingTextLayers.length == 0) {
-                    return [];
-                }
+                resultingTextLayer = {
+                    layerName: layerName,
+                    texts: checkAndAdjustFontSize(resultText, textLayer, originalLayerName, textIsSplittable)
+                };
+                resultingTextLayers.push(resultingTextLayer);
 
                 // the script can't handle text where layers are splitted
                 // so the template should not have any masks and layers
@@ -89,6 +95,7 @@ export default function updateTextLayers(comp, parsedContentLine, parentFolder) 
                             lineLayer.remove();
                         }
                     } else {
+                        // TODO: check for expected maskLayer and lineLayer within load-all-expected-templates
                         if (maskLayer) {
                             if (lineLayer) {
                                 // fill ins found, so we need to create and position the mask layers

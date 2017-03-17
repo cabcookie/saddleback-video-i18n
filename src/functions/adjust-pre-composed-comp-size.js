@@ -1,6 +1,6 @@
 'use strict';
 
-import evaluateShift from './evaluate-shift';
+// import evaluateShift from './evaluate-shift';
 
 /**
 Evaluate how parent layers are shifting the current layer and make sure the

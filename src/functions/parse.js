@@ -1,6 +1,5 @@
 'use strict';
 
-import processText from './process-text';
 import timeToSeconds from './time-to-seconds';
 import clone from './clone';
 import configuration from './configuration';
@@ -13,39 +12,46 @@ import configuration from './configuration';
  @param delimiter {String} [Optional] - a delimiter between parts of a long string.
  */
 export default function parse(rawText, columnPositions, frameRate, delimiter) {
-	delimiter = delimiter || configuration().standardCSVDelimiter;
-	var lineObj = {};
+	try {
+		delimiter = delimiter || configuration().standardCSVDelimiter;
+		var lineObj = {};
 
-	// check if the line starts and ends with a " character
-	// and delete them
-	var lineLength = rawText.length;
-	var firstAndLastChar = rawText.charAt(0) + rawText.charAt(lineLength - 1);
-	if (firstAndLastChar === '""') {
-		rawText = rawText.substring(1, lineLength - 1);
-	}
-
-	// split the line into columns
-	var text = rawText.split(delimiter);
-
-	if (text.length > 1) {
-		// get the content of all columns from the line and put them into the right
-		// position of the object
-		lineObj.comp = text[columnPositions.compositionIndex];
-		lineObj.layers = [];
-		for (var i = 0, cpll = columnPositions.layers.length; i < cpll; i++) {
-			var layer = columnPositions.layers[i];
-			var colText = text[layer.layerIndex];
-			lineObj.layers.push({
-				layerName: layer.layerName,
-				originalLayerName: layer.originalLayerName,
-				text: colText
-			});
+		// check if the line starts and ends with a " character
+		// and delete them
+		var lineLength = rawText.length;
+		var firstAndLastChar = rawText.charAt(0) + rawText.charAt(lineLength - 1);
+		if (firstAndLastChar === '""') {
+			rawText = rawText.substring(1, lineLength - 1);
 		}
 
-		lineObj.startTime = timeToSeconds(text[columnPositions.startTimeIndex], frameRate);
-		lineObj.endTime = timeToSeconds(text[columnPositions.endTimeIndex], frameRate);
-	}
+		// split the line into columns
+		var text = rawText.split(delimiter);
 
-	// Return an object with the parts we need.
-	return lineObj;
+		if (text.length > 1) {
+			// get the content of all columns from the line and put them into the right
+			// position of the object
+			lineObj.comp = text[columnPositions.compositionIndex];
+			lineObj.layers = [];
+			for (var i = 0, cpll = columnPositions.layers.length; i < cpll; i++) {
+				var layer = columnPositions.layers[i];
+				var colText = text[layer.layerIndex];
+				lineObj.layers.push({
+					layerName: layer.layerName,
+					originalLayerName: layer.originalLayerName,
+					text: colText
+				});
+			}
+
+			lineObj.startTime = timeToSeconds(text[columnPositions.startTimeIndex], frameRate);
+			lineObj.endTime = timeToSeconds(text[columnPositions.endTimeIndex], frameRate);
+		}
+
+		// Return an object with the parts we need.
+		return lineObj;
+	} catch (e) {
+		if (e instanceof Error) {
+			e.message = 'in parse' + '\n' + e.message;
+			throw e;
+		}
+	}
 }
