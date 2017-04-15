@@ -7,8 +7,9 @@ The following lines provide information to test the function
 /**
 This functions creates a status message with the expected font color
 */
-export default function changeStatusMessage(statusObj, statusText, statusColor) {
+export default function changeStatusMessage(statusObj, statusText, statusColor, uiPanel) {
     // var gr = statusObj.graphics;
-    // gr.foregroundColor = gr.newPen(gr.PenType.SOLID_COLOR, statusColor, 1);
+    // var ui = uiPanel.graphics;
+    // gr.foregroundColor = ui.newPen(ui.BrushType.SOLID_COLOR, [0,0,0], 1);
     statusObj.text = "[" + statusColor + "] " + statusText;
 }

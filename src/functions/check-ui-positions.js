@@ -1,8 +1,5 @@
 'use strict';
 
-import configuration from './configuration';
-import extendLayerDuration from './extend-layer-duration';
-
 /**
 The following lines provide information to test the function
 */

@@ -1,10 +1,12 @@
 'use strict';
 
 import configuration from './configuration';
-import extendLayerDuration from './extend-layer-duration';
 import checkUIPositions from './check-ui-positions';
 import changeStatusMessage from './change-status-message';
 import createCompsFromTextFile from './functions/create-comps-from-text-file';
+import searchItemInTimeline from './seach-item-in-timeline';
+import configuration from './configuration';
+import clone from './clone';
 
 /**
 The following lines provide information to test the function
@@ -16,96 +18,33 @@ The following lines provide information to test the function
 */
 export default function createUI(thisObj) {
     var pan = (thisObj instanceof Panel) ? thisObj : new Window("palette", "Saddleback Video Translation", undefined, {resizeable: false});
-    var RED_FONT, GREEN_FONT, YELLOW_FONT;
-    var statusText, X_WIDTH, titlePos, pos, statusWidth, btnWidth, statusObj, csvData;
+    var clr, l;
+    var X_WIDTH, NULL_SIZE, MAX_SIZE, NO_SPLIT_BTNS;
+    var titlePos, pos, statusWidth, btnWidth, statusObj, splBtnGrp;
+
+    NULL_SIZE = [0,0];
+    MAX_SIZE = [1000,1000];
+    NO_SPLIT_BTNS = configuration().uiNoOfSptBtns;
+
     pan.orientation = "row";
-
     // colors for status messages
-    RED_FONT = "ERR";
-    GREEN_FONT = "SUC";
-    YELLOW_FONT = "WARN";
+    clr = configuration().statusColors;
 
-    // value of type String means to take the Y2 position of the named attribute
-    // as a basis to calculate position
-    btnWidth = 140;
-    titlePos = [0, 0, btnWidth, 30];
-    statusWidth = btnWidth * 2;
-    pos = {
-        grStat: {
-            pos: [10, 0, statusWidth+30, "status"],
-            title: {
-                pos: titlePos,
-            },
-            status: {
-                pos: [20, 30, statusWidth+20,90],
-            },
-        },
-        grCrLay: {
-            pos: [10, "grStat", btnWidth+30, "btnGrp"],
-            title: {
-                pos: titlePos,
-            },
-            btnGrp: {
-                pos: [20, 30, btnWidth+20, "blank"],
-                chFile: {
-                    pos: [0, 0, btnWidth, 25],
-                },
-                crSlides: {
-                    pos: [0, 30, btnWidth, 55],
-                },
-                blank: {
-                    pos: [0, 55, 10, 60],
-                },
-            },
-        },
-        grSplLay: {
-            pos: [10, "grCrLay", btnWidth+30, "btnGrp"],
-            title: {
-                pos: titlePos,
-            },
-            btnGrp: {
-                pos: [20, 30, btnWidth+20, "splBtnGrp"],
-                title: {
-                    pos: titlePos,
-                },
-                lArr: {
-                    pos: [0, 25, btnWidth/2-2, 50],
-                },
-                rArr: {
-                    pos: [btnWidth/2+2, 25, btnWidth, 50],
-                },
-                splBtnGrp: {
-                    pos: [0, 60, btnWidth, 600],
-                    title: {
-                        pos: titlePos,
-                    },
-                    // to delete, it's just for test purposes
-                    l1: {
-                        pos: [0, 30, btnWidth, 55],
-                    },
-                    l2: {
-                        pos: [0, 60, btnWidth, 85],
-                    },
-                    l3: {
-                        pos: [0, 90, btnWidth, 115],
-                    },
-                },
-            },
-        },
-    };
+    pos = clone(configuration().uiPositions);
+    // TODO: hide the title for the split layer controls
+    // pos.grSplLay.btnGrp.splBtnGrp.title.pos[3] = pos.grSplLay.btnGrp.splBtnGrp.title.pos[1];
     checkUIPositions(pos);
 
     pan.grStat = pan.add("group", pos.grStat.pos);
     pan.grStat.orientation = "row";
     pan.grStat.title = pan.grStat.add("statictext", pos.grStat.title.pos, "Status:");
 
-    statusText = "Waiting for user input...";
     statusObj = pan.grStat.status = pan.grStat.add("statictext", pos.grStat.status.pos, 'X', {multiline:true});
     X_WIDTH = statusObj.preferredSize[0];
     statusObj.preferredSize = [-1,-1];
     statusObj.characters = ~~(statusWidth/X_WIDTH);
     statusObj.preferredSize[1] = -1;
-    changeStatusMessage(statusObj, statusText, YELLOW_FONT);
+    changeStatusMessage(statusObj, "Waiting for user input...", clr.YELLOW_FONT, pan);
 
     // TODO: add selector for compositions to be created
 
@@ -121,7 +60,7 @@ export default function createUI(thisObj) {
 
     pan.grSplLay = pan.add("group", pos.grSplLay.pos);
     pan.grSplLay.orientation = "row";
-    pan.grSplLay.title = pan.grSplLay.add("statictext", pos.grSplLay.title.pos, "Adjust Splitted Layers");
+    pan.grSplLay.title = pan.grSplLay.add("statictext", pos.grSplLay.title.pos, "Check Layers");
     pan.grSplLay.btnGrp = pan.grSplLay.add("group", pos.grSplLay.btnGrp.pos);
     pan.grSplLay.btnGrp.orientation = "row";
     pan.grSplLay.btnGrp.title = pan.grSplLay.btnGrp.add("statictext", pos.grSplLay.btnGrp.title.pos, "search directions:");
@@ -129,21 +68,25 @@ export default function createUI(thisObj) {
     pan.grSplLay.btnGrp.rArr = pan.grSplLay.btnGrp.add("button", pos.grSplLay.btnGrp.rArr.pos, ">");
     pan.grSplLay.btnGrp.splBtnGrp = pan.grSplLay.btnGrp.add("group", pos.grSplLay.btnGrp.splBtnGrp.pos);
     pan.grSplLay.btnGrp.splBtnGrp.title = pan.grSplLay.btnGrp.splBtnGrp.add("statictext", pos.grSplLay.btnGrp.splBtnGrp.title.pos, "Split at Cursor...");
-    pan.grSplLay.btnGrp.splBtnGrp.l1 = pan.grSplLay.btnGrp.splBtnGrp.add("button", pos.grSplLay.btnGrp.splBtnGrp.l1.pos, "Text German {1 > 2}");
-    pan.grSplLay.btnGrp.splBtnGrp.l2 = pan.grSplLay.btnGrp.splBtnGrp.add("button", pos.grSplLay.btnGrp.splBtnGrp.l2.pos, "Text German {2 > 3}");
-    pan.grSplLay.btnGrp.splBtnGrp.l3 = pan.grSplLay.btnGrp.splBtnGrp.add("button", pos.grSplLay.btnGrp.splBtnGrp.l3.pos, "Text English {1 > 2}");
+
+    splBtnGrp = pan.grSplLay.btnGrp.splBtnGrp;
+    for (var i = 1; i <= NO_SPLIT_BTNS; i++) {
+        l = splBtnGrp['l'+i] = splBtnGrp.add("button", pos.grSplLay.btnGrp.splBtnGrp['l'+i].pos, "Blank Button "+i);
+    }
+    splBtnGrp.visible = false;
+    splBtnGrp.maximumSize = NULL_SIZE;
 
     pan.grCrLay.btnGrp.crSlides.enabled = false;
 
     pan.grCrLay.btnGrp.chFile.onClick = function () {
         try {
-            csvData = loadAndCheckFilesAndTemplates();
+            pan.csvData = loadAndCheckFilesAndTemplates();
             pan.grCrLay.btnGrp.crSlides.enabled = true;
-            changeStatusMessage(statusObj, "Succesfully loaded CSV content.", GREEN_FONT);
+            changeStatusMessage(statusObj, "Succesfully loaded CSV content.", clr.GREEN_FONT, pan);
         } catch (e) {
             pan.grCrLay.btnGrp.crSlides.enabled = false;
         	if (e instanceof RuntimeError) {
-                changeStatusMessage(statusObj, e.message, RED_FONT);
+                changeStatusMessage(statusObj, e.message, clr.RED_FONT, pan);
         	} else {
         		throw e;
         	}
@@ -152,14 +95,41 @@ export default function createUI(thisObj) {
 
     pan.grCrLay.btnGrp.crSlides.onClick = function () {
         try {
-            if (!csvData) {
-                throw "UIError - No CSV data loaded yet. Please choose a CSV file with consistent data.";
+            if (!pan.csvData) {
+                throw new RuntimeError({
+                    func: "crSlides.onClick",
+                    title: "No CSV data loaded yet. Please choose a CSV file with consistent data.",
+                });
             }
-            createCompsFromTextFile(csvData);
-            changeStatusMessage(statusObj, "Succesfully created compositions.", GREEN_FONT);
+            pan.resultComps = createCompsFromTextFile(pan.csvData);
+            changeStatusMessage(statusObj, "Succesfully created compositions.", clr.GREEN_FONT, pan);
         } catch (e) {
             pan.grCrLay.btnGrp.crSlides.enabled = false;
-            changeStatusMessage(statusObj, e.message, RED_FONT);
+            changeStatusMessage(statusObj, e.message, clr.RED_FONT, pan);
+        }
+    };
+
+    pan.grSplLay.btnGrp.lArr.onClick = function () {
+        var funcName = "lArr.onClick";
+        var direction = "left";
+        var numDirection = -1;
+
+        try {
+            searchItemInTimeline(funcName, direction, numDirection, statusObj, pan, pan.resultComps);
+        } catch (e) {
+            changeStatusMessage(statusObj, e.message, clr.RED_FONT, pan);
+        }
+    };
+
+    pan.grSplLay.btnGrp.rArr.onClick = function () {
+        var funcName = "rArr.onClick";
+        var direction = "right";
+        var numDirection = 1;
+
+        try {
+            searchItemInTimeline(funcName, direction, numDirection, statusObj, pan, pan.resultComps);
+        } catch (e) {
+            changeStatusMessage(statusObj, e.message, clr.RED_FONT, pan);
         }
     };
 

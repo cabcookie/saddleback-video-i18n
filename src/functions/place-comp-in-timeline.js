@@ -16,7 +16,10 @@ it will be splitted in three parts: beginning, middle and end.
 */
 export default function placeCompInTimeline(comp, targetComp, startTime, endTime, splittedTextLayers) {
 	if (!comp) {
-		return;
+		throw new RuntimeError({
+			func: "placeCompInTimeline",
+			title: "Composition was empty or undefined, thus couldn't be placed in timeline."
+		});
 	}
 
 	var compDuration, shouldCompDuration, targetLayer;
@@ -29,4 +32,5 @@ export default function placeCompInTimeline(comp, targetComp, startTime, endTime
 
 	targetLayer = targetComp.layers.add(comp);
 	targetLayer.startTime = startTime;
+	return comp.name;
 }

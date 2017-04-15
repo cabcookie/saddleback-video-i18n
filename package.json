@@ -1,6 +1,6 @@
 {
   "name": "saddleback-video-translation",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": "A script to help translate video components from one language into another in After Effects for Saddleback Church sermons.",
   "main": "index.js",
   "repository": "git@github.com:TejasQ/SaddlebackVideoTranslation.git",

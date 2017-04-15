@@ -25,12 +25,15 @@ export default function createCompsFromTextFile(data) {
 		var fps, renderQueue;
 		var currentLine, parsedContentLine;
 		var resultingTextLayers, newComp;
+		var resultingLayer, resultingLayers, resultingMainComps;
 
 		// get the frameRate of the selected file
 		fps = data.mediaFootage.frameRate;
 
 		// load render queue for later rendering of main compositions
 		renderQueue = app.project.renderQueue;
+
+		resultingMainComps = {};
 
 		// iterate through all comps that needs to be created and adjust
 		// the relevant columns of CSV file
@@ -44,6 +47,14 @@ export default function createCompsFromTextFile(data) {
 			colPos = cloneColumnPositionsForMainComp(data.columnPositions, tcConf);
 
 			main.comp.openInViewer();
+
+			resultingLayers = [];
+			resultingMainComps[main.comp.name] = {
+				comp: main.comp,
+				layers: resultingLayers,
+			};
+
+			app.beginUndoGroup("Creating Slides for '" + main.comp.name + "'");
 
 			// now process all activities to create comps from template
 			// place the comps in the timeline and modify the text layers
@@ -64,6 +75,11 @@ export default function createCompsFromTextFile(data) {
 
 						try {
 							resultingTextLayers = updateTextLayers(newComp, parsedContentLine, main.footageFolder);
+							resultingLayer = {
+								line: c,
+								compType: parsedContentLine.comp,
+								textLayers: resultingTextLayers,
+							};
 						} catch (e) {
 							if (e instanceof FontToSmallError) {
 								cfg = configuration().compositionTemplates[parsedContentLine.comp];
@@ -97,15 +113,21 @@ export default function createCompsFromTextFile(data) {
 					cfg = configuration().compositionTemplates[parsedContentLine.comp];
 					startTime = parsedContentLine.startTime - cfg.inBgFullyCovered;
 					endTime = parsedContentLine.endTime + cfg.outBgFullyCovered;
-					placeCompInTimeline(newComp, main.comp, startTime, endTime, resultingTextLayers);
+					resultingLayer.layerName = placeCompInTimeline(newComp, main.comp, startTime, endTime, resultingTextLayers);
+					resultingLayer.startTime = parsedContentLine.startTime - 2 / fps;
+					resultingLayer.endTime = parsedContentLine.endTime + 2 / fps;
+					resultingLayers.push(resultingLayer);
 				}
 			}
 
 			// master the audio and add the main comp to the render queue
 			masteringComp(main.comp);
 			renderQueue.items.add(main.comp);
+
+			app.endUndoGroup();
+
 		}
-		return true;
+		return resultingMainComps;
 	} catch (e) {
 		if (e instanceof Error) {
 			e.message = 'in createCompsFromTextFile' + '\n' + e.message;
