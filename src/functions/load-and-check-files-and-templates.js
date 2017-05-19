@@ -47,8 +47,7 @@ export default function loadAndCheckFilesAndTemplates() {
 		linesOfCSV: linesOfCSV,
 		columnPositions: columnPositions,
 		mediaFootage: mediaFootage,
-		// do I need the templates as well?
-		// templates: templates,
+		templates: templates,
 		mainCompFolder: mainCompFolder
 	};
 }

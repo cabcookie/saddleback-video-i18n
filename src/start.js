@@ -1,1 +1,1 @@
-'use strict';import loadAndCheckFilesAndTemplates from './load-and-check-files-and-templates';import createCompsFromTextFile from './functions/create-comps-from-text-file';import createUI from './create-ui';import RuntimeError from './runtime-error';var uiPanel = createUI(this);
+'use strict';import createUI from './create-ui';var uiPanel = createUI(this);

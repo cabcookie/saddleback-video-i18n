@@ -9,7 +9,7 @@ export default function createArrayFromFile() {
     var file = File.openDialog("Please choose the file with the relevant texts", "txt");
     var doc = new File(file);
     if (!doc.exists) throw new RuntimeError({
-        func: "loadAndCheckFilesAndTemplates",
+        func: "createArrayFromFile",
         title: "No file found or couldn't read it!"
     });
 
