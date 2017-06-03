@@ -46,6 +46,7 @@ export default function checkMarkersInTemplates(templates) {
     for (var i = 0, cl = templates.length; i < cl; i++) {
         template = templates[i];
         tempNull = template.layers.addNull(template.duration);
+        moveItemToTrashFolder(tempNull);
         tempNull.name = "IF THIS IS HERE SOMETHING WENT WRONG - JUST DELETE IT";
 
         // it is a bit tricky to access comp markers

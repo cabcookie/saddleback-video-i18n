@@ -64,6 +64,7 @@ export default function configuration() {
                 animationProtectionTime: 0.2,
             },
             compositionNameForInOuts: 'Comp for In-Outs',
+            folderNameForTrash: 'ZZZ Temporary Items For Trash',
             mainCompositionsToBuild: {
                 folderName: 'Sermon  - DELETE BEFORE NEXT SCRIPT START',
                 compositionsConfig: [{
@@ -101,7 +102,7 @@ export default function configuration() {
             markersNeededInTemplateComps: 2,
             preferredSermonFormat: 'PRPROJ',
             parentFolderFootageExtensions: " Footage [Script Results]",
-            requiredFieldsInCSV: ['startTime', 'endTime', 'composition'],
+            requiredFieldsInCSV: [],
             standardCSVDelimiter: "\t",
             maskLayerNamePrefix: 'Mask',
             lineLayerNamePrefix: 'Line',

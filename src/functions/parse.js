@@ -11,7 +11,7 @@ import configuration from './configuration';
  @param columnPositions {Object} - the index of the required and optional fields
  @param delimiter {String} [Optional] - a delimiter between parts of a long string.
  */
-export default function parse(rawText, columnPositions, frameRate, delimiter) {
+export default function parse(rawText, columnPositions, delimiter) {
 	try {
 		delimiter = delimiter || configuration().standardCSVDelimiter;
 		var lineObj = {};
@@ -30,7 +30,7 @@ export default function parse(rawText, columnPositions, frameRate, delimiter) {
 		if (text.length > 1) {
 			// get the content of all columns from the line and put them into the right
 			// position of the object
-			lineObj.comp = text[columnPositions.compositionIndex];
+			// lineObj.comp = text[columnPositions.compositionIndex];
 			lineObj.layers = [];
 			for (var i = 0, cpll = columnPositions.layers.length; i < cpll; i++) {
 				var layer = columnPositions.layers[i];
@@ -42,16 +42,14 @@ export default function parse(rawText, columnPositions, frameRate, delimiter) {
 				});
 			}
 
-			lineObj.startTime = timeToSeconds(text[columnPositions.startTimeIndex], frameRate);
-			lineObj.endTime = timeToSeconds(text[columnPositions.endTimeIndex], frameRate);
+			// lineObj.startTime = timeToSeconds(text[columnPositions.startTimeIndex], frameRate);
+			// lineObj.endTime = timeToSeconds(text[columnPositions.endTimeIndex], frameRate);
 		}
 
 		// Return an object with the parts we need.
 		return lineObj;
 	} catch (e) {
-		if (e instanceof Error) {
-			e.message = 'in parse' + '\n' + e.message;
-			throw e;
-		}
+		e.message = 'in parse' + '\n' + e.message;
+		throw e;
 	}
 }

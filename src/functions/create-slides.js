@@ -18,10 +18,12 @@ export default function createSlides(panel, statusObj, statusColors) {
                     title: "No CSV data loaded yet. Please choose a CSV file with consistent data.",
                 });
             }
-            panel.resultComps = createCompsFromTextFile(panel.csvData);
+
+            panel.resultComps = createMainCompsFromConfig(panel.csvData);
             changeStatusMessage(statusObj, "Succesfully created compositions.", statusColors.GREEN_FONT, panel);
         } catch (e) {
             section.btnGrp.crSlides.enabled = false;
+            alert(e.message);
             changeStatusMessage(statusObj, e.message, statusColors.RED_FONT, panel);
         }
     };

@@ -30,13 +30,12 @@ export default function createUI(thisObj) {
     var statusObj = pan.statusGrp.status;
     changeStatusMessage(statusObj, "Waiting for user input...", statusColors.YELLOW_FONT, pan);
 
-    pan.createCompForInOutGrp = createUISectionCreateCompForInOuts(pan, nextYPos, standardWidth, titlePos); nextYPos += 150;
+    pan.createCompForInOutGrp = createUISectionCreateCompForInOuts(pan, nextYPos, standardWidth, titlePos, statusObj, statusColors); nextYPos += 255;
 
-    pan.findInOutGrp = createUISectionFindInOuts(pan, nextYPos, standardWidth, titlePos); nextYPos += 150;
-    pan.findInOutGrp.changeButtonState(false);
-    pan.createCompForInOutGrp.changeButtonState = pan.findInOutGrp.changeButtonState;
+    pan.findInOutGrp = createUISectionFindInOuts(pan, nextYPos, standardWidth, titlePos); nextYPos += 60;
+    pan.changeFindInOutButtonsState(false);
 
-    pan.loadCSVAndCreateSlidesGrp = createUISectionLoadCSVAndCreateSlides(pan, nextYPos, standardWidth, titlePos, statusObj, statusColors); nextYPos += 90;
+    // pan.loadCSVAndCreateSlidesGrp = createUISectionLoadCSVAndCreateSlides(pan, nextYPos, standardWidth, titlePos, statusObj, statusColors); nextYPos += 90;
     pan.splitTextLayersGrp = createUISectionSplitTextLayers(pan, nextYPos, standardWidth, titlePos, statusObj, statusColors); nextYPos += 450;
 
     if (!(thisObj instanceof Panel)) {

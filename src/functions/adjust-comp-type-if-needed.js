@@ -2,16 +2,17 @@
 
 import configuration from './configuration';
 
-export default function adjustCompTypeIfNeeded(tcConf, parsedContentLine) {
+export default function adjustCompTypeIfNeeded(tcConf, templateName) {
     try {
         var ytExt = configuration().compositionYouTubeNameExtension;
         var isYtComp = tcConf.name.indexOf(ytExt);
         if (isYtComp >= 0) {
-            var ct = configuration().compositionTemplates[parsedContentLine.comp];
+            var ct = configuration().compositionTemplates[templateName];
             if (ct.youtubeAlternative) {
-                parsedContentLine.comp += ytExt;
+                templateName += ytExt;
             }
         }
+        return templateName;
     } catch (e) {
         if (e instanceof Error) {
 			e.message = 'in adjustCompTypeIfNeeded' + '\n' + e.message;
