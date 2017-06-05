@@ -3,5 +3,7 @@
 node_modules
 bundle.js
 SaddlebackVideoTranslation_*.jsx
+.imdone
+./.imdone
 
 trials

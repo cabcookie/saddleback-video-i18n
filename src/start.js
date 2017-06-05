@@ -1,1 +1,1 @@
-'use strict';import createUI from './create-ui';var uiPanel = createUI(this);
+// TODO:6 Implement something to bundle the whole package into one script file to copy it to the After Effects script folder id:6 gh:5// TODO:7 Every function should have an error handling id:7 gh:3// TODO:8 Script should be refactored to remove unused functions id:8 gh:2var uiPanel = createUI(this);
