@@ -5,7 +5,7 @@ function searchItemInTimeline(func, direction, statusObj, panel, splitLayerButto
         try {
             var compositionsData = panel.resultComps;
             if (!compositionsData) {
-                throw new RuntimeError({
+                throw new sbVideoScript.RuntimeError({
                     func: func,
                     title: "No composition results to iterate through yet. Please load CSV file and create slides and layers.",
                 });
@@ -17,7 +17,7 @@ function searchItemInTimeline(func, direction, statusObj, panel, splitLayerButto
             currTime += direction/comp.frameRate
 
             if (!compositionsData[comp.name]) {
-                throw new RuntimeError({
+                throw new sbVideoScript.RuntimeError({
                     func: func,
                     title: "Composition can't be searched.",
                     message: "The composition %1 is not a main composition and thus you can't search for IN and OUT times or split layers in this comp.",

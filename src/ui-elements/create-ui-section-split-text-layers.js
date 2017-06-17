@@ -1,4 +1,7 @@
-// TODO Every function should have an error handling gh:3 id:58
+// TODO Implement proper error handling for this function +bug id:102 gh:46
+// TODO: Review how UI should look like for adjusting timeline for splitted text layers with the new UI ressource string approach +enhancement id:103 gh:47
+// TODO: I want a button per layer that has splitted text layers to jump right to these layers. +enhancement id:104 gh:48
+// TODO: I want to see the texts of the text layers so that I exactly know which timings I'm currently adjusting +enhancement id:105 gh:49
 
 // panel.csvData contains the following information:
 // {

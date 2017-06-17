@@ -1,78 +1,93 @@
-// TODO Every function should have an error handling gh:3 id:47
+// DONE Every function should have an error handling gh:3 id:47
 
-function extendCompDuration(comp, shouldCompDuration, splittedTextLayers, protection) {
-    if (!comp) {
-        return;
+{
+    try {
+        importScript('errors/runtime-error');
+        importScript('adjust-timeline/extend-layer-duration');
+
+    } catch (e) {
+        throw new sbVideoScript.RuntimeError({
+            func: "importScript's for extendCompDuration",
+            title: 'Error loading neccesary functions',
+            message: e.message
+        })
     }
 
-    var compDuration, compLayers, minDuration, offset,
-    layer, layerOut, layerComp, isCompItem, layerName,
-    spt, numChars, layersWithSplittedTexts, aLay, aText,
-    brackets, aLayName, aLayNo, aInPointShare, currSpLayDur,
-    aLayOff, aLayMinDur, aLayStartOff, totSpLayDur, aLayDur;
+    sbVideoScript.extendCompDuration = function (comp, shouldCompDuration, splittedTextLayers, protection) {
+        try {
+            if (!comp) { throw new Error("Composition is empty") }
 
-    compDuration = comp.duration;
-    offset = shouldCompDuration - compDuration;
-    compLayers = comp.layers;
-    protection = protection || configuration().animationProtectionTime;
-    minDuration = compDuration - protection;
-    layersWithSplittedTexts = {};
-    brackets = configuration().splitSettings.bracketsForLayerCounting;
+            var compDuration = comp.duration;
+            var offset = shouldCompDuration - compDuration;
+            var compLayers = comp.layers;
+            protection = protection || sbVideoScript.settings.animationProtectionTime;
+            var minDuration = compDuration - protection;
+            var layersWithSplittedTexts = {};
+            var brackets = sbVideoScript.settings.splitSettings.bracketsForLayerCounting;
 
-    // Walk through all splitted text layers and create new symbol object
-    for (var t = 0, tl = splittedTextLayers.length; t < tl; t++) {
-        spt = splittedTextLayers[t];
-        if (spt.texts.length > 1) {
-            numChars = 0;
-            // aLay = layersWithSplittedTexts[spt.layerName] = {
-            // 	texts: spt.texts
-            // };
-            for (var st = 0, stl = spt.texts.length; st < stl; st++) {
-                numChars += spt.texts[st].length;
+            // Walk through all splitted text layers and create new symbol object
+            for (var t = 0, tl = splittedTextLayers.length; t < tl; t++) {
+                var spt = splittedTextLayers[t];
+                if (spt.texts.length > 1) {
+                    var numChars = 0;
+                    // aLay = layersWithSplittedTexts[spt.layerName] = {
+                    // 	texts: spt.texts
+                    // };
+                    for (var st = 0, stl = spt.texts.length; st < stl; st++) {
+                        numChars += spt.texts[st].length;
+                    }
+                    var aInPointShare = 0;
+                    for (var st = 0, stl = spt.texts.length; st < stl; st++) {
+                        var aText = spt.texts[st];
+                        var aLayNo = st + 1;
+                        var aLayName = spt.layerName + ' ' + brackets.replace('#', aLayNo);
+                        var aLay = layersWithSplittedTexts[aLayName] = {
+                            text: aText,
+                            timeShare: aText.length / numChars,
+                            inPointShare: aInPointShare
+                        };
+                        aInPointShare += aLay.timeShare;
+                    }
+                }
             }
-            aInPointShare = 0;
-            for (var st = 0, stl = spt.texts.length; st < stl; st++) {
-                aText = spt.texts[st];
-                aLayNo = st + 1;
-                aLayName = spt.layerName + ' ' + brackets.replace('#', aLayNo);
-                aLay = layersWithSplittedTexts[aLayName] = {
-                    text: aText,
-                    timeShare: aText.length / numChars,
-                    inPointShare: aInPointShare
-                };
-                aInPointShare += aLay.timeShare;
+
+            // Walk layers
+            for (var l = 1, ll=compLayers.length; l <= ll; l++) { // Layers NON-Zero based!
+                var layer = compLayers[l];
+                var layerOut = layer.outPoint;
+                var layerComp = layer.source;
+                var isCompItem = (layerComp instanceof CompItem);
+                var layerName = layer.name;
+                var aLay = layersWithSplittedTexts[layerName];
+
+                if (aLay) {
+                    var currSpLayDur = layer.outPoint - layer.inPoint
+                    var totSpLayDur = currSpLayDur + offset;
+                    var aLayDur = totSpLayDur * aLay.timeShare;
+                    var aLayStartOff = totSpLayDur * aLay.inPointShare;
+                    var aLayMinDur = currSpLayDur - protection;
+                    var aLayOff = aLayDur - currSpLayDur;
+                    sbVideoScript.extendLayerDuration(layer, aLayOff, aLayMinDur);
+                    layer.startTime += aLayStartOff;
+                    layer.outPoint += aLayOff;
+                } else if (layerOut >= minDuration) {
+                    // Walk props
+                    sbVideoScript.extendLayerDuration(layer, offset, minDuration);
+                    if (isCompItem && layerComp.duration < shouldCompDuration) {
+                        sbVideoScript.extendCompDuration(layerComp, shouldCompDuration, protection);
+                    }
+                    layer.outPoint += offset;
+                }
             }
+
+            comp.duration += offset;
+
+        } catch (e) {
+            throw new sbVideoScript.RuntimeError({
+                func: 'extendCompDuration',
+                title: "Error extending the duration of the composition",
+                message: e.message
+            })
         }
     }
-
-    // Walk layers
-    for (var l = 1, ll=compLayers.length; l <= ll; l++) { // Layers NON-Zero based!
-        layer = compLayers[l];
-        layerOut = layer.outPoint;
-        layerComp = layer.source;
-        isCompItem = (layerComp instanceof CompItem);
-        layerName = layer.name;
-        aLay = layersWithSplittedTexts[layerName];
-
-        if (aLay) {
-            currSpLayDur = layer.outPoint - layer.inPoint
-            totSpLayDur = currSpLayDur + offset;
-            aLayDur = totSpLayDur * aLay.timeShare;
-            aLayStartOff = totSpLayDur * aLay.inPointShare;
-            aLayMinDur = currSpLayDur - protection;
-            aLayOff = aLayDur - currSpLayDur;
-            extendLayerDuration(layer, aLayOff, aLayMinDur);
-            layer.startTime += aLayStartOff;
-            layer.outPoint += aLayOff;
-        } else if (layerOut >= minDuration) {
-            // Walk props
-            extendLayerDuration(layer, offset, minDuration);
-            if (isCompItem && layerComp.duration < shouldCompDuration) {
-                extendCompDuration(layerComp, shouldCompDuration, protection);
-            }
-            layer.outPoint += offset;
-        }
-    }
-
-    comp.duration += offset;
 }

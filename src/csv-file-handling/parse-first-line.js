@@ -1,4 +1,4 @@
-// TODO Every function should have an error handling gh:3 id:18
+// DONE Every function should have an error handling gh:3 id:18
 
 /**
  Parse the first line of a tab separated text file to retrieve
@@ -18,32 +18,55 @@
  @param requiredFields {Array} - the array that includes all columns that are required in the text file
  @param delimiter {String} [Optional] - a delimiter between parts of a long string.
  */
-function parseFirstLine(rawText, requiredFields, delimiter) {
-	delimiter = delimiter || configuration().standardCSVDelimiter;
-	var text = rawText.split(delimiter);
-	var ret = {
-		layers: []
-	};
 
-	// TODO: make sure no column in the CSV exists twice +enhancement id:19 gh:6
+{
+    try {
+        importScript('errors/runtime-error');
 
-	for (var i = 0, tl = text.length; i < tl; i++) {
-		var requiredFound = false;
-		for (var j = 0, rfl = requiredFields.length; j < rfl; j++) {
-			if (text[i].toUpperCase() === requiredFields[j].toUpperCase()) {
-				var attributeName = requiredFields[j] + "Index";
-				ret[attributeName] = i;
-				requiredFound = true;
-			}
-		}
-		if (!requiredFound) {
-			ret.layers.push({
-				layerName: text[i],
-				layerIndex: i
-			});
-		}
-	}
+    } catch (e) {
+        throw new sbVideoScript.RuntimeError({
+            func: "importScript's for parseFirstLine",
+            title: 'Error loading neccesary functions',
+            message: e.message
+        })
+    }
 
-	// Return an object with the parts we need.
-	return ret;
+    sbVideoScript.parseFirstLine = function (rawText, requiredFields, delimiter) {
+        try {
+            delimiter = delimiter || sbVideoScript.settings.standardCSVDelimiter;
+        	var text = rawText.split(delimiter);
+        	var ret = {
+        		layers: []
+        	};
+
+        	// TODO: make sure no column in the CSV exists twice +enhancement id:19 gh:6
+
+        	for (var i = 0, tl = text.length; i < tl; i++) {
+        		var requiredFound = false;
+        		for (var j = 0, rfl = requiredFields.length; j < rfl; j++) {
+        			if (text[i].toUpperCase() === requiredFields[j].toUpperCase()) {
+        				var attributeName = requiredFields[j] + "Index";
+        				ret[attributeName] = i;
+        				requiredFound = true;
+        			}
+        		}
+        		if (!requiredFound) {
+        			ret.layers.push({
+        				layerName: text[i],
+        				layerIndex: i
+        			});
+        		}
+        	}
+
+        	// Return an object with the parts we need.
+        	return ret;
+
+        } catch (e) {
+            throw new sbVideoScript.RuntimeError({
+                func: 'parseFirstLine',
+                title: "Error parsing the first line of the CSV file to identify it's columns",
+                message: e.message
+            });
+        }
+    }
 }

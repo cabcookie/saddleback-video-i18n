@@ -1,6 +1,6 @@
-// TODO Every function should have an error handling gh:3 id:38
+// DONE Every function should have an error handling gh:3 id:38
 
-function RuntimeError(data) {
+sbVideoScript.RuntimeError = function (data) {
     this.name = 'RuntimeError';
     this.message = this.name + " ";
     this.message += data.func ? "(" + data.func + ") " : "";
@@ -16,5 +16,5 @@ function RuntimeError(data) {
     }
 }
 
-RuntimeError.prototype = new Error();
-RuntimeError.prototype.constructor = RuntimeError;
+sbVideoScript.RuntimeError.prototype = new Error();
+sbVideoScript.RuntimeError.prototype.constructor = sbVideoScript.RuntimeError;

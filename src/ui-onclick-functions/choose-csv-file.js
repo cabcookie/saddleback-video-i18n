@@ -1,46 +1,37 @@
-// TODO Every function should have an error handling gh:3 id:30
+// DONE Every function should have an error handling gh:3 id:30
+// DONE: refactor function to be not a callback function anymore and adapt with the new UI ressource string +enhancement id:77 gh:22
+// DONE: function should support multi column content list and dropdownlist gh:30 id:87
 
-function chooseCSVFile(panel, section, createSlidesButton, statusObj, statusColors) {
-    return function () {
+{
+    try {
+        importScript('errors/runtime-error');
+        importScript('handle-items-and-folders/create-comp-for-in-outs');
+        importScript('handle-items-and-folders/load-and-check-files-and-templates');
+        importScript('csv-file-handling/clone-column-positions-for-main-comp');
+        importScript('csv-file-handling/parse');
+        importScript('ui-elements/set-content-list');
+
+    } catch (e) {
+        throw new sbVideoScript.RuntimeError({
+            func: "importScript's for chooseCSVFile",
+            title: 'Error loading neccesary functions',
+            message: e.message
+        })
+    }
+
+    sbVideoScript.chooseCSVFile = function () {
         try {
-            createCompForInOuts(panel, section);
-            panel.csvData = loadAndCheckFilesAndTemplates();
+            sbVideoScript.createCompForInOuts();
+            sbVideoScript.loadAndCheckFilesAndTemplates();
+            sbVideoScript.setContentList();
+            sbVideoScript.createSlidesButton.enabled = true;
 
-            var tcConf = configuration().mainCompositionsToBuild.compositionsConfig[0];
-            var colPos = cloneColumnPositionsForMainComp(panel.csvData.columnPositions, tcConf);
-
-            var contentLines = [];
-            for (var i = 1; i < panel.csvData.linesOfCSV.length; i++) {
-                var item = '';
-                var currentLine = panel.csvData.linesOfCSV[i];
-                if (currentLine.length > 0) {
-                    var parsedContentLine = parse(currentLine, colPos);
-
-                    for (var l = 0; l < parsedContentLine.layers.length; l++) {
-                        var lay = parsedContentLine.layers[l];
-                        if (lay.layerName.indexOf(' 1') > 0 && lay.text.length > 0) {
-                            if (lay.text.length > 40) {
-                                item += lay.text.substring(0, 40) + '… // ';
-                            } else {
-                                item += lay.text + ' // ';
-                            }
-                        }
-                    }
-                    contentLines.push(item);
-                }
-            }
-            panel.setContentLines(contentLines);
-
-            createSlidesButton.enabled = true;
-            changeStatusMessage(statusObj, "Succesfully loaded CSV content.", statusColors.GREEN_FONT, panel);
         } catch (e) {
-            createSlidesButton.enabled = false;
-            alert(e.message);
-            if (e instanceof RuntimeError) {
-                changeStatusMessage(statusObj, e.message, statusColors.RED_FONT, panel);
-            } else {
-                throw e;
-            }
+            throw new sbVideoScript.RuntimeError({
+                func: 'chooseCSVFile',
+                title: 'Error choosing and loading CSV file',
+                message: e.message
+            });
         }
     }
 }

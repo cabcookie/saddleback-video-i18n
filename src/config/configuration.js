@@ -1,17 +1,10 @@
-// TODO Every function should have an error handling gh:3 id:6
+// DONE Every function should have an error handling gh:3 id:6
 
-/**
-This function is to emulate a config file for now
-*/
-function configuration() {
-    var toCreate = true;
-    if ("settings" in this) {
-        if ("compositionTemplates" in this.settings) {
-            toCreate = false;
-        }
-    }
-    if (toCreate) {
-        this.settings = {
+{
+    try {
+        importScript('errors/runtime-error');
+
+        sbVideoScript.settings = {
             compositionYouTubeNameExtension: ' YouTube',
             compositionTemplates: {
                 'Lower Third': {
@@ -112,13 +105,19 @@ function configuration() {
             animationProtectionTime: 2,
             tolerancePxForMaskPositioning: 4,
             preComposedMaskLayerExtension: '-composed-',
-            timeSeperator: ';',
+            timeSeperator: ';'
         };
         var replaceWithYoutube = ['Full Screen', 'Two Columns'];
         for (var i = 0, l = replaceWithYoutube.length; i < l; i++) {
             var name = replaceWithYoutube[i];
-            this.settings.compositionTemplates[name].sizeAlternative = name + this.settings.compositionYouTubeNameExtension;
+            sbVideoScript.settings.compositionTemplates[name].sizeAlternative = name + sbVideoScript.settings.compositionYouTubeNameExtension;
         }
+
+    } catch (e) {
+        throw new sbVideoScript.RuntimeError({
+            func: 'configuration',
+            title: 'Error loading settings',
+            message: e.message
+        });
     }
-    return this.settings;
 }

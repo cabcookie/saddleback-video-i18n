@@ -1,4 +1,5 @@
-// TODO Every function should have an error handling gh:3 id:22
+// DONE Every function should have an error handling gh:3 id:22
+// DONE: refactor function to not iterate through all template compositions but receive a composition to analyze +enhancement id:91 gh:35
 
 /**
 This functions takes a list of compositions and checks if they have the
@@ -8,61 +9,62 @@ configuration settings of the certain composition name.
 If 1+ compositions doesn't have the expected number of markers, it will return
 an array of composition names where the markers are missing.
 */
-function checkMarkersInTemplates(templates) {
-    // prepare some vars
-    var template, markers, markersNeeded, templatesWithoutMarkers;
-    var tempNull, tempPos, exp, cfg;
-    var cfgTemplates;
+{
+    try {
+        importScript('errors/runtime-error');
+        importScript('handle-items-and-folders/move-item-to-trash-folder');
 
-    markersNeeded = configuration().markersNeededInTemplateComps; // script can only handle 2; otherwise reprogramming needed
-    cfgTemplates = configuration().compositionTemplates;
+    } catch (e) {
+        throw new sbVideoScript.RuntimeError({
+            func: "importScript's for checkMarkersInTemplates",
+            title: 'Error loading neccesary functions',
+            message: e.message
+        })
+    }
 
-    // we iterate through the list of templates and check for composition markers
-    for (var i = 0, cl = templates.length; i < cl; i++) {
-        template = templates[i];
-        markers = template.markerProperty;
-        if (!(markers.numKeys == markersNeeded)) {
-            // we found a composition template with more or less than two markers
-            // we need these two markers to identify the in and out animations
-            // so we will prevent the script to continue if the templates
-            // are not setup correctly
-            throw new RuntimeError({
-                func: "checkMarkersInTemplates",
-                title: "Missing Composition Markers for Animations",
-                message: "All compositions need to have exactly %1 markers. The composition %2 does not fullfill this requirement.",
-                params: [
-                    markersNeeded,
-                    template.name
-                ]
+    sbVideoScript.checkMarkersInTemplates = function (templateComp) {
+        try {
+            var markersNeeded = sbVideoScript.settings.markersNeededInTemplateComps; // script can only handle 2; otherwise reprogramming needed
+            var markers = templateComp.markerProperty;
+            if (!(markers.numKeys == markersNeeded)) {
+                // we found a composition template with more or less than two markers
+                // we need these two markers to identify the in and out animations
+                // so we will prevent the script to continue if the templates
+                // are not setup correctly
+                throw new Error("All compositions need to have exactly '"+ markersNeeded +"' markers. The composition '"+ templateComp.name +"' does not fullfill this requirement.");
+            }
+
+            var cfgTemplates = sbVideoScript.settings.compositionTemplates;
+
+            var tempNull = templateComp.layers.addNull(templateComp.duration);
+            sbVideoScript.moveItemToTrashFolder(tempNull);
+            tempNull.name = "IF THIS IS HERE SOMETHING WENT WRONG - JUST DELETE IT";
+
+            // it is a bit tricky to access comp markers
+            // according to https://forums.adobe.com/message/4671642#4671642
+            // we can do it by creating a temp layer and adding an Expression to it
+            var tempPos = tempNull.property("Position");
+            var exp = "";
+            exp += "x = thisComp.marker.key(1).time;";
+            exp += "y = thisComp.marker.key(2).time;";
+            exp += "[x,y]";
+            tempPos.expression = exp;
+            var cfg = cfgTemplates[templateComp.name];
+            if (cfg === undefined) {
+                cfg = cfgTemplates[templateComp.name] = {};
+            }
+            cfg.inBgFullyCovered = tempPos.value[0];
+            cfg.outBgFullyCovered = templateComp.duration - tempPos.value[1];
+
+            // at the end we remove the temp layer
+            tempNull.remove();
+
+        } catch (e) {
+            throw new sbVideoScript.RuntimeError({
+                func: 'checkMarkersInTemplates',
+                title: "Error reviewing all templates and finding their expected markers",
+                message: e.message
             });
         }
     }
-
-    // iterate through the comp names and extract the markers times
-    for (var i = 0, cl = templates.length; i < cl; i++) {
-        template = templates[i];
-        tempNull = template.layers.addNull(template.duration);
-        moveItemToTrashFolder(tempNull);
-        tempNull.name = "IF THIS IS HERE SOMETHING WENT WRONG - JUST DELETE IT";
-
-        // it is a bit tricky to access comp markers
-        // according to https://forums.adobe.com/message/4671642#4671642
-        // we can do it by creating a temp layer and adding an Expression to it
-        tempPos = tempNull.property("Position");
-        exp = "";
-        exp += "x = thisComp.marker.key(1).time;";
-        exp += "y = thisComp.marker.key(2).time;";
-        exp += "[x,y]";
-        tempPos.expression = exp;
-        cfg = cfgTemplates[template.name];
-        if (cfg === undefined) {
-            cfg = cfgTemplates[template.name] = {};
-        }
-        cfg.inBgFullyCovered = tempPos.value[0];
-        cfg.outBgFullyCovered = template.duration - tempPos.value[1];
-
-        // at the end we remove the temp layer
-        tempNull.remove();
-    }
-    return true;
 }

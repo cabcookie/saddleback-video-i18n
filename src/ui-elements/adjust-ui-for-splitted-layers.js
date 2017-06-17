@@ -9,7 +9,7 @@ function adjustUIForSplittedLayers(layer, panel, splitLayerButtonGroup, statusCo
     var MAX_SIZE = [1000,1000];
     var NO_SPLIT_BTNS = 11;
 
-    protection = configuration().splitSettings.animationProtectionTime;
+    protection = sbVideoScript.settings.splitSettings.animationProtectionTime;
     btnNames = [];
 
     // we create the list of possible button names before we create the UI

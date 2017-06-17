@@ -1,4 +1,5 @@
-// TODO Every function should have an error handling gh:3 id:56
+// TODO: Implement proper error handling for this function +bug id:106 gh:51
+// TODO: The function should analyse a composition to find the splitted text layers information. Or we create an object while creating all layers and splitted text layers and if we restart After Effects all these information will be reproduced when loading the CSV file +feature id:107 gh:50
 
 function changeSplitTextLayerTime(layerOptions, protection, statusObj, statusColors) {
     return function () {
