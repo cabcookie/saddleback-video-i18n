@@ -1,5 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:43
-
 /**
 Evaluate how parent layers are shifting the current layer and make sure the
 layers in the composition are shifted accoordingly

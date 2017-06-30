@@ -1,5 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:50
-
 {
     try {
         importScript('errors/runtime-error');
@@ -28,18 +26,37 @@
             }
 
             // find the layer and take or add the Stereo Mixer effect
+            // the script can currently only handle English and German language
+            // settings of the After Effects UI
             var lastLayer = comp.layers.length;
             var layer = comp.layers[lastLayer];
-            var lp = layer("Effects")("Stereo Mixer");
-            if (lp) {
-                null;
-            } else {
-                lp = layer("Effects").addProperty("Stereo Mixer");
+
+            var propTrans = sbVideoScript.settings.propertyTranslations;
+            var numberOfLanguagesSupported = propTrans.languages.length;
+            var langIdx = sbVideoScript.settings.languageIndexNumber;
+
+            var effName = propTrans['Effects'][langIdx];
+            var mixName = propTrans['Stereo Mixer'][langIdx];
+            var lp = layer(effName)(mixName);
+
+            while (lp === null) {
+                try {
+                    lp = layer(effName).addProperty(mixName);
+                } catch (e) {
+                    langIdx += 1;
+                    if (langIdx >= numberOfLanguagesSupported) { throw new Error("Something is wrong with the language settings of the After Effects UI. We currently only support "+ propTrans.languages.join(', ') +" languages.") }
+                    effName = propTrans['Effects'][langIdx];
+                    mixName = propTrans['Stereo Mixer'][langIdx];
+                    lp = null;
+                }
             }
+
+            sbVideoScript.settings.languageIndexNumber = langIdx;
 
             // change the audio settings of the Stereo Mixer
             for (var key in audioSettings) {
-                var prop = lp.property(key);
+                var transKey = propTrans[key][langIdx];
+                var prop = lp.property(transKey);
                 var newVal = audioSettings[key];
                 prop.setValue(newVal);
             }

@@ -1,5 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:18
-
 /**
  Parse the first line of a tab separated text file to retrieve
  column positions for further use. The result will be an object where for each

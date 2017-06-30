@@ -1,15 +1,19 @@
-// DONE: function should support multi column content list and dropdownlist +feature id:85 gh:30
-// DONE: currently if I open the dropdownlist it doesn't show a single item but I can iterate through it with the keyboard cursors +bug id:86 gh:31
-
 {
+    try {
+        importScript('errors/runtime-error');
+
+    } catch (e) {
+        throw new sbVideoScript.RuntimeError({
+            func: "importScript's for setContentList",
+            title: 'Error loading neccesary functions',
+            message: e.message
+        })
+    }
+
     sbVideoScript.setContentList = function (groupContentList) {
         try {
-            importScript('errors/runtime-error');
-
-            var groupContentList = groupContentList || sbVideoScript.groupContentList;
-            if (!groupContentList) {
-                throw new Error("function called without a reference to the dropdownlist UI element")
-            }
+            groupContentList = groupContentList || sbVideoScript.groupContentList;
+            if (!groupContentList) { throw new Error("function called without a reference to the dropdownlist UI element") }
             sbVideoScript.groupContentList = groupContentList;
             groupContentList.maximumSize.height = 300;
 
@@ -25,6 +29,7 @@
                     colHeaders.push(firstLine.layers[l].layerName);
                 }
 
+                if (sbVideoScript.contentList) { groupContentList.remove(sbVideoScript.contentList) }
                 var contentList = groupContentList.add('listbox', undefined, '', {
                     numberOfColumns:maxHeaders, showHeaders:true, columnTitles:colHeaders
                 });

@@ -1,8 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:20
-// DONE: store the template information globally in sbVideoScript +enhancement id:82 gh:27
-// DONE: Move the check for markers and the check for how many lines fit into the text layers into this function so that we don't iterate through the compositions over and over again and we improve performance a bit +enhancement id:90 gh:34
-// DONE: better idea: call the checkLineNumsInTemplates function from checkAndAdjustFontSize and if it is the first time to check the template we do the test and store the information into the settings; if the function is called a second time it just returns the result from the settings +enhancement id:93 gh:37
-
 {
     try {
         importScript('errors/runtime-error');

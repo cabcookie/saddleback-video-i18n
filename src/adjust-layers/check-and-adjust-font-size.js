@@ -1,6 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:40
-// DONE: put the check for the number of lines that fit into a text field into the function checkLineNumsInTemplates and save it in the configuration +enhancement id:23 gh:7
-// DONE: does adjusting font size still work? it seems like at least the text split doesn't work anymore +bug id:98 gh:42
 // TODO: the adjustment of font size is not working with the addresses of scriptures in the Scripture template but it should. +bug id:100 gh:44
 
 {

@@ -1,5 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:45
-
 /**
 Update the text layer of a given comp.
 

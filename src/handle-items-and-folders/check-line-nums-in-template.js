@@ -1,7 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:24
-// DONE: move the check for the number of lines fitting into the text field from function checkAndAdjustFontSize to here +enhancement id:25 gh:8
-// DONE: better idea: call this function from checkAndAdjustFontSize and if it is the first time to check the template we do the test and store the information into the settings; if the function is called a second time it just returns the result from the settings +enhancement id:92 gh:36
-
 {
     try {
         importScript('errors/runtime-error');

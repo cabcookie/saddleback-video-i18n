@@ -1,6 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:52
-// DONE: change behaviour of this function to the new approach with a global store/namespace and a wrapper function for the onClick callbacks +enhancement id:88 gh:32
-// DONE: figure out if I need to store the resulting compositions into a global store +bug id:89 gh:33
 // TODO: do I really need the resultingMainComps? +enhancement id:97 gh:41
 
 {
@@ -23,7 +20,7 @@
     sbVideoScript.createSlides = function () {
         try {
             if (!sbVideoScript.linesOfCSV) { throw new Error("No CSV data loaded yet. Please choose a CSV file with consistent data.") }
-            if (!sbVideoScript.mediaFootage) { throw new Error("No video footage found. Please load a video into the project") }
+            if (!sbVideoScript.loadVideoFootage()) { throw new Error("No video footage found. Please load a video into the project") }
 
             var compForInOuts = sbVideoScript.getCompItem(sbVideoScript.settings.compositionNameForInOuts);
             var mainComps = sbVideoScript.settings.mainCompositionsToBuild;
@@ -48,6 +45,8 @@
                 };
 
                 app.beginUndoGroup("Creating Slides for '" + main.comp.name + "'");
+
+                // TODO: Add a progress bar when creating the main compositions and their slides +feature
 
                 var layerLen = compForInOuts.layers.length - 1;
                 for (var l = layerLen; l > 0; l--) {

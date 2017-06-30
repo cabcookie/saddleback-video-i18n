@@ -1,7 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:30
-// DONE: refactor function to be not a callback function anymore and adapt with the new UI ressource string +enhancement id:77 gh:22
-// DONE: function should support multi column content list and dropdownlist gh:30 id:87
-
 {
     try {
         importScript('errors/runtime-error');

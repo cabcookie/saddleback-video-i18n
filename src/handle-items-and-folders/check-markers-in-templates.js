@@ -1,6 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:22
-// DONE: refactor function to not iterate through all template compositions but receive a composition to analyze +enhancement id:91 gh:35
-
 /**
 This functions takes a list of compositions and checks if they have the
 expected number of composition markers for identifying in and out animations.

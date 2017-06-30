@@ -1,4 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:46
 // TODO: when extending a layer the type of a keyframe seems to be ignored when deleting and creating it again +bug id:96 gh:40
 
 {

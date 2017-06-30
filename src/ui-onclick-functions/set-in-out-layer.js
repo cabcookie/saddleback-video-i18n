@@ -1,6 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:32
-// DONE: implement check if template was chosen. If not 'Out' is not possible +enhancement id:31 gh:9
-
 {
     try {
         importScript('errors/runtime-error');

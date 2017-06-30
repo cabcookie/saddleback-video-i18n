@@ -1,19 +1,26 @@
-// DONE Every function should have an error handling gh:3 id:10
-// DONE: refactor function to the new approach with sbVideoScript being the global storage +enhancement id:72 gh:17
-
 {
-    sbVideoScript.loadVideoFootage = function (minDuration) {
-        try {
-            importScript('errors/runtime-error');
+    try {
+        importScript('errors/runtime-error');
 
+    } catch (e) {
+        throw new sbVideoScript.RuntimeError({
+            func: "importScript's for loadVideoFootage",
+            title: 'Error loading neccesary functions',
+            message: e.message
+        })
+    }
+
+    sbVideoScript.loadVideoFootage = function () {
+        try {
             if (sbVideoScript.mediaFootage) {
                 return sbVideoScript.mediaFootage;
             }
 
+            var minDuration = sbVideoScript.settings.minimumSermonDurationInMin * 60;
+
             // search for a video file with the mininum duration
             // or for a Dynamic Link file
             var items = app.project.items;
-            minDuration = minDuration*60;
             var mediaResult = [];
             for (var i = 1, il = items.length; i <= il; i++) {
                 var it = items[i];
@@ -58,14 +65,7 @@
             }
 
             if (!continueCompCreation) {
-                throw new sbVideoScript.RuntimeError({
-                    func: "loadVideoFootage",
-                    title: "No Media Footage found",
-                    message: "Unfortunately there was no video file found with a minimum duration of %1 Minutes. Please review your footage and import the video before running the script again.",
-                    params: [
-                        minimumSermonDurationInMin
-                    ]
-                });
+                throw new Error("Unfortunately there was no video file found with a minimum duration of "+ minDuration +" Minutes. Please review your footage and import the video before running the script again.");
             }
 
             sbVideoScript.mediaFootage = mediaResult[0].footage;

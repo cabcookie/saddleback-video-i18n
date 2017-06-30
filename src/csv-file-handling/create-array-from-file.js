@@ -1,5 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:17
-
 /**
 Opens the file and returns it as an array which represents the lines of the file.
 */

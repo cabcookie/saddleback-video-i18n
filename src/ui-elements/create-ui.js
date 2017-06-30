@@ -1,20 +1,23 @@
-// DONE Every function should have an error handling gh:3 id:59
-// DONE: refactor UI creation in the same way that the AE function 'Find and Replace Text' UI is build +enhancement id:61 gh:10
-
-// DONE: make sure all onclick functions in UI work again +bug id:81 gh:26
-// DONE: make sure dropdownlists work again +bug id:80 gh:25
 // TODO: add tab for scripts settings +enhancement id:65 gh:13
 
 {
+    try {
+        importScript('errors/runtime-error');
+        importScript('ui-elements/set-template-list');
+        importScript('ui-elements/set-content-list');
+        importScript('ui-onclick-functions/change-find-in-out-buttons-state');
+        importScript('ui-onclick-functions/on-click-function-wrapper');
+
+    } catch (e) {
+        throw new sbVideoScript.RuntimeError({
+            func: "importScript's for createUI",
+            title: 'Error loading neccesary functions',
+            message: e.message
+        })
+    }
+
     sbVideoScript.createUI = function (thisObj) {
         try {
-            // importScript('ui-elements/create-ui-section-split-text-layers');
-            importScript('errors/runtime-error');
-            importScript('ui-elements/set-template-list');
-            importScript('ui-elements/set-content-list');
-            importScript('ui-onclick-functions/change-find-in-out-buttons-state');
-            importScript('ui-onclick-functions/on-click-function-wrapper');
-
             var pan = (thisObj instanceof Panel) ? thisObj : new Window("palette", "Saddleback Video Translation", undefined, {resizeable: true});
 
             if (pan != null) {
@@ -55,14 +58,15 @@
 
                 var tabAlignText =
                 "tab { \
-                    text:'Align text layers', \
+                    text:'Review layers', \
                     alignment:['fill','fill'], alignChildren:['fill','top'], spacing:5, margins:5, minimumSize:[215,-1], \
-                    titleSplitLayers: StaticText { text:'Search and change layer split' }, \
+                    titleSearch: StaticText { text:'Jump to layer middle points:' }, \
                     grpSearchLayers: Group { \
                         alignChildren:['fill','top'], spacing:3, \
                         btnSearchBack: Button { text:'<'}, \
                         btnSearchForw: Button { text:'>'} \
-                    } \
+                    }, \
+                    grpTextLayers: Group { alignChildren:['fill','fill'] } \
                 }";
 
                 var ressource =
@@ -70,10 +74,7 @@
                     orientation:'column', \
                 }";
             } else {
-                throw new sbVideoScript.RuntimeError({
-                    func: 'createUI',
-                    title: 'Not able to assign panel'
-                });
+                throw new Error("Not able to assign panel")
             }
 
             pan.margins = 1;
@@ -84,8 +85,8 @@
             sbVideoScript.groupInOutButtons = pan.grp.tabPreparation.grpInOut;
 
             sbVideoScript.setTemplateList(pan.grp.tabPreparation.grpTemplate.dropdown);
-            // sbVideoScript.setContentList([], pan.grp.tabPreparation.grpContent.dropdown);
             sbVideoScript.setContentList(pan.grp.tabPreparation.grpContentList);
+            sbVideoScript.adjustUIForSplittedLayers(null, pan.grp.tabAlignText.grpTextLayers);
             sbVideoScript.groupInOutButtons.outButton.enabled = false;
             sbVideoScript.createSlidesButton.enabled = false;
             sbVideoScript.changeFindInOutButtonsState(false, pan.grp.tabPreparation.grpTimeControls);
@@ -101,6 +102,9 @@
             pan.grp.tabPreparation.grpTimeControls.forwFrm1.onClick =   sbVideoScript.onClickFunctionWrapper('setActiveTimeInTimeline', [  1, 'frames' ]);
             pan.grp.tabPreparation.grpTimeControls.forwSecs1.onClick =  sbVideoScript.onClickFunctionWrapper('setActiveTimeInTimeline', [  1, 'seconds']);
             pan.grp.tabPreparation.grpTimeControls.forwSecs10.onClick = sbVideoScript.onClickFunctionWrapper('setActiveTimeInTimeline', [ 10, 'seconds']);
+
+            pan.grp.tabAlignText.grpSearchLayers.btnSearchBack.onClick = sbVideoScript.onClickFunctionWrapper('searchItemInTimeline', [-1]);
+            pan.grp.tabAlignText.grpSearchLayers.btnSearchForw.onClick = sbVideoScript.onClickFunctionWrapper('searchItemInTimeline', [ 1]);
 
             pan.onResizing = pan.onResize = function () { this.layout.resize() }
 

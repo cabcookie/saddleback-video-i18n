@@ -1,5 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:29
-
 /**
  Make sense of a tab separated text file.
 

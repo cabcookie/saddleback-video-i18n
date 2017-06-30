@@ -1,6 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:21
-// DONE: create reference to the trash folder into the sbVideoScript +enhancement id:84 gh:29
-
 {
     try {
         importScript('errors/runtime-error');

@@ -1,5 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:49
-
 /**
 Create all compositions from a given text file based on templates.
 
@@ -42,7 +40,7 @@ Create all compositions from a given text file based on templates.
                     var newComp = sbVideoScript.createCompFromTemplate(templateName, line, main.footageFolder);
 
                     try {
-                        // TODO: check if I really need to store resulting layers and text layer information +enhancement id:95 gh:39
+                        // DOING:130 check if I really need to store resulting layers and text layer information +enhancement id:95 gh:39
                         resultingTextLayers = sbVideoScript.updateTextLayers(newComp, parsedContentLine, main.footageFolder);
                         resultingLayer = {
                             line: line,

@@ -1,5 +1,3 @@
-// DONE: move search for templates to fill dropdownlist into this file and function +enhancement +closeIssue id:63 gh:11
-
 {
     sbVideoScript.setTemplateList = function (dropdownlist) {
         try {

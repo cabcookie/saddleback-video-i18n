@@ -1,5 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:36
-
 /**
  Duplicate an existing "template" composition and return the
  new one. It searches by name, as opposed to index to make things easier.

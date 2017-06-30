@@ -36,7 +36,7 @@ Fix an issue, make a pull request, and Bob's your uncle.
 
 ## Object structure
 
-The script is using the name space `sbVideoScript`. All functions and data are stored here. The script is not packaged so it loads all neccesary functions during runtime. Thus it uses the `importScript(filename)` function to load the relevant script. If the script is loaded it sets reminder in `sbVideoScript.filesLoaded` so that the same script is only being loaded once.
+The script is using the name space `sbVideoScript`. All functions and data are stored here. The script is not packaged so it loads all necessary functions during runtime. Thus it uses the `importScript(filename)` function to load the relevant script. If the script is loaded it sets reminder in `sbVideoScript.filesLoaded` so that the same script is only being loaded once.
 
 ```js
 sbVideoScript = {

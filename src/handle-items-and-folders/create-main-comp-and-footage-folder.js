@@ -1,6 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:34
-// DONE: use sbVideoScript to store the data instead the panel or the object csvData +enhancement id:75 gh:20
-
 {
     try {
         importScript('errors/runtime-error');
@@ -19,14 +16,16 @@
     sbVideoScript.createMainCompAndFootageFolder = function (compConfig) {
         try {
             if (!compConfig) { throw new Error("No settings for composition to be created") }
-            if (!sbVideoScript.mediaFootage) { throw new Error("No media footage found in the project. Please import a video or link a Premiere sequence.") }
-            if (!sbVideoScript.mainCompFolder) { throw new Error("No main folder for the composition has been created.") }
+            if (!sbVideoScript.loadVideoFootage()) { throw new Error("No media footage found in the project. Please import a video or link a Premiere sequence.") }
+
+            var mainCompFolder = sbVideoScript.getMainCompFolder();
+            if (!mainCompFolder) { throw new Error("No main folder for the composition has been created.") }
 
             var sunday = new Date();
             sunday.setDate(sunday.getDate() + (7 - sunday.getDay()));
 
             var compName = compConfig.name + ' ' + sbVideoScript.dateFormatted(sunday);
-            var targetComp = sbVideoScript.getCompItem(compName, sbVideoScript.mediaFootage, sbVideoScript.mainCompFolder.name);
+            var targetComp = sbVideoScript.getCompItem(compName, sbVideoScript.loadVideoFootage(), mainCompFolder.name);
 
             // we check for the first template composition weather it has a drop frame timecode
             var firstTemplateName = '';
@@ -38,7 +37,7 @@
             // retrieve the name of the comp and create the name for the footage folder
             var compFootageFolderName = compConfig.name + sbVideoScript.settings.parentFolderFootageExtensions;
             // create a parent folder for the new footages
-            var compFootageFolder = sbVideoScript.getFolder(compFootageFolderName, sbVideoScript.mainCompFolder.name);
+            var compFootageFolder = sbVideoScript.getFolder(compFootageFolderName, mainCompFolder.name);
 
             return {
                 comp: targetComp,

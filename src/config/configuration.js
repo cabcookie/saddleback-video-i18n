@@ -1,5 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:6
-
 {
     try {
         importScript('errors/runtime-error');
@@ -19,7 +17,8 @@
                 },
                 'Full Screen': {
                     youtubeAlternative: true,
-                    isSizeAlternative: true
+                    isSizeAlternative: true,
+                    sizeAlternative: 'Full Screen YouTube'
                 },
                 'Full Screen YouTube': {
                     youtubeAlternative: false,
@@ -27,7 +26,8 @@
                 },
                 'Two Columns': {
                     youtubeAlternative: true,
-                    isSizeAlternative: true
+                    isSizeAlternative: true,
+                    sizeAlternative: 'Two Columns YouTube'
                 },
                 'Two Columns YouTube': {
                     youtubeAlternative: false,
@@ -54,8 +54,9 @@
                 markerForSplitPositions: '*{}*',
                 bracketsForLayerCounting: '{#}',
                 markSplittedCompsWith: ' [splitted layers]',
-                animationProtectionTime: 0.2,
+                animationProtectionTime: 0.5,
             },
+            badCharactersToBeReplaced: "''",
             compositionNameForInOuts: 'Comp for In-Outs',
             folderNameForTrash: 'ZZZ Temporary Items For Trash',
             mainCompositionsToBuild: {
@@ -86,11 +87,6 @@
                 }],
                 dateFormat: 'dd.mm.yyyy'
             },
-            statusColors: {
-                RED_FONT: "ERR",
-                GREEN_FONT: "SUC",
-                YELLOW_FONT: "WARN"
-            },
             minimumSermonDurationInMin: 10,
             markersNeededInTemplateComps: 2,
             preferredSermonFormat: 'PRPROJ',
@@ -105,13 +101,18 @@
             animationProtectionTime: 2,
             tolerancePxForMaskPositioning: 4,
             preComposedMaskLayerExtension: '-composed-',
-            timeSeperator: ';'
+            timeSeperator: ';',
+            languageIndexNumber: 0, // the original language is used, otherwise index of the array will be set here
+            propertyTranslations: {
+                languages: ['English', 'German'],
+                'Effects': ['Effects', 'Effekte'],
+                'Stereo Mixer': ['Stereo Mixer', 'Stereo-Mischpult'],
+                'Left Level': ['Left Level', 'Pegel links'],
+                'Right Level': ['Right Level', 'Pegel rechts'],
+                'Left Pan': ['Left Pan', 'Balance links'],
+                'Right Pan': ['Right Pan', 'Balance rechts']
+            }
         };
-        var replaceWithYoutube = ['Full Screen', 'Two Columns'];
-        for (var i = 0, l = replaceWithYoutube.length; i < l; i++) {
-            var name = replaceWithYoutube[i];
-            sbVideoScript.settings.compositionTemplates[name].sizeAlternative = name + sbVideoScript.settings.compositionYouTubeNameExtension;
-        }
 
     } catch (e) {
         throw new sbVideoScript.RuntimeError({

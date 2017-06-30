@@ -1,70 +1,61 @@
-// TODO Every function should have an error handling gh:3 id:57
+{
+    try {
+        importScript('errors/runtime-error');
+        importScript('ui-elements/adjust-ui-for-splitted-layers');
 
-function searchItemInTimeline(func, direction, statusObj, panel, splitLayerButtonGroup, statusColors) {
-    return function () {
+    } catch (e) {
+        throw new sbVideoScript.RuntimeError({
+            func: "importScript's for searchItemInTimeline",
+            title: 'Error loading neccesary functions',
+            message: e.message
+        })
+    }
+
+    sbVideoScript.searchItemInTimeline = function (direction) {
         try {
-            var compositionsData = panel.resultComps;
-            if (!compositionsData) {
-                throw new sbVideoScript.RuntimeError({
-                    func: func,
-                    title: "No composition results to iterate through yet. Please load CSV file and create slides and layers.",
-                });
-            }
+            if (direction !== 1 && direction !== -1) { throw new Error("Direction must be +1 or -1 but is "+ direction) }
 
-            var comp, currTime;
-            comp = app.project.activeItem;
-            currTime = comp.time;
-            currTime += direction/comp.frameRate
+            var comp;
+            var activeName = app.project.activeItem.name;
+            var mainCompsToBuild = sbVideoScript.settings.mainCompositionsToBuild.compositionsConfig;
 
-            if (!compositionsData[comp.name]) {
-                throw new sbVideoScript.RuntimeError({
-                    func: func,
-                    title: "Composition can't be searched.",
-                    message: "The composition %1 is not a main composition and thus you can't search for IN and OUT times or split layers in this comp.",
-                    params: [ comp.name ]
-                });
-            }
+            for (var i = 0; i < mainCompsToBuild.length; i++) {
+                var name = mainCompsToBuild[i].name;
 
-            var newTime, mainComp, index, testLay, layer;
-
-            newTime = direction === 1 ? comp.duration : 0;
-            mainComp = compositionsData[comp.name];
-
-            for (var l = 0, mll = mainComp.layers.length; l < mll; l++) {
-                index = direction === 1 ? l : mll - l - 1;
-                testLay = mainComp.layers[index];
-                if (direction === 1) {
-                    if (testLay.startTime > currTime && testLay.startTime < newTime) {
-                        newTime = testLay.startTime;
-                        layer = testLay;
-                    } else if (testLay.endTime > currTime && testLay.endTime < newTime) {
-                        newTime = testLay.endTime;
-                        layer = testLay;
-                    }
-                } else {
-                    if (testLay.endTime < currTime && testLay.endTime > newTime) {
-                        newTime = testLay.endTime;
-                        layer = testLay;
-                    } else if (testLay.startTime < currTime && testLay.endTime > newTime) {
-                        newTime = testLay.startTime;
-                        layer = testLay
-                    }
+                if (activeName.indexOf(name) === 0) {
+                    comp = app.project.activeItem;
+                    break;
                 }
             }
 
-            if (newTime === comp.duration) {
-                var msg = "No further IN/OUT position in the "+ (direction === 1 ? 'right' : 'left') +" direction.";
-                changeStatusMessage(statusObj, msg, statusColors.YELLOW_FONT, panel);
-                return;
+            if (!comp) { throw new Error("No main composition selected") }
+
+            var currTime = comp.time + direction/comp.frameRate;
+            var maxDuration = sbVideoScript.settings.minimumSermonDurationInMin * 60;
+
+            var newMidPoint = direction === 1 ? comp.duration : 0;
+            var selectedLayer;
+
+            for (var i = 1; i <= comp.layers.length; i++) {
+                var layer = comp.layers[i];
+                var midPoint = (layer.inPoint + layer.outPoint) / 2.0;
+
+                if ((layer.outPoint - layer.inPoint) < maxDuration) {
+                    if (direction ===  1 && midPoint > currTime && midPoint < newMidPoint) { newMidPoint = midPoint }
+                    if (direction === -1 && midPoint < currTime && midPoint > newMidPoint) { newMidPoint = midPoint }
+                    if (newMidPoint === midPoint) { selectedLayer = layer }
+                }
             }
 
-            var msg = "Found next IN/OUT position by searching "+ (direction === 1 ? 'right' : 'left') +".";
-            comp.time = newTime;
-            comp.openInViewer();
-            adjustUIForSplittedLayers(layer, panel, splitLayerButtonGroup, statusColors, statusObj);
-            changeStatusMessage(statusObj, msg, statusColors.GREEN_FONT, panel);
+            comp.time = newMidPoint;
+            sbVideoScript.adjustUIForSplittedLayers(selectedLayer);
+
         } catch (e) {
-            changeStatusMessage(statusObj, e.message, statusColors.RED_FONT, panel);
+            throw new sbVideoScript.RuntimeError({
+                func: 'searchItemInTimeline',
+                title: "Error searching layers within the timeline. Moving "+ (direction == -1 ? 'left' : 'right') +".",
+                message: e.message
+            })
         }
     }
 }

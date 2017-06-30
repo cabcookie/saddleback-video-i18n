@@ -1,6 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:14
-// DONE: store a reference to the main comp folder within sbVideoScript +enhancement id:83 gh:28
-
 {
     try {
         importScript('errors/runtime-error');
@@ -8,23 +5,25 @@
 
     } catch (e) {
         throw new sbVideoScript.RuntimeError({
-            func: "importScript's for createMainCompFolder",
+            func: "importScript's for getMainCompFolder",
             title: 'Error loading neccesary functions',
             message: e.message
         })
     }
 
-    sbVideoScript.createMainCompFolder = function () {
+    sbVideoScript.getMainCompFolder = function () {
         try {
-            var mainCompFolderName = sbVideoScript.settings.mainCompositionsToBuild.folderName;
             if (sbVideoScript.mainCompFolder) {
-                return;
+                return sbVideoScript.mainCompFolder;
             }
+
+            var mainCompFolderName = sbVideoScript.settings.mainCompositionsToBuild.folderName;
             sbVideoScript.mainCompFolder = sbVideoScript.getFolder(mainCompFolderName);
+            return sbVideoScript.mainCompFolder;
 
         } catch (e) {
             throw new sbVideoScript.RuntimeError({
-                func: 'createMainCompFolder',
+                func: 'getMainCompFolder',
                 title: 'Error loading or creating main composition folder',
                 message: e.message
             })

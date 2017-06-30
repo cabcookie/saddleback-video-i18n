@@ -1,46 +1,51 @@
-// TODO: Implement proper error handling for this function +bug id:106 gh:51
-// TODO: The function should analyse a composition to find the splitted text layers information. Or we create an object while creating all layers and splitted text layers and if we restart After Effects all these information will be reproduced when loading the CSV file +feature id:107 gh:50
+{
+    try {
+        importScript('errors/runtime-error');
+        importScript('adjust-timeline/extend-layer-duration');
 
-function changeSplitTextLayerTime(layerOptions, protection, statusObj, statusColors) {
-    return function () {
-        var lay1, l1Offset, l1MinDuration;
-        var lay2, l2Offset, l2MinDuration;
+    } catch (e) {
+        throw new sbVideoScript.RuntimeError({
+            func: "importScript's for changeSplitTextLayerTime",
+            title: 'Error loading neccesary functions',
+            message: e.message
+        })
+    }
 
-        lay1 = layerOptions.comp.layer(layerOptions.lay1Name);
-        lay2 = layerOptions.comp.layer(layerOptions.lay2Name);
+    sbVideoScript.changeSplitTextLayerTime = function (layer1, layer2) {
+        try {
+            var comp = layer1.containingComp;
+            if (!comp === app.project.activeItem) { throw new Error("You haven't selected the right composition anymore. Please open composition '"+ comp.name +"' to continue.") }
 
-        var currTime = layerOptions.comp.time;
-        if (currTime > 0 && currTime <= layerOptions.comp.duration) {
+            var currTime = comp.time;
+            if (currTime < 0 || currTime > comp.duration) { throw new Error("The time indicator is currently not in the layer '"+ comp.name +"'. Please remove before splitting.") }
 
-            app.beginUndoGroup("Layer split positions changed");
+            var protection = sbVideoScript.settings.splitSettings.animationProtectionTime;
+            var lay1Name = layer1.name;
+            var lay2Name = layer2.name;
+            var l1MinDuration = layer1.outPoint - protection;
+            var l1Offset = currTime - layer1.outPoint;
+            var l2MinDuration = layer2.outPoint - protection;
+            var l2Offset = layer2.inPoint - currTime;
 
-            try {
-                l1MinDuration = lay1.outPoint - protection;
-                l1Offset = currTime - lay1.outPoint;
-                extendLayerDuration(lay1, l1Offset, l1MinDuration);
-                lay1.outPoint += l1Offset;
+            app.beginUndoGroup("Layer split positions changed between '"+ lay1Name +"' and '"+ lay2Name +"'");
+            {
+                sbVideoScript.extendLayerDuration(layer1, l1Offset, l1MinDuration);
+                layer1.outPoint += l1Offset;
 
-                l2MinDuration = lay2.outPoint - protection;
-                l2Offset = lay2.inPoint - currTime;
-                extendLayerDuration(lay2, l2Offset, l2MinDuration);
-                lay2.startTime -= l2Offset;
-                lay2.outPoint += l2Offset;
-
-                var msg = "Changed transition position between layer '%1' and layer '%2'.";
-                msg = msg.replace('%1', layerOptions.lay1Name);
-                msg = msg.replace('%2', layerOptions.lay2Name);
-                changeStatusMessage(statusObj, msg, statusColors.GREEN_FONT, panel);
-            } catch (e) {
-                changeStatusMessage(statusObj, e.message, statusColors.RED_FONT, panel);
+                sbVideoScript.extendLayerDuration(layer2, l2Offset, l2MinDuration);
+                layer2.startTime -= l2Offset;
+                layer2.outPoint += l2Offset;
             }
-
             app.endUndoGroup();
 
-            layerOptions.comp.openInViewer();
-        } else {
-            var msg = "The time indicator is currently not in the layer '%1'. Please remove before splitting.";
-            msg = msg.replace('%1', layerOptions.comp.name);
-            changeStatusMessage(statusObj, msg, statusColors.YELLOW_FONT, panel);
+            comp.openInViewer();
+
+        } catch (e) {
+            throw new sbVideoScript.RuntimeError({
+                func: 'changeSplitTextLayerTime',
+                title: "Couldn't change the time where the text is being splitted.",
+                message: e.message
+            })
         }
     }
 }

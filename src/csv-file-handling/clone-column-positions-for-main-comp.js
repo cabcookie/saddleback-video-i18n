@@ -1,5 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:28
-
 {
     try {
         importScript('errors/runtime-error');

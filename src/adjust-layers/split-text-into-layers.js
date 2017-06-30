@@ -1,5 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:39
-
 {
     try {
         importScript('errors/runtime-error');
@@ -33,7 +31,7 @@
         		preparedText = preparedText.split(splitter).join(splitter + markSplits);
         	}
         	for (var i = 0, gs = specificSplitters.length; i < gs; i++) {
-        		var splitter = specificSplitters[i];
+        		var splitter = ' ' + specificSplitters[i];
         		preparedText = preparedText.split(splitter).join(markSplits + splitter);
         	}
 

@@ -1,5 +1,5 @@
-// DONE Every function should have an error handling gh:3 id:42
 // TODO: If a fill in spreads over more than one line, the first and the last line works fine but the lines in between appear in the last line +bug id:94 gh:38
+// TODO: If a fill in starts at the very beginning of a line it creates problems with the location of the mask and line +bug gh:57
 
 {
     try {

@@ -1,5 +1,3 @@
-// DONE Every function should have an error handling gh:3 id:48
-
 /**
 Places a given comp on a timeline of a target comp by using the given
 start and end time. The comp will be a Layer in the target comp and
