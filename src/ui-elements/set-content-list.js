@@ -42,13 +42,15 @@
                         var parsedLine = sbVideoScript.parse(line, colPos);
 
                         var firstCol = parsedLine.layers[0].text;
-                        if (firstCol.length > 40) { firstCol = firstCol.substring(0,40) + '…' }
+                        var splitter = sbVideoScript.settings.splitSettings.seperatorForSplitting;
+
+                        if (firstCol.length > 40) { firstCol = firstCol.substring(0,40) + splitter }
 
                         var lineItem = contentList.add('item', firstCol);
 
                         for (var l = 1; l < maxHeaders; l++) {
                             var item = parsedLine.layers[l].text;
-                            if (item.length > 40) { item = item.substring(0,40) + '…' }
+                            if (item.length > 40) { item = item.substring(0,40) + splitter }
                             lineItem.subItems[l-1].text = item;
                         }
                     }

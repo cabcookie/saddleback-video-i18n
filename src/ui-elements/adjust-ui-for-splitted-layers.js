@@ -25,7 +25,7 @@
             if (!tabs.layersWithSplittedTexts) {
                 tabs.tabs = {};
                 tabs.layersWithSplittedTexts = tabs.add('tab', undefined, "Split Layers");
-                // TODO: review all layers and search for layers with splitted texts +enhancement
+                // TODO: review all layers and search for layers with splitted texts +enhancement gh:59
             }
             // and remove all other tabs
             for (var tabName in tabs.tabs) { tabs.remove(tabs.tabs[tabName]) }

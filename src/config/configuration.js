@@ -18,6 +18,16 @@
                 'Full Screen': {
                     youtubeAlternative: true,
                     isSizeAlternative: true,
+                    sizeAlternative: 'Full Screen 2-lines'
+                },
+                'Full Screen 2-lines': {
+                    youtubeAlternative: false,
+                    isSizeAlternative: true,
+                    sizeAlternative: 'Full Screen 3-lines'
+                },
+                'Full Screen 3-lines': {
+                    youtubeAlternative: false,
+                    isSizeAlternative: true,
                     sizeAlternative: 'Full Screen YouTube'
                 },
                 'Full Screen YouTube': {
@@ -46,11 +56,11 @@
             },
             splitSettings: {
                 splitPositions: {
-                    allTexts: ['. ', '? ', '! ', '; ', ', ', ' - ', ' – ', '…'],
+                    allTexts: ['. ', '? ', '! ', '; ', ', ', ' - ', ' – ', '...', '…'],
                     'Text German': ['und'],
                     'Text English': ['and', 'than', 'then'],
                 },
-                seperatorForSplitting: '…',
+                seperatorForSplitting: '...',
                 markerForSplitPositions: '*{}*',
                 bracketsForLayerCounting: '{#}',
                 markSplittedCompsWith: ' [splitted layers]',

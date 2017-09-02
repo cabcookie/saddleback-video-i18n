@@ -1,4 +1,5 @@
 // TODO: when extending a layer the type of a keyframe seems to be ignored when deleting and creating it again +bug id:96 gh:40
+// TODO: keyframes should be adjusted from the middle to the end of the duration instead of within the array of the minduration +enhancement 
 
 {
     try {
