@@ -46,7 +46,7 @@
 
                 app.beginUndoGroup("Creating Slides for '" + main.comp.name + "'");
 
-                // TODO: Add a progress bar when creating the main compositions and their slides +feature gh:60
+                // TODO: Add a progress bar when creating the main compositions and their slides +feature gh:60 id:3
 
                 var layerLen = compForInOuts.layers.length - 1;
                 for (var l = layerLen; l > 0; l--) {

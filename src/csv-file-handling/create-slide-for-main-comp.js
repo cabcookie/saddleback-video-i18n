@@ -40,7 +40,7 @@ Create all compositions from a given text file based on templates.
                     var newComp = sbVideoScript.createCompFromTemplate(templateName, line, main.footageFolder);
 
                     try {
-                        // DOING:130 check if I really need to store resulting layers and text layer information +enhancement id:95 gh:39
+                        // DOING check if I really need to store resulting layers and text layer information +enhancement id:95 gh:39
                         resultingTextLayers = sbVideoScript.updateTextLayers(newComp, parsedContentLine, main.footageFolder);
                         resultingLayer = {
                             line: line,

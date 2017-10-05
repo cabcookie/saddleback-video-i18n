@@ -8,50 +8,60 @@
                 'Lower Third': {
                     youtubeAlternative: true,
                     isSizeAlternative: true,
-                    sizeAlternative: 'Full Screen'
+                    sizeAlternative: 'Full Screen',
+                    isSelectable: true
                 },
                 'Lower Third YouTube': {
                     youtubeAlternative: false,
                     isSizeAlternative: true,
-                    sizeAlternative: 'Full Screen YouTube'
+                    sizeAlternative: 'Full Screen YouTube',
+                    isSelectable: false
                 },
                 'Full Screen': {
                     youtubeAlternative: true,
                     isSizeAlternative: true,
-                    sizeAlternative: 'Full Screen 2-lines'
+                    sizeAlternative: 'Full Screen 2-lines',
+                    isSelectable: true
                 },
                 'Full Screen 2-lines': {
                     youtubeAlternative: false,
                     isSizeAlternative: true,
-                    sizeAlternative: 'Full Screen 3-lines'
+                    sizeAlternative: 'Full Screen 3-lines',
+                    isSelectable: false
                 },
                 'Full Screen 3-lines': {
                     youtubeAlternative: false,
                     isSizeAlternative: true,
-                    sizeAlternative: 'Full Screen YouTube'
+                    sizeAlternative: 'Full Screen YouTube',
+                    isSelectable: false
                 },
                 'Full Screen YouTube': {
                     youtubeAlternative: false,
-                    isSizeAlternative: false
+                    isSizeAlternative: false,
+                    isSelectable: false
                 },
                 'Two Columns': {
                     youtubeAlternative: true,
                     isSizeAlternative: true,
-                    sizeAlternative: 'Two Columns YouTube'
+                    sizeAlternative: 'Two Columns YouTube',
+                    isSelectable: true
                 },
                 'Two Columns YouTube': {
                     youtubeAlternative: false,
-                    isSizeAlternative: false
+                    isSizeAlternative: false,
+                    isSelectable: false
                 },
                 'Scripture': {
                     youtubeAlternative: true,
                     isSizeAlternative: false,
-                    splitLongTexts: true
+                    splitLongTexts: true,
+                    isSelectable: true
                 },
                 'Scripture YouTube': {
                     youtubeAlternative: false,
                     isSizeAlternative: false,
-                    splitLongTexts: true
+                    splitLongTexts: true,
+                    isSelectable: false
                 }
             },
             splitSettings: {
