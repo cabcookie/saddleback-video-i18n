@@ -1,4 +1,4 @@
-// TODO: If a fill in spreads over more than one line, the first and the last line works fine but the lines in between appear in the last line +bug id:99 gh:43
+// DOING: If a fill in spreads over more than one line, the first and the last line works fine but the lines in between appear in the last line +bug id:99 gh:43
 
 {
     try {

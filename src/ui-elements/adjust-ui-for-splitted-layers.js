@@ -25,7 +25,7 @@
             if (!tabs.layersWithSplittedTexts) {
                 tabs.tabs = {};
                 tabs.layersWithSplittedTexts = tabs.add('tab', undefined, "Split Layers");
-                // TODO: review all layers and search for layers with splitted texts +enhancement gh:59
+                // TODO: review all layers and search for layers with splitted texts +enhancement gh:59 id:2
             }
             // and remove all other tabs
             for (var tabName in tabs.tabs) { tabs.remove(tabs.tabs[tabName]) }
@@ -111,12 +111,12 @@
                         var lay2Text = sbVideoScript.replaceBadCharacters(lay2.property("Source Text").value.text);
 
                         var groupRessource =
-                        "Group { \
-                            alignChildren:['fill','top'], \
-                            layer1: StaticText { properties:{multiline:true}, text:'"+ lay1Text +"' }, \
-                            splitButton: Button { text:'Split at current time' }, \
-                            layer2: StaticText { properties:{multiline:true}, text:'"+ lay2Text +"' } \
-                        }";
+                        'Group { \
+                            alignChildren:["fill","top"], \
+                            layer1: StaticText { properties:{multiline:true}, text:"'+ lay1Text +'" }, \
+                            splitButton: Button { text:"Split at current time" }, \
+                            layer2: StaticText { properties:{multiline:true}, text:"'+ lay2Text +'" } \
+                        }';
                         var group = tab.add(groupRessource);
                         group.splitButton.minimumSize.width = 115;
                         group.splitButton.preferredSize.width = 115;

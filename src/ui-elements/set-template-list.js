@@ -5,11 +5,11 @@
             importScript('config/configuration');
 
             var templates = sbVideoScript.settings.compositionTemplates;
-            var youtubeTempName = sbVideoScript.settings.compositionYouTubeNameExtension;
             dropdownlist.removeAll();
 
             for (var name in templates) {
-                if (name.indexOf(youtubeTempName) === -1) {
+                var setting = templates[name];
+                if (setting.isSelectable) {
                     dropdownlist.add('item', name);
                 }
             }

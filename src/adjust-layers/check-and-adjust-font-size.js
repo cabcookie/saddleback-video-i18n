@@ -1,4 +1,4 @@
-// TODO: the adjustment of font size is not working with the addresses of scriptures in the Scripture template but it should. +bug id:100 gh:44
+// DONE: the adjustment of font size is not working with the addresses of scriptures in the Scripture template but it should. +bug id:100 gh:44
 
 {
     try {
@@ -23,7 +23,7 @@
             // saving some data to make sure the fontSize doesn't get to small
             // and placing the mask and line for the fill ins is possible
             var oldLinePosition = textDocument.baselineLocs[1];
-            var oldFontSize = textDocument.fontSize;
+            var orgFontSize = textDocument.fontSize;
 
             var cfgTextLayer = sbVideoScript.checkLineNumsInTemplate(templateCompName, textLayer, originalLayerName);
             var numLines = cfgTextLayer.numLines;
@@ -42,33 +42,52 @@
             // check if text is too long for the text field and
             // adjust fontSize until it fits
             textDocument = textProp.value;
-            var newFontSize = oldFontSize;
             var maxFontSizeChange = sbVideoScript.settings.maximumFontSizeChange;
 
-            // TODO: find a way to make these checks faster (reduce fontSize to fit text into layer). The call textProp.setValue(textDocument) is very slow. +enhancement id:101 gh:45
-            while (textDocument.baselineLocs.length > numLines * 4) {
-                newFontSize -= 1;
-                var fontSizeChange = newFontSize / oldFontSize - 1;
+            var maxFontSize = orgFontSize;
+            var minFontSize = Math.ceil((1+maxFontSizeChange) * maxFontSize);
+            var testFontSize = orgFontSize;
+            var biggerPossible = false;
 
-                // if fontSizeChange is to high than stop and try to split the layers
-                // or return an empty array
-                // an empty array means we were not succesfull to put the text into the layer
-                if (fontSizeChange < maxFontSizeChange) {
-                    if (textIsSplittable) {
-                        // we can split the text in the layers for this comp
-                        // but first we reset to a moderate fontSize
-                        textDocument.fontSize = oldFontSize * (maxFontSizeChange / 2 + 1);
-                        textProp.setValue(textDocument);
+            // DOING: find a way to make these checks faster (reduce fontSize to fit text into layer). The call textProp.setValue(textDocument) is very slow. +enhancement id:101 gh:45
+            while (textDocument.baselineLocs.length > numLines * 4 || biggerPossible) {
+                if (testFontSize === orgFontSize) {
+                    testFontSize = minFontSize;
+                    biggerPossible = true;
+                } else if (textDocument.baselineLocs.length > numLines * 4) {
+                    if (testFontSize === minFontSize) {
+                        // if testFontSize is the minimum allowed fontSize and is still to
+                        // long for the textLayer than stop and try to split the layers
+                        // or return an empty array
+                        // an empty array means we were not succesfull to put the text into the layer
+                        if (textIsSplittable) {
+                            // we can split the text in the layers for this comp
+                            // but first we reset to a moderate fontSize
+                            textDocument.fontSize = Math.ceil(orgFontSize * (maxFontSizeChange / 2.0 + 1));
+                            textProp.setValue(textDocument);
 
-                        var splittedLayers = sbVideoScript.splitTextIntoLayers(text, textLayer, originalLayerName, numLines);
-                        return splittedLayers;
+                            var splittedLayers = sbVideoScript.splitTextIntoLayers(text, textLayer, originalLayerName, numLines);
+                            return splittedLayers;
+                        } else {
+                            throw new sbVideoScript.FontToSmallError(text, textLayer.name, templateCompName);
+                        }
+
                     } else {
-                        throw new sbVideoScript.FontToSmallError(text, textLayer.name, templateCompName);
+                        // the text didn't fit into the layer but we haven't reached the minimum
+                        // font size thus we set the tested fontSize to the new maximum
+                        // and continue to search for the best fit
+                        maxFontSize = testFontSize;
                     }
+
+                } else if (testFontSize === (maxFontSize - 1)) {
+                    biggerPossible = false;
+
+                } else if (biggerPossible) {
+                    testFontSize = Math.floor((maxFontSize + minFontSize) / 2.0);
+                    textDocument.fontSize = testFontSize;
+                    textProp.setValue(textDocument);
+                    textDocument = textProp.value;
                 }
-                textDocument.fontSize = newFontSize;
-                textProp.setValue(textDocument);
-                textDocument = textProp.value;
             }
             return [text];
 
