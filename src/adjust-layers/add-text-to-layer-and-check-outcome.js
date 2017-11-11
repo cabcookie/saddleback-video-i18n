@@ -17,6 +17,18 @@
             textProp.setValue(text);
             var textDocument = textProp.value;
             var bl = textDocument.baselineLocs;
+            var len = bl.length
+            var startAtNewLine = false;
+
+            if (bl[len-1] === bl[len-2] && bl[len-1] === bl[len-3] && bl[len-1] === bl[len-4]) {
+                text += 'CHECK';
+                textProp.setValue(text);
+                textDocument = textProp.value;
+                bl = textDocument.baselineLocs;
+                len = bl.length
+                startAtNewLine = true;
+            }
+
             lastBlLength = lastBlLength === 0 || lastBlLength > bl.length ? 4 : lastBlLength;
             var lines = [];
 
@@ -30,8 +42,13 @@
                     line.startX = bl[i-4];
                     line.startY = bl[i-3];
                 }
-                line.endX = bl[i-2];
-                line.endY = bl[i-1];
+                if (i === bl.length && startAtNewLine) {
+                    line.endX = line.startX;
+                    line.endY = line.startY;
+                } else {
+                    line.endX = bl[i-2];
+                    line.endY = bl[i-1];
+                }
 
                 lines.push(line);
             }

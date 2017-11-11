@@ -55,6 +55,9 @@
                     restText = restText.substring(pos+len, restText.length);
 
                 } else {
+                    if (restText.length > 0) {
+                        textAry.push({text: restText});
+                    }
                     textFullyChecked = true;
                 }
             }

@@ -32,10 +32,22 @@
                 'Full Screen 3-lines': {
                     youtubeAlternative: false,
                     isSizeAlternative: true,
-                    sizeAlternative: 'Full Screen YouTube',
+                    sizeAlternative: 'Full Screen 4-lines',
+                    isSelectable: false
+                },
+                'Full Screen 4-lines': {
+                    youtubeAlternative: false,
+                    isSizeAlternative: true,
+                    sizeAlternative: 'Two Columns',
                     isSelectable: false
                 },
                 'Full Screen YouTube': {
+                    youtubeAlternative: false,
+                    isSizeAlternative: true,
+                    sizeAlternative: 'Full Screen YouTube smaller',
+                    isSelectable: false
+                },
+                'Full Screen YouTube smaller': {
                     youtubeAlternative: false,
                     isSizeAlternative: false,
                     isSelectable: false
@@ -125,7 +137,7 @@
                     textMaskHandling: 'animate'
                 },
                 hideText: {
-                    delimiter: '§§§§',
+                    delimiter: '$$$$',
                     textMaskHandling: 'hide'
                 }
             },
