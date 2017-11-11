@@ -4,7 +4,7 @@
     try {
         importScript('errors/runtime-error');
         importScript('adjust-layers/adjust-pre-composed-comp-size');
-        importScript('remove-keyframes-and-set-opacity');
+        importScript('adjust-layers/remove-keyframes-and-set-opacity');
 
     } catch (e) {
         throw new sbVideoScript.RuntimeError({
