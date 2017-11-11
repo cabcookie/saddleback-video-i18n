@@ -14,71 +14,69 @@
         })
     }
 
-    sbVideoScript.checkFillinLayerAddresses = function (text, textLayer, delimiter) {
+    sbVideoScript.checkFillinLayerAddresses = function (text, textLayer) {
         try {
-            // we evaluate the text before the first fill in and in which line it ends
-            var textAry = text.split(delimiter[0]);
-            var testText = textAry[0];
-            var evaluate = {};
-            sbVideoScript.addTextToLayerAndCheckOutcome(testText, textLayer, evaluate);
-            var lastBl = evaluate.blLength;
+            var fillInHandling = sbVideoScript.settings.fillInHandling;
 
-            // the end of this text is the beginning of the first fill in
-            // and thus the starting point of the mask for it
-            var maskAddress = {
-                startX: evaluate.lineEndX,
-                y: evaluate.lineY
-            };
-            var maskAddressAry = [];
+            // create array of fill in start positions with their mathching animation option
+            var restText = text;
+            var textFullyChecked = false;
+            var textAry = [];
+            while (!textFullyChecked) {
+                var leftPosition = -1;
+                var aryObj = {};
+                for (var fillInOption in fillInHandling) {
+                    var option = fillInHandling[fillInOption];
+                    var delimiter = option.delimiter;
+                    var len = delimiter.length / 2;
+                    var delimiterLeft = delimiter.substring(0, len);
 
-            for (var i = 1, tl = textAry.length; i < tl; i++) {
-                // we split the fill in from the text behind it and evaluate
-                // if there is a line break within the fill in
-                var elem = textAry[i].split(delimiter[1]);
-                testText += elem[0];
-                sbVideoScript.addTextToLayerAndCheckOutcome(testText, textLayer, evaluate);
-                var newBl = evaluate.blLength;
-
-                // if the newBl has more lines than the lastBl there is at least
-                // one line break in the fill in; then we split the fill in and store information
-                // about the start and end position for the masks
-                while (newBl > lastBl) {
-                    // evaluating the line end of the lastBl line and take this as
-                    // the end of the maskLayer
-                    maskAddress.endX = evaluate.lastLineEndX[lastBl];
-
-                    // add these complete maskAddress to the array of masks
-                    // which we will use for later to create and position the mask layers
-                    maskAddressAry[maskAddressAry.length] = maskAddress;
-
-                    // now create the new starting point for the next mask layer
-                    // thus the fill in continues after the line break
-                    lastBl += 4;
-                    var maskAddress = {
-                        startX: evaluate.lineStartX,
-                        y: evaluate.lineY
-                    };
-                    // attention when we add more text to this line and the text is centered
-                    // the starting point may change
-
-                    // TODO: how can we handle centered text? +feature id:79 gh:24
+                    var pos = restText.indexOf(delimiterLeft);
+                    if (pos >= 0 && (pos < leftPosition || leftPosition < 0)) {
+                        leftPosition = pos;
+                        aryObj.text = restText.substring(0, pos);
+                        aryObj.fillInOption = option;
+                        aryObj.delimiterRight = delimiter.substring(len, len*2);
+                    }
                 }
+                if (leftPosition > 0) {
+                    textAry.push({text: aryObj.text});
+                    var option = aryObj.fillInOption;
+                    var len = option.delimiter.length/2;
+                    restText = restText.substring(leftPosition+len, restText.length);
+                    var pos = restText.indexOf(aryObj.delimiterRight);
+                    if (pos < 0) {
+                        throw new Error("Closing bracket '"+ aryObj.delimiterRight +"' is missing for text '"+ restText +"'");
+                    }
+                    textAry.push({
+                        text: restText.substring(0, pos),
+                        textMaskHandling: aryObj.fillInOption.textMaskHandling
+                    })
+                    restText = restText.substring(pos+len, restText.length);
 
-                // now that we iterated through all lines we can add the end of the current line
-                // thus it is the end of the fill in
-                maskAddress.endX = evaluate.lineEndX;
-                maskAddressAry[maskAddressAry.length] = maskAddress;
-
-                // add the text after the fill in and set the new end of the current line
-                // as a new starting point for the next possible fill in
-                testText += elem[1];
-                sbVideoScript.addTextToLayerAndCheckOutcome(testText, textLayer, evaluate);
-                lastBl = evaluate.blLength;
-                maskAddress = {
-                    startX: evaluate.lineEndX,
-                    y: evaluate.lineY
-                };
+                } else {
+                    textFullyChecked = true;
+                }
             }
+
+            // iterate through the array of texts and add their baseline positions
+            var evaluate = [];
+            var testText = "";
+            var maskAddressAry = [];
+            for (var i = 0; i < textAry.length; i++) {
+                var part = textAry[i];
+                testText += part.text;
+                // TODO: how can we handle centered text? +feature id:79 gh:24
+                evaluate = sbVideoScript.addTextToLayerAndCheckOutcome(testText, textLayer, evaluate);
+
+                if (part.textMaskHandling) {
+                    maskAddressAry.push({
+                        positions: evaluate,
+                        textMaskHandling: part.textMaskHandling
+                    })
+                }
+            }
+
             return maskAddressAry;
 
         } catch (e) {

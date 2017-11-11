@@ -3,7 +3,7 @@ Update the text layer of a given comp.
 
 @Usage this is used to replace the text in duplicated "German" comps with text from a file.
 @param comp {Object} - a composition.
-@param textLayers {Array} - an array of text layers with its name and new content.
+@param parsedContentLine {Object} - an object which contains the information of a certain line of the CSV file in form of a structured object. parsedContentLine.layers stores the text layers with its originalLayerName, layerName and the text itself
 @param parentFolder {Object} - the parentFolder where pre-composed layers will be consolidated
 */
 
@@ -27,7 +27,11 @@ Update the text layer of a given comp.
             if (!comp) { throw new Error("No composition provided") }
 
             var textLayers = parsedContentLine.layers;
-            var fillInDelimiter = sbVideoScript.settings.fillInDelimiter;
+
+            // DONE add several fill in options here
+            // var fillInDelimiter = sbVideoScript.settings.fillInDelimiter;
+            var fillInHandling = sbVideoScript.settings.fillInHandling;
+
             var resultingTextLayers = [];
 
             // let's check if we have permission to split the text
@@ -52,7 +56,15 @@ Update the text layer of a given comp.
                     var textLayer = comp.layer(layerName);
 
                     if (textLayer) {
-                        var resultText = newText.replace(fillInDelimiter[0],'').replace(fillInDelimiter[1],'');
+                        // remove all possible fill in delimiters within the text to just handle the pure text
+                        var resultText = newText;
+                        for (var fillInOption in fillInHandling) {
+                            var delimiter = fillInHandling[fillInOption].delimiter;
+                            var len = delimiter.length / 2;
+                            var delimiterLeft = delimiter.substring(0, len);
+                            var delimiterRight = delimiter.substring(len, len*2);
+                            resultText = resultText.replace(delimiterLeft,'').replace(delimiterRight,'');
+                        }
 
                         // store baselines assuming the mask and line start at the very
                         // left of the template text and we only need to know how far
@@ -84,7 +96,10 @@ Update the text layer of a given comp.
                             // evaluate if there is more than one fill in
                             // or a fill in is splitted over lines
                             // if this is the case than duplicate masks and lines and precompose them
-                            var arrOfMaskAddresses = sbVideoScript.checkFillinLayerAddresses(newText, textLayer, fillInDelimiter);
+
+                            // DONE add several fill in options here
+                            // var arrOfMaskAddresses = sbVideoScript.checkFillinLayerAddresses(newText, textLayer, fillInDelimiter);
+                            var arrayOfMaskAddresses = sbVideoScript.checkFillinLayerAddresses(newText, textLayer);
 
                             var maskLayerName = sbVideoScript.settings.maskLayerNamePrefix + ' ' + layerName[layerName.length - 1];
                             var maskLayer = comp.layer(maskLayerName);
@@ -93,17 +108,20 @@ Update the text layer of a given comp.
 
                             // check if there is no fill in and hide the mask and the line
                             // check if there is more than one fill in
-                            if (arrOfMaskAddresses.length === 0) {
+                            // if (arrOfMaskAddresses.length === 0) {
+                            if (arrayOfMaskAddresses.length === 0) {
                                 textLayer.trackMatteType = TrackMatteType.NO_TRACK_MATTE;
                                 if (lineLayer) {
                                     lineLayer.remove();
                                 }
                             } else {
-                                // TODO: check for expected maskLayer and lineLayer within load-all-expected-templates +enhancement id:78 gh:23
                                 if (maskLayer) {
                                     if (lineLayer) {
                                         // fill ins found, so we need to create and position the mask layers
-                                        sbVideoScript.createAndPositionMasksAndLines(arrOfMaskAddresses, maskLayer, lineLayer, baselines, parentFolder);
+                                        // DONE handle several fill in options here
+                                        // sbVideoScript.createAndPositionMasksAndLines(arrOfMaskAddresses, maskLayer, lineLayer, baselines, parentFolder);
+                                        sbVideoScript.createAndPositionMasksAndLines(arrayOfMaskAddresses, maskLayer, lineLayer, baselines, parentFolder);
+
                                     } else {
                                         // if lineLayer doesn't exist something is wrong with the template
                                         throw new Error("The current composition '"+ comp.name +"' shows that the layer '"+ lineLayerName +"' is missing. Please correct and run the script again.");

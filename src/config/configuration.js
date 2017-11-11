@@ -66,7 +66,7 @@
             },
             splitSettings: {
                 splitPositions: {
-                    allTexts: ['. ', '? ', '! ', '; ', ', ', ' - ', ' – ', '...', '…'],
+                    allTexts: ['. ', '? ', '! ', '; ', ', ', ' - ', ' – ', '...', '…', '. . .'],
                     'Text German': ['und'],
                     'Text English': ['and', 'than', 'then'],
                 },
@@ -115,7 +115,20 @@
             standardCSVDelimiter: "\t",
             maskLayerNamePrefix: 'Mask',
             lineLayerNamePrefix: 'Line',
-            fillInDelimiter: '[]',
+            fillInHandling: {
+                showFromBeginning: {
+                    delimiter: '&&&&',
+                    textMaskHandling: 'show'
+                },
+                showWithAnimation: {
+                    delimiter: '[]',
+                    textMaskHandling: 'animate'
+                },
+                hideText: {
+                    delimiter: '§§§§',
+                    textMaskHandling: 'hide'
+                }
+            },
             delimiterForNewLines: '{n}',
             maximumFontSizeChange: -0.15,
             animationProtectionTime: 2,

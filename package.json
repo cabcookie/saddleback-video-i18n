@@ -1,10 +1,10 @@
 {
-    "name": "saddleback-video-translation",
-    "version": "2.4.0",
+    "name": "saddleback-video-i18n",
+    "version": "2.4.1",
     "description": "A script to help translate video components from one language into another in After Effects for Saddleback Church sermons.",
     "main": "index.js",
-    "repository": "git@github.com:TejasQ/SaddlebackVideoTranslation.git",
-    "author": "Tejas Kumar <tejas.kumar@mcmakler.de>",
+    "repository": "git@github.com:TejasQ/saddleback-video-i18n.git",
+    "author": "Carsten Koch<carsten.b.koch@gmail.com>",
     "license": "MIT",
     "devDependencies": {
     }
