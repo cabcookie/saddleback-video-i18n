@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+In terms of this script the version number MAJOR.MINOR.PATCH would mean the following:
+
+- MAJOR version when the changes would need a review of the templates that were created in After Effects or the approach of media files being used,
+- MINOR version when you add functionality in a backwards-compatible manner, and
+- PATCH version when you make backwards-compatible bug fixes.
+
 ## [Planned]
+- Add a description to the README how the templates need to be set up to be handled by the script
+- Add a logging mechanism. The log file should be saved in the After Effects file folder, so in case of an error problems can be easily reproduced
+- Split configuration in global and user specific configurations (one approach might be to search for configuration settings within the current AE file's directory and the directories up where the subfolder's settings file overwrites the parent folder's settings)
+- Find out if it is possible to store some settings within the After Effects file
 - Fix problem with text layer's line counts so that for one line text layers the text isn't cut anymore but is split or font size is being reduced
 - Fix problem with keyframe types being changed when a split position of a text layer was changed
 - Create a configuration UI
@@ -12,6 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Create a UI to search for split texts within the resulting main comps
 - Thinking of saving changes made to text layers (e.g. splits at different positions) being saved in the `Comp for In and Out` composition
 - Create an option for being able to handle not only left oriented texts for fill ins
+- Try adding a Automatic Update functionality where the script is checking the GitHub master branch for a new version and updates the appropriate files accordingly
 
 ## [Work In Progress]
 
