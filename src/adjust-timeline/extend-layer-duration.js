@@ -84,11 +84,19 @@
             }
 
         } catch (e) {
+            var propertyInfo = "";
+            try {
+                propertyInfo += "pGroupName = "+ pGroup.name;
+                propertyInfo = "[composition information: "+ propertyInfo +"]";
+            } catch (e) {
+                propertyInfo = "["+ propertyInfo +"; wasn't able to retrieve property's information]";
+            }
+
             throw new sbVideoScript.RuntimeError({
                 func: 'extendLayerDuration',
-                title: "Error extending the duration of the layer",
+                title: 'Error extending the duration of the layer: '+ propertyInfo,
                 message: e.message
-            })
+            });
         }
 
     }

@@ -32,10 +32,22 @@
                 'Full Screen 3-lines': {
                     youtubeAlternative: false,
                     isSizeAlternative: true,
-                    sizeAlternative: 'Full Screen YouTube',
+                    sizeAlternative: 'Full Screen 4-lines',
+                    isSelectable: false
+                },
+                'Full Screen 4-lines': {
+                    youtubeAlternative: false,
+                    isSizeAlternative: true,
+                    sizeAlternative: 'Two Columns',
                     isSelectable: false
                 },
                 'Full Screen YouTube': {
+                    youtubeAlternative: false,
+                    isSizeAlternative: true,
+                    sizeAlternative: 'Full Screen YouTube smaller',
+                    isSelectable: false
+                },
+                'Full Screen YouTube smaller': {
                     youtubeAlternative: false,
                     isSizeAlternative: false,
                     isSelectable: false
@@ -66,7 +78,7 @@
             },
             splitSettings: {
                 splitPositions: {
-                    allTexts: ['. ', '? ', '! ', '; ', ', ', ' - ', ' – ', '...', '…'],
+                    allTexts: ['. ', '? ', '! ', '; ', ', ', ' - ', ' – ', '...', '…', '. . .'],
                     'Text German': ['und'],
                     'Text English': ['and', 'than', 'then'],
                 },
@@ -115,7 +127,20 @@
             standardCSVDelimiter: "\t",
             maskLayerNamePrefix: 'Mask',
             lineLayerNamePrefix: 'Line',
-            fillInDelimiter: '[]',
+            fillInHandling: {
+                showFromBeginning: {
+                    delimiter: '&&&&',
+                    textMaskHandling: 'show'
+                },
+                showWithAnimation: {
+                    delimiter: '[]',
+                    textMaskHandling: 'animate'
+                },
+                hideText: {
+                    delimiter: '$$$$',
+                    textMaskHandling: 'hide'
+                }
+            },
             delimiterForNewLines: '{n}',
             maximumFontSizeChange: -0.15,
             animationProtectionTime: 2,

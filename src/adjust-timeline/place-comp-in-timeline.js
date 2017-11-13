@@ -38,9 +38,18 @@ it will be splitted in three parts: beginning, middle and end.
             return comp.name;
 
         } catch (e) {
+            var compInfo = "";
+            try {
+                compInfo += "targetCompName = "+ targetComp.name;
+                compInfo += "; compName = "+ comp.name;
+                compInfo = "[composition information: "+ compInfo +"]";
+            } catch (e) {
+                compInfo = "["+ compInfo +"; wasn't able to retrieve composition's information]";
+            }
+
             throw new sbVideoScript.RuntimeError({
                 func: 'placeCompInTimeline',
-                title: "Error placing composition in timeline",
+                title: 'Error placing composition in timeline: '+ compInfo,
                 message: e.message
             })
         }

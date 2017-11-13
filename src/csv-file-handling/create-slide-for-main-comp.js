@@ -1,10 +1,3 @@
-/**
-Create all compositions from a given text file based on templates.
-
-@IMPORTANT: You MUST have a default template composition for the different
-"types" of compositions => "Scripture", "Lower Third", etc.
-*/
-
 {
     try {
         importScript('errors/runtime-error');
@@ -40,13 +33,7 @@ Create all compositions from a given text file based on templates.
                     var newComp = sbVideoScript.createCompFromTemplate(templateName, line, main.footageFolder);
 
                     try {
-                        // DOING check if I really need to store resulting layers and text layer information +enhancement id:95 gh:39
                         resultingTextLayers = sbVideoScript.updateTextLayers(newComp, parsedContentLine, main.footageFolder);
-                        resultingLayer = {
-                            line: line,
-                            compType: templateName,
-                            textLayers: resultingTextLayers
-                        }
                     } catch (e) {
                         if (e instanceof sbVideoScript.FontToSmallError) {
                             var cfg = sbVideoScript.settings.compositionTemplates[templateName];
@@ -70,11 +57,7 @@ Create all compositions from a given text file based on templates.
                 var cfg = sbVideoScript.settings.compositionTemplates[templateName];
                 startTime = startTime - cfg.inBgFullyCovered;
                 endTime = endTime + cfg.outBgFullyCovered;
-                resultingLayer.layerName = sbVideoScript.placeCompInTimeline(newComp, main.comp, startTime, endTime, resultingTextLayers);
-                resultingLayer.startTime = startTime - 2 / main.frameRate;
-                resultingLayer.endTime = endTime + 2 / main.frameRate;
-
-                return resultingLayer;
+                sbVideoScript.placeCompInTimeline(newComp, main.comp, startTime, endTime, resultingTextLayers);
             }
 
         } catch (e) {
@@ -82,6 +65,7 @@ Create all compositions from a given text file based on templates.
             try {
                 mainCompInfo += "mainCompName = "+ main.comp.name;
                 mainCompInfo += "; templateName = "+ templateName;
+                mainCompInfo += "; lineNumber = "+ line;
                 mainCompInfo = "[main composition information: "+ mainCompInfo +"]";
             } catch (e) {
                 mainCompInfo = "["+ mainCompInfo +"; wasn't able to retrieve main composition's information]";

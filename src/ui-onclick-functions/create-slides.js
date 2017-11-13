@@ -1,5 +1,3 @@
-// TODO: do I really need the resultingMainComps? +enhancement id:97 gh:41
-
 {
     try {
         importScript('errors/runtime-error');
@@ -25,7 +23,6 @@
             var compForInOuts = sbVideoScript.getCompItem(sbVideoScript.settings.compositionNameForInOuts);
             var mainComps = sbVideoScript.settings.mainCompositionsToBuild;
             var mainCompsConfig = mainComps.compositionsConfig;
-            var resultingMainComps = {};
 
             if (!(compForInOuts && mainComps)) { throw new Error("Please make sure you first load the content and create a composition which shows the in/out points of the slides and content being used") }
 
@@ -38,15 +35,7 @@
 
                 main.comp.openInViewer();
 
-                var resultingLayers = [];
-                resultingMainComps[main.comp.name] = {
-                    comp: main.comp,
-                    layers: resultingLayers,
-                };
-
                 app.beginUndoGroup("Creating Slides for '" + main.comp.name + "'");
-
-                // TODO: Add a progress bar when creating the main compositions and their slides +feature gh:60 id:3
 
                 var layerLen = compForInOuts.layers.length - 1;
                 for (var l = layerLen; l > 0; l--) {
@@ -60,8 +49,7 @@
                     var templateName = layerNameArr.join(' ');
                     var startTime = layer.inPoint;
                     var endTime = layer.outPoint;
-                    var resultingLayer = sbVideoScript.createSlideForMainComp(main, csvLine, lineNumber, colPos, compConfig, startTime, endTime, templateName);
-                    resultingLayers.push(resultingLayer);
+                    sbVideoScript.createSlideForMainComp(main, csvLine, lineNumber, colPos, compConfig, startTime, endTime, templateName);
                 }
 
                 // master the audio and add the main comp to the render queue

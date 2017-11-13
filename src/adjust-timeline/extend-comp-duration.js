@@ -81,11 +81,21 @@
             comp.duration += offset;
 
         } catch (e) {
+            var compInfo = "";
+            try {
+                compInfo += "compName = "+ comp.name;
+                compInfo += "; shouldCompDuration = "+ Math.floor(shouldCompDuration);
+                compInfo += "; protection = "+ Math.floor(protection);
+                compInfo = "[composition information: "+ compInfo +"]";
+            } catch (e) {
+                compInfo = "["+ compInfo +"; wasn't able to retrieve composition's information]";
+            }
+
             throw new sbVideoScript.RuntimeError({
                 func: 'extendCompDuration',
-                title: "Error extending the duration of the composition",
+                title: 'Error extending the duration of the composition: '+ compInfo,
                 message: e.message
-            })
+            });
         }
     }
 }

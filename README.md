@@ -1,4 +1,4 @@
-# Saddleback Video Translation
+# Saddleback Video i18n
 
 This app, created to help with the creation of translated video files, exists to fulfill these purposes:
 
@@ -20,9 +20,9 @@ Install the script as mentioned in the `Getting started` section. Before you can
 
 In your Applications folder search for `Adobe After Effects CC ...`. You will find a folder `Scripts/ScriptUI Panels` there. This is where we will put all the scripts material.
 
-Download the file `start.js` from the folder `src` from this repository and put it into the folder `ScriptUI Panels` as shown above. After restarting Adobe After Effects you will find this script in the Window menu in After Effects. It is helpfull to rename the script's name to something usefull like `Saddleback Video Translation`. It should have the extension `.jsx` otherwise it will not be recognised by Adobe After Effects.
+Download the file `start.js` from the folder `src` from this repository and put it into the folder `ScriptUI Panels` as shown above. After restarting Adobe After Effects you will find this script in the Window menu in After Effects. It is helpful to rename the script's name to something useful like `Saddleback Video i18n`. It should have the extension `.jsx` otherwise it will not be recognized by Adobe After Effects.
 
-In addition you need to create a subfolder with the name `(Saddleback Translation Script Supporting Functions)` within the `ScriptUI Panels` folder. Download all subfolders from the `src` folder from this repository into this supporting functions folder.
+In addition you need to create a subfolder with the name `(Saddleback Video i18n Functions)` within the `ScriptUI Panels` folder. Download all subfolders from the `src` folder from this repository into this supporting functions folder.
 
 Now you are ready to use the script.
 

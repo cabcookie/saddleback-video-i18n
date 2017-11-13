@@ -4,7 +4,7 @@
         var fileAlreadyLoaded = sbVideoScript.filesLoaded[fileName];
         if (!fileAlreadyLoaded) {
             try {
-                var mainDirectory = '(Saddleback Translation Script Supporting Functions)/';
+                var mainDirectory = '(Saddleback Video i18n Functions)/';
                 var extension = '.js';
                 var file = new File(mainDirectory + fileName + extension);
                 file.open("r");
