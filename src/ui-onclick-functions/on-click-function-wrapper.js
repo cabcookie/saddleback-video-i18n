@@ -2,7 +2,7 @@
     try {
         importScript('errors/runtime-error');
         importScript('ui-onclick-functions/set-active-time-in-timeline');
-        importScript('ui-onclick-functions/choose-csv-file');
+        importScript('ui-onclick-functions/load-project-data');
         importScript('ui-onclick-functions/set-in-out-layer');
         importScript('ui-onclick-functions/create-slides');
         importScript('ui-onclick-functions/search-item-in-timeline');
@@ -24,8 +24,8 @@
                         case 'setActiveTimeInTimeline':
                             sbVideoScript.setActiveTimeInTimeline(paramArray[0], paramArray[1]);
                             break;
-                        case 'chooseCSVFile':
-                            sbVideoScript.chooseCSVFile();
+                        case 'loadProjectData':
+                            sbVideoScript.loadProjectData();
                             break;
                         case 'setInOutLayer':
                             sbVideoScript.setInOutLayer(paramArray[0], paramArray[1]);

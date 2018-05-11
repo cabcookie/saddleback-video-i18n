@@ -3,20 +3,19 @@
         importScript('errors/runtime-error');
         importScript('handle-items-and-folders/create-comp-for-in-outs');
         importScript('handle-items-and-folders/load-and-check-files-and-templates');
-        importScript('csv-file-handling/clone-column-positions-for-main-comp');
-        importScript('csv-file-handling/parse');
         importScript('ui-elements/set-content-list');
 
     } catch (e) {
         throw new sbVideoScript.RuntimeError({
-            func: "importScript's for chooseCSVFile",
+            func: "importScript's for loadProjectData",
             title: 'Error loading neccesary functions',
             message: e.message
         })
     }
 
-    sbVideoScript.chooseCSVFile = function () {
+    sbVideoScript.loadProjectData = function () {
         try {
+            sbVideoScript.loadProjectSettings();
             sbVideoScript.createCompForInOuts();
             sbVideoScript.loadAndCheckFilesAndTemplates();
             sbVideoScript.setContentList();
@@ -24,8 +23,8 @@
 
         } catch (e) {
             throw new sbVideoScript.RuntimeError({
-                func: 'chooseCSVFile',
-                title: 'Error choosing and loading CSV file',
+                func: 'loadProjectData',
+                title: 'Error loading the project data (settings, audio, CSV file)',
                 message: e.message
             });
         }

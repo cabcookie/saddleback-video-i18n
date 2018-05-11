@@ -2,7 +2,6 @@
     sbVideoScript.setTemplateList = function (dropdownlist) {
         try {
             importScript('errors/runtime-error');
-            importScript('config/configuration');
 
             var templates = sbVideoScript.settings.compositionTemplates;
             dropdownlist.removeAll();

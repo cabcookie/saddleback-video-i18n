@@ -15,50 +15,79 @@
             var mc = sbVideoScript.settings.mainCompositionsToBuild;
             var cc = mc.compositionsConfig;
 
-            // find the audioSettings for the current comp
-            var audioSettings;
+            // find the audioChannels for the current comp
+            var audioChannels;
             for (var i = 0, ccl = cc.length; i < ccl; i++) {
                 var n = cc[i].name;
                 if (comp.name.indexOf(n) === 0) {
-                    audioSettings = cc[i].audioSettings;
+                    audioChannels = cc[i].audioChannels;
                     break;
                 }
             }
 
-            // find the layer and take or add the Stereo Mixer effect
-            // the script can currently only handle English and German language
-            // settings of the After Effects UI
-            var lastLayer = comp.layers.length;
-            var layer = comp.layers[lastLayer];
+            var layersForAudioChannels = {};
+            var layersFound = 0;
 
+            for (var l = comp.layers.length; l > 0; l--) {
+                var layer = comp.layers[l];
+                for (var lang in sbVideoScript.audioFiles) {
+                    if (sbVideoScript.audioFiles[lang] === layer.source) {
+                        layersForAudioChannels[lang] = l;
+                        layersFound++;
+                        break;
+                    }
+                }
+                if (l + layersFound === comp.layers.length) {
+                    break;
+                }
+            }
             var propTrans = sbVideoScript.settings.propertyTranslations;
             var numberOfLanguagesSupported = propTrans.languages.length;
             var langIdx = sbVideoScript.settings.languageIndexNumber;
 
-            var effName = propTrans['Effects'][langIdx];
-            var mixName = propTrans['Stereo Mixer'][langIdx];
-            var lp = layer(effName)(mixName);
-
-            while (lp === null) {
+            for (var lang in audioChannels) {
                 try {
-                    lp = layer(effName).addProperty(mixName);
-                } catch (e) {
-                    langIdx += 1;
-                    if (langIdx >= numberOfLanguagesSupported) { throw new Error("Something is wrong with the language settings of the After Effects UI. We currently only support "+ propTrans.languages.join(', ') +" languages.") }
-                    effName = propTrans['Effects'][langIdx];
-                    mixName = propTrans['Stereo Mixer'][langIdx];
-                    lp = null;
-                }
-            }
+                    var settingForLanguage = audioChannels[lang];
+                    var layerIndex = layersForAudioChannels[lang];
+                    var layer = comp.layers[layerIndex];
 
-            sbVideoScript.settings.languageIndexNumber = langIdx;
+                    if (settingForLanguage === 'mute') {
+                        layer.audioEnabled = false;
+                    } else {
+                        var effName = propTrans['Effects'][langIdx];
+                        var mixName = propTrans['Stereo Mixer'][langIdx];
+                        var lp = layer(effName)(mixName);
 
-            // change the audio settings of the Stereo Mixer
-            for (var key in audioSettings) {
-                var transKey = propTrans[key][langIdx];
-                var prop = lp.property(transKey);
-                var newVal = audioSettings[key];
-                prop.setValue(newVal);
+                        while (lp === null) {
+                            try {
+                                lp = layer(effName).addProperty(mixName);
+                            } catch (e) {
+                                langIdx += 1;
+                                if (langIdx >= numberOfLanguagesSupported) { throw new Error("Something is wrong with the language settings of the After Effects UI. We currently only support "+ propTrans.languages.join(', ') +" languages.") }
+                                effName = propTrans['Effects'][langIdx];
+                                mixName = propTrans['Stereo Mixer'][langIdx];
+                                lp = null;
+                            }
+                        }
+
+                        sbVideoScript.settings.languageIndexNumber = langIdx;
+
+                        var key;
+
+                        if (settingForLanguage === 'left') {
+                            key = 'Right Level';
+                        } else if (settingForLanguage === 'right') {
+                            key = 'Left Level';
+                        } else {
+                            throw new Error("Wrong setting for the language of the audio channels. It must be set to [mute, left, right].");
+                        }
+
+                        var transKey = propTrans[key][langIdx];
+                        var prop = lp.property(transKey);
+                        prop.setValue(0);
+
+                    }
+                } catch (e) {}
             }
 
         } catch (e) {

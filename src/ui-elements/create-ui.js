@@ -30,7 +30,7 @@
                 "tab { \
                     text:'Prepare Video', \
                     alignment:['fill','fill'], alignChildren:['fill','top'], spacing:5, margins:5, \
-                    btnLoadFile: Button { text:'Load content...' }, \
+                    btnLoadProjectData: Button { text:'Reload CSV & Audio' }, \
                     titleTimeControls: StaticText { text:'Find In/Out positions'}, \
                     grpTimeControls: Group { \
                         alignChildren:['fill','top'], spacing:1, minimumSize:[215,-1], \
@@ -91,7 +91,7 @@
             sbVideoScript.createSlidesButton.enabled = false;
             sbVideoScript.changeFindInOutButtonsState(false, pan.grp.tabPreparation.grpTimeControls);
 
-            pan.grp.tabPreparation.btnLoadFile.onClick =        sbVideoScript.onClickFunctionWrapper('chooseCSVFile', []);
+            pan.grp.tabPreparation.btnLoadProjectData.onClick =        sbVideoScript.onClickFunctionWrapper('loadProjectData', []);
             sbVideoScript.groupInOutButtons.inButton.onClick =  sbVideoScript.onClickFunctionWrapper('setInOutLayer', ['inButton', 'outButton']);
             sbVideoScript.groupInOutButtons.outButton.onClick = sbVideoScript.onClickFunctionWrapper('setInOutLayer', ['outButton', 'inButton']);
             sbVideoScript.createSlidesButton.onClick =          sbVideoScript.onClickFunctionWrapper('createSlides',  []);     // createSlides(panel, statusObj, statusColors);

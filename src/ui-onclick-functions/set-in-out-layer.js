@@ -45,6 +45,7 @@
                 var newLayer = comp.layers.addSolid([1, 1, 1], newLayerName, comp.width, comp.height, comp.pixelAspect, duration);
                 sbVideoScript.moveItemToTrashFolder(newLayer);
                 newLayer.inPoint = store.inTime;
+                newLayer.enabled = false;
                 sbVideoScript.templateList.selection = null;
                 sbVideoScript.contentList.selection = null;
             }
