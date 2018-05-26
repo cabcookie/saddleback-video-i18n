@@ -35,10 +35,8 @@
         var sbVideoScript = {};
         importScript('errors/runtime-error');
         importScript('ui-elements/create-ui');
-        importScript('config/load-project-settings');
 
         sbVideoScript.settings = loadGlobalSettings();
-        sbVideoScript.loadProjectSettings();
         sbVideoScript.uiPanel = sbVideoScript.createUI(this);
     } catch (e) {
         alert(e.message);

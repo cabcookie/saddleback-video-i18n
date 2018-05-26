@@ -4,6 +4,7 @@
         importScript('handle-items-and-folders/create-comp-for-in-outs');
         importScript('handle-items-and-folders/load-and-check-files-and-templates');
         importScript('ui-elements/set-content-list');
+        importScript('config/load-project-settings');
 
     } catch (e) {
         throw new sbVideoScript.RuntimeError({
