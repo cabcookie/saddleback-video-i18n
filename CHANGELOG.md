@@ -26,6 +26,10 @@ In terms of this script the version number MAJOR.MINOR.PATCH would mean the foll
 
 ## Unreleased
 
+## [2.4.3] - 2018-05-26
+### Fixed
+- Fixed minor bug: script tried to load the project settings already while starting. When no project was open yet the script failed to start. Now the project settings are only loaded when you click on the button "Reload CSV & Audio".
+
 ## [2.4.2] - 2018-05-11
 ### Added
 - Split configuration in global and user specific configurations (one approach might be to search for configuration settings within the current AE file's directory and the directories up where the subfolder's settings file overwrites the parent folder's settings)
