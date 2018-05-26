@@ -7,7 +7,7 @@ Opens the file and returns it as an array which represents the lines of the file
 
     } catch (e) {
         throw new sbVideoScript.RuntimeError({
-            func: "importScript's for loadAndCheckFilesAndTemplates",
+            func: "importScript's for createArrayFromFile",
             title: 'Error loading neccesary functions',
             message: e.message
         })
@@ -15,9 +15,8 @@ Opens the file and returns it as an array which represents the lines of the file
 
     sbVideoScript.createArrayFromFile = function () {
         try {
-            var file = File.openDialog("Please choose the file with the relevant texts", "txt");
-            var doc = new File(file);
-            if (!doc.exists) throw new Error("No file found or couldn't read it!");
+            var csvFileName = sbVideoScript.settings.CSVFileName;
+            var file = new File(app.project.file.parent.fsName + '/' + csvFileName);
 
             var contentAry = [];
             file.open('r');

@@ -39,6 +39,13 @@
             // create a parent folder for the new footages
             var compFootageFolder = sbVideoScript.getFolder(compFootageFolderName, mainCompFolder.name);
 
+            for (var lang in sbVideoScript.audioFiles) {
+                var audioFile = sbVideoScript.audioFiles[lang];
+                if (audioFile !== sbVideoScript.loadVideoFootage()) {
+                    targetComp.layers.add(audioFile);
+                }
+            }
+
             return {
                 comp: targetComp,
                 footageFolder: compFootageFolder

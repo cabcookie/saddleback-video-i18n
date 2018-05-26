@@ -18,6 +18,8 @@
 
             var minDuration = sbVideoScript.settings.minimumSermonDurationInMin * 60;
 
+            // TODO: I want to implement a way to define the neccessary audio files within the local project settings file; AE should than automatically search for these files within the project folder
+
             // search for a video file with the mininum duration
             // or for a Dynamic Link file
             var items = app.project.items;

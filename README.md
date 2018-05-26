@@ -14,7 +14,7 @@ Install the script as mentioned in the `Getting started` section. Before you can
 
 * All neccessary templates for the footages to be created (lower thirds, scripture, etc.). To be identified as a template
 * The original video file either as an MP4 or as a Dynamic Link to Adobe Premiere
-* The file `config/configuration.js` should be reviewed as it defines which compositions needs to be created
+* The file `config/settings.json` should be reviewed as it defines which compositions needs to be created
 
 ## Getting Started
 
@@ -44,7 +44,7 @@ sbVideoScript = {
         'function1': true               // stores information which function was loaded already
         ...
     },
-    settings: { ... },                  // stores the script's settings (see config/configuration.js)
+    settings: { ... },                  // stores the script's settings (see config/settings.json)
     linesOfCSV: [...],                  // stores the lines of the CSV file in an array
     mediaFootage: {...},                // stores the main footage (the original video file)
     columnPositions: {                  // stores names and positions of columns within the loaded CSV file
@@ -54,7 +54,7 @@ sbVideoScript = {
             layerIndex: 2
         }]
     },
-    templates: [...],                   // all expected templates are mentioned in config/configuration.js in settings.compositionTemplates; they are loaded as compositions into this array
+    templates: [...],                   // all expected templates are mentioned in config/settings.json in settings.compositionTemplates; they are loaded as compositions into this array
     mainCompFolder: {...},              // reference to the folder for the main compositions
     trashFolder: {...},                 // reference to the trash folder
     createSlidesButton: {...},          // UI button object that will create the videos and its slides; it will be enabled or disabled here and there

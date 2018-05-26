@@ -11,22 +11,29 @@ In terms of this script the version number MAJOR.MINOR.PATCH would mean the foll
 - PATCH version when you make backwards-compatible bug fixes.
 
 ## [Planned]
+- Implement a check after clicking `Set Out Pos` to inform the user when one line from the CSV was stepped over
+- Reduce video quality in preview window for composition `Comp for In and Out` to ensure higher performance while stepping through the video
 - Add a description to the README how the templates need to be set up to be handled by the script
 - Add a logging mechanism. The log file should be saved in the After Effects file folder, so in case of an error problems can be easily reproduced
-- Split configuration in global and user specific configurations (one approach might be to search for configuration settings within the current AE file's directory and the directories up where the subfolder's settings file overwrites the parent folder's settings)
-- Find out if it is possible to store some settings within the After Effects file
-- Fix problem with text layer's line counts so that for one line text layers the text isn't cut anymore but is split or font size is being reduced
-- Fix problem with keyframe types being changed when a split position of a text layer was changed
-- Create a configuration UI
-- Create an option so save configuration settings
 - Create a UI to search for split texts within the resulting main comps
 - Thinking of saving changes made to text layers (e.g. splits at different positions) being saved in the `Comp for In and Out` composition
 - Create an option for being able to handle not only left oriented texts for fill ins
 - Try adding a Automatic Update functionality where the script is checking the GitHub master branch for a new version and updates the appropriate files accordingly
+- When a fill in start at the beginning of a line it doesn't work
+- When the In Pos is set, the script shows the duration of a layer when stepping forward or backward with the buttons; it also shows the timecode for the In Pos
 
 ## [Work In Progress]
 
-## [Unreleased]
+## Unreleased
+
+## [2.4.2] - 2018-05-11
+### Added
+- Split configuration in global and user specific configurations (one approach might be to search for configuration settings within the current AE file's directory and the directories up where the subfolder's settings file overwrites the parent folder's settings)
+- Handling of separate audio and video files.
+- In settings the name of the CSV file is represented as well as the names of the relevant audio files and these files are loaded automatically when starting the script. Thus the script `ui-onclick-functions/choose-csv-file` is being renamed to `load-project-data`.
+
+### Changed
+- All solid layers being created in `Comp for In and Out` are being disabled, so that you can now step back in the video and see the video not the solid.
 
 ## [2.4.1] - 2017-11-11
 ### Changed
