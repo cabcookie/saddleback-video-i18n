@@ -1,6 +1,7 @@
 {
     try {
         importScript('errors/runtime-error');
+        importScript('ui-elements/set-template-list');
 
     } catch (e) {
         throw new sbVideoScript.RuntimeError({
@@ -33,11 +34,6 @@
             }
         }
 
-        // function adaptSettings(parentSettings, childSettings) {
-        //     sbVideoScript.settings = updateSetting(sbVideoScript.settings, parentSettings);
-        //     return childSettings;
-        // }
-
         function loadSettings(folder, iteration, projSettingsArr) {
             if (iteration === MAX_PARENTS) return;
             var settings = {};
@@ -49,20 +45,11 @@
             loadSettings(folder.parent, iteration + 1, projSettingsArr);
         }
 
-        // function loadSettings(folder, iteration, childSettings) {
-        //     if (iteration === MAX_PARENTS) return childSettings;
-        //     var settings = {};
-        //     try {
-        //         settings = JSON.parse(loadFile(folder.fsName + '/project-settings.json'));
-        //     } catch (e) {
-        //     }
-        //     return adaptSettings(loadSettings(folder.parent, iteration + 1, settings), settings);
-        // }
-
         try {
             var projSettingsArr = [];
             loadSettings(app.project.file.parent, 0, projSettingsArr);
             adaptSettings(projSettingsArr);
+            sbVideoScript.setTemplateList(sbVideoScript.uiTemplateListDropDown);
 
         } catch (e) {
             throw new sbVideoScript.RuntimeError({

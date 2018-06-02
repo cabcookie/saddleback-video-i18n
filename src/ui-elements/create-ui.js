@@ -84,7 +84,8 @@
             sbVideoScript.createSlidesButton = pan.grp.tabPreparation.btnCreateSlides;
             sbVideoScript.groupInOutButtons = pan.grp.tabPreparation.grpInOut;
 
-            sbVideoScript.setTemplateList(pan.grp.tabPreparation.grpTemplate.dropdown);
+            sbVideoScript.uiTemplateListDropDown = pan.grp.tabPreparation.grpTemplate.dropdown;
+            sbVideoScript.setTemplateList(sbVideoScript.uiTemplateListDropDown);
             sbVideoScript.setContentList(pan.grp.tabPreparation.grpContentList);
             sbVideoScript.adjustUIForSplittedLayers(null, pan.grp.tabAlignText.grpTextLayers);
             sbVideoScript.groupInOutButtons.outButton.enabled = false;
