@@ -28,7 +28,7 @@ In terms of this script the version number MAJOR.MINOR.PATCH would mean the foll
 
 ## [2.4.4] - 2018-06-02
 ### Fixed
-- Project settings were not loaded. Fixed that issue.
+- Project settings were not loaded and list of templates were not updated accordingly. Fixed that issue.
 
 ## [2.4.3] - 2018-05-26
 ### Fixed
