@@ -9,8 +9,7 @@
         },
         "Full Screen": {
             "youtubeAlternative": false,
-            "isSizeAlternative": true,
-            "sizeAlternative": "Full Screen 2-lines",
+            "isSizeAlternative": false,
             "isSelectable": true
         },
         "Scripture": {
