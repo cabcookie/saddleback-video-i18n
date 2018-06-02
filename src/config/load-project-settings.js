@@ -38,7 +38,7 @@
             if (iteration === MAX_PARENTS) return;
             var settings = {};
             try {
-                settings = JSON.parse(loadFile(folder.fsName + 'project-settings.json'));
+                settings = JSON.parse(loadFile(folder.fsName + '/project-settings.json'));
                 projSettingsArr.push(settings);
             } catch (e) {
             }
