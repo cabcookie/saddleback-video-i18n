@@ -23,6 +23,8 @@ In terms of this script the version number MAJOR.MINOR.PATCH would mean the foll
 - When the In Pos is set, the script shows the duration of a layer when stepping forward or backward with the buttons; it also shows the timecode for the In Pos
 
 ## [Work In Progress]
+### Fixed
+- Some more specific error messages
 
 ## Unreleased
 
