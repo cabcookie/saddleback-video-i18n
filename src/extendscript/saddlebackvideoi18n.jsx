@@ -1,5 +1,5 @@
 /**
- * Copyright {%= year %} {%= author_name %}
+ * Copyright 2018 Carsten Koch
  * All rights reserved.
  */
 

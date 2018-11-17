@@ -11,6 +11,7 @@ In terms of this script the version number MAJOR.MINOR.PATCH would mean the foll
 - PATCH version when you make backwards-compatible bug fixes.
 
 ## [Planned]
+- Reimplementing the whole package using Common Extensibility Platform (CEP) from Adobe® Creative Cloud®
 - Implement a check after clicking `Set Out Pos` to inform the user when one line from the CSV was stepped over
 - Reduce video quality in preview window for composition `Comp for In and Out` to ensure higher performance while stepping through the video
 - Add a description to the README how the templates need to be set up to be handled by the script
@@ -26,7 +27,8 @@ In terms of this script the version number MAJOR.MINOR.PATCH would mean the foll
 ### Fixed
 - Some more specific error messages
 
-## Unreleased
+### Added
+- Created a boilerplate of a CEP project based on https://github.com/fcamarlinghi/grunt-init-cep
 
 ## [2.4.4] - 2018-06-02
 ### Fixed

@@ -1,20 +1,20 @@
-﻿module.exports =
+module.exports =
 {
     bundle: {
-        version: '{%= version %}',
-        id: '{%= id %}',
-        name: '{%= name %}',
-        author_name: '{%= author_name %}',
-        description: '{%= description %}',
-        ui_access: 'You can run this extension by choosing<br><b>Window &gt; Extensions &gt; {%= name %}.</b>',
+        version: '2.4.5',
+        id: 'com.sbb.saddleback.video.i18n',
+        name: 'SaddlebackVideoI18n',
+        author_name: 'Carsten Koch',
+        description: 'This app, created to help with the creation of translated video files.',
+        ui_access: 'You can run this extension by choosing<br><b>Window &gt; Extensions &gt; SaddlebackVideoI18n.</b>',
     },
 
     extensions: [{
-        version: '{%= version %}',
-        id: '{%= id %}.panel',
-        name: '{%= name %}',
-        main_path: '{%= basename %}.html',
-        script_path: 'extendscript/{%= basename %}.jsx',
+        version: '2.4.5',
+        id: 'com.sbb.saddleback.video.i18n.panel',
+        name: 'SaddlebackVideoI18n',
+        main_path: 'saddlebackvideoi18n.html',
+        script_path: 'extendscript/saddlebackvideoi18n.jsx',
         icons: {
             light: {
                 normal: 'icons/icon-light.png',
@@ -34,14 +34,14 @@
         // CC2017 and up
         {
             bundle: { manifest: 'bundle/manifest.bundle.cc2017.xml' },
-            products: {%= products %},
+            products: ["aftereffects"],
             source: 'src',
             families: ['CC2019', 'CC2018', 'CC2017'],
         },
         // Legacy versions
         {
             bundle: { manifest: 'bundle/manifest.bundle.cc.xml' },
-            products: {%= products %},
+            products: ["aftereffects"],
             source: 'src',
             families: ['CC2015.5', 'CC2015', 'CC2014', 'CC'],
         }
