@@ -1,5 +1,5 @@
 {
-    var SCRIPT_DIR = '~/(Saddleback Video i18n Functions)/';
+    var SCRIPT_DIR = '~/Saddleback-Video-i18n-Functions/';
 
     function loadFile(filePathAndName) {
         var file = new File(filePathAndName);

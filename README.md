@@ -24,9 +24,17 @@ In this folder you copy the `start.js` file from the folder `src`. Rename the fi
 
 Also download the folder `media_controls` from this repository and move it into the `Scripts/ScriptUI Panels` folder as well.
 
-In your home folder (the main folder for the user `~`) you create a folder `(Saddleback Video i18n Functions)`. Download all subfolders from the `src` folder from this repository into this supporting functions folder.
+In your home folder (the main folder for the user `~`) you create a folder `Saddleback-Video-i18n-Functions`. Download all subfolders from the `src` folder from this repository into this supporting functions folder.
 
-Now you are ready to use the script. Just run After Effects or restart it if you opened it already.
+Open After Effects and go to the scripting preferences:
+
+![Scripting Preferences](img/scripting-prefs.png)
+
+Set the options for enabling the script to write files and access the network:
+
+![Set Preferences](img/enable-options.png)
+
+Now you are ready to use the script. Just restart After Effects. You will then find the script in the `Window` menu.
 
 ## Any problems?
 
