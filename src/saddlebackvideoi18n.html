@@ -8,10 +8,31 @@
     <meta charset="utf-8" />
     <title>SaddlebackVideoI18n</title>
     <link href="css/saddlebackvideoi18n.css" rel="stylesheet" />
-</head>
-<body>
-    <h1>It Works!</h1>
+    <script src="js/ext.js"></script>
     <script src="js/lib/CSInterface-latest.js"></script>
-    <script src="js/saddlebackvideoi18n.js"></script>
+    <script src="js/lib/jquery-1.9.1.js"></script>
+    <script src="js/lib/Vulcan.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // For functions which require interaction at the JavaScript level, we provide these JQuery-based
+			// handlers, instead of directly invoking ExtendScript .This givs the JavaScript layer a chance
+            // to pass data into the ExtendScript layer, and process the results.
+            $("#sendtext").on("click", function (e) {
+                e.preventDefault();
+                var csInterface = new CSInterface();
+                csInterface.evalScript('$._ext.sendText()', null);
+            });
+        });
+    </script>
+</head>
+<body onload="onLoaded()">
+    <a href="javascript:history.go(0)">Refresh Panel</a>
+    <button id="sendtext">Send all texts from layers</button>
+    <!-- 
+        TODO: experiment with examples from these pages:
+            https://github.com/Adobe-CEP/Samples/tree/master/AfterEffectsPanel
+            https://github.com/Adobe-CEP/Samples/tree/master/TypeScript
+            https://github.com/Adobe-CEP/Getting-Started-guides
+    -->
 </body>
 </html>

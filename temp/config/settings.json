@@ -55,7 +55,7 @@
         }],
         "dateFormat": "dd.mm.yyyy"
     },
-    "minimumSermonDurationInMin": 10,
+    "minimumSermonDurationInMin": 2,
     "markersNeededInTemplateComps": 2,
     "preferredSermonFormat": "PRPROJ",
     "parentFolderFootageExtensions": " Footage [Script Results]",

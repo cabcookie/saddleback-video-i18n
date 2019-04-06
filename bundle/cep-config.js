@@ -5,7 +5,7 @@ module.exports =
         id: 'com.sbb.saddleback.video.i18n',
         name: 'SaddlebackVideoI18n',
         author_name: 'Carsten Koch',
-        description: 'This app, created to help with the creation of translated video files.',
+        description: 'A script to help translate video components from one language into another in After Effects for Saddleback Church sermons.',
         ui_access: 'You can run this extension by choosing<br><b>Window &gt; Extensions &gt; SaddlebackVideoI18n.</b>',
     },
 

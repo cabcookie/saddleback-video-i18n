@@ -28,7 +28,9 @@ In terms of this script the version number MAJOR.MINOR.PATCH would mean the foll
 - Some more specific error messages
 
 ### Added
-- Created a boilerplate of a CEP project based on https://github.com/fcamarlinghi/grunt-init-cep
+- Created a boilerplate of a CEP project based on https://github.com/fcamarlinghi/grunt-init-cep run `grunt cep:debug` to deploy and start the application in After Effects or `grunt cep:release` for releasing a version; see more information on grunt-cep here: https://github.com/fcamarlinghi/grunt-cep a very useful to for developing and deploying applications into Adobe CC applications
+- Used Typescript typings from here: https://github.com/pravdomil/Types-for-Adobe
+- Implemented a Typescript Panel demo from here: https://github.com/Adobe-CEP/Samples/tree/master/TypeScript
 
 ## [2.4.4] - 2018-06-02
 ### Fixed
