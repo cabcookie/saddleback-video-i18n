@@ -22,6 +22,8 @@ In your Applications folder search for `Adobe After Effects CC ...`. You will fi
 
 In this folder you copy the `start.js` file from the folder `src`. Rename the file to `Saddleback Video i18n 2.4.5.jsx`.
 
+Also download the folder `media_controls` from this repository and move it into the `Scripts/ScriptUI Panels` folder as well.
+
 In your home folder (the main folder for the user `~`) you create a folder `(Saddleback Video i18n Functions)`. Download all subfolders from the `src` folder from this repository into this supporting functions folder.
 
 Now you are ready to use the script. Just run After Effects or restart it if you opened it already.

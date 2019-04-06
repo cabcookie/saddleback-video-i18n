@@ -36,6 +36,7 @@ Fixed some issues getting the script running on this version
 
 - the script supporting functions now need to be in a different folder (documented in the README)
 - JSON is not a function anymore so I added one
+- mentioning `media-controls` folder to be copied as well (README)
 
 ## [2.4.4] - 2018-06-02
 
