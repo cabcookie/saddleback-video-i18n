@@ -15,8 +15,8 @@ Opens the file and returns it as an array which represents the lines of the file
 
     sbVideoScript.createArrayFromFile = function () {
         try {
-            var csvFileName = sbVideoScript.settings.CSVFileName;
-            var file = new File(app.project.file.parent.fsName + '/' + csvFileName);
+            var csvFileName = app.project.file.parent.fsName + '/' + sbVideoScript.settings.CSVFileName;
+            var file = new File(csvFileName);
 
             var contentAry = [];
             file.open('r');

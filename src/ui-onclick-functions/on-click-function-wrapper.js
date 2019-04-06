@@ -45,7 +45,7 @@
                 } catch (e) {
                     throw new sbVideoScript.RuntimeError({
                         func: 'onClickFunctionWrapper',
-                        title: "Error proceeding onClick function",
+                        title: "Error proceeding onClick function " + functionName + " with params " + JSON.stringify(paramArray),
                         message: e.message
                     });
                 }

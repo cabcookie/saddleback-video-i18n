@@ -1,5 +1,5 @@
 {
-    var SCRIPT_DIR = '(Saddleback Video i18n Functions)/';
+    var SCRIPT_DIR = '~/(Saddleback Video i18n Functions)/';
 
     function loadFile(filePathAndName) {
         var file = new File(filePathAndName);
@@ -25,20 +25,25 @@
                 throw new Error("Error while importing '"+ fileName + "': " + e.message);
             }
         }
-    }
+    }
+
 
     function loadGlobalSettings() {
-        return JSON.parse(loadFile(SCRIPT_DIR + 'config/settings.json'));
+        var fileContent = loadFile(SCRIPT_DIR + 'config/settings.json');
+        return JSON.parse(fileContent);
     }
 
     try {
         var sbVideoScript = {};
         importScript('errors/runtime-error');
         importScript('ui-elements/create-ui');
+        importScript('config/json');
 
         sbVideoScript.settings = loadGlobalSettings();
-        sbVideoScript.uiPanel = sbVideoScript.createUI(this);
+        sbVideoScript.uiPanel = sbVideoScript.createUI(this);
+
     } catch (e) {
         alert(e.message);
     }
-}
+
+}

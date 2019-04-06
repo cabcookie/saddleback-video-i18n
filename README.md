@@ -18,13 +18,13 @@ Install the script as mentioned in the `Getting started` section. Before you can
 
 ## Getting Started
 
-In your Applications folder search for `Adobe After Effects CC ...`. You will find a folder `Scripts/ScriptUI Panels` there. This is where we will put all the scripts material.
+In your Applications folder search for `Adobe After Effects CC ...`. You will find a folder `Scripts/ScriptUI Panels` there.
 
-Download the file `start.js` from the folder `src` from this repository and put it into the folder `ScriptUI Panels` as shown above. After restarting Adobe After Effects you will find this script in the Window menu in After Effects. It is helpful to rename the script's name to something useful like `Saddleback Video i18n`. It should have the extension `.jsx` otherwise it will not be recognized by Adobe After Effects.
+In this folder you copy the `start.js` file from the folder `src`. Rename the file to `Saddleback Video i18n 2.4.5.jsx`.
 
-In addition you need to create a subfolder with the name `(Saddleback Video i18n Functions)` within the `ScriptUI Panels` folder. Download all subfolders from the `src` folder from this repository into this supporting functions folder.
+In your home folder (the main folder for the user `~`) you create a folder `(Saddleback Video i18n Functions)`. Download all subfolders from the `src` folder from this repository into this supporting functions folder.
 
-Now you are ready to use the script.
+Now you are ready to use the script. Just run After Effects or restart it if you opened it already.
 
 ## Any problems?
 

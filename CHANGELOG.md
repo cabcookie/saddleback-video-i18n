@@ -1,4 +1,5 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
@@ -11,6 +12,7 @@ In terms of this script the version number MAJOR.MINOR.PATCH would mean the foll
 - PATCH version when you make backwards-compatible bug fixes.
 
 ## [Planned]
+
 - Implement a check after clicking `Set Out Pos` to inform the user when one line from the CSV was stepped over
 - Reduce video quality in preview window for composition `Comp for In and Out` to ensure higher performance while stepping through the video
 - Add a description to the README how the templates need to be set up to be handled by the script
@@ -26,34 +28,55 @@ In terms of this script the version number MAJOR.MINOR.PATCH would mean the foll
 
 ## Unreleased
 
+## [2.4.5] - 2019-04-06
+
+### Adapted for After Effects 2019 (Version 16.1.0 build 204)
+
+Fixed some issues getting the script running on this version
+
+- the script supporting functions now need to be in a different folder (documented in the README)
+- JSON is not a function anymore so I added one
+
 ## [2.4.4] - 2018-06-02
+
 ### Fixed
+
 - Project settings were not loaded and list of templates were not updated accordingly. Fixed that issue.
 
 ## [2.4.3] - 2018-05-26
+
 ### Fixed
+
 - Fixed minor bug: script tried to load the project settings already while starting. When no project was open yet the script failed to start. Now the project settings are only loaded when you click on the button "Reload CSV & Audio".
 
 ## [2.4.2] - 2018-05-11
+
 ### Added
+
 - Split configuration in global and user specific configurations (one approach might be to search for configuration settings within the current AE file's directory and the directories up where the subfolder's settings file overwrites the parent folder's settings)
 - Handling of separate audio and video files.
 - In settings the name of the CSV file is represented as well as the names of the relevant audio files and these files are loaded automatically when starting the script. Thus the script `ui-onclick-functions/choose-csv-file` is being renamed to `load-project-data`.
 
 ### Changed
+
 - All solid layers being created in `Comp for In and Out` are being disabled, so that you can now step back in the video and see the video not the solid.
 
 ## [2.4.1] - 2017-11-11
+
 ### Changed
+
 - We are not storing the resulting comps and layer information in an object anymore. We did that to make it easier to review them later. But the created main compositions store all the relevant information in their layers thus this information is much more accurate and change resistant than storing a static object.
 - Renamed package to `saddleback-video-i18n`
 - Adding several fill in options: Fill In is shown from the beginning of the slide, Fill In is shown with animation (as it was before), and Fill In text is not shown within the slide
 
 ### Fixed
+
 - Fixed problems with the fill in positions if a fill starts in the beginning of a line (line number > 1) or is spread over more than two lines (sbVideoScript.checkFillinLayerAddresses)
 
 ## [2.4.0] - 2017-10-05
+
 ### Fixed
+
 - The adjustment of font sizes didn't properly work for text layers with only one line
 - Solved problems in `sbVideoScript.adjustUIForSplittedLayers`: When a text included a `'` character jumping to a text layer with split text caused an error
 - Minor corrections on README.md
@@ -61,11 +84,15 @@ In terms of this script the version number MAJOR.MINOR.PATCH would mean the foll
 - enable/disable templates for `dropdownlist` within configuration UI
 
 ## [2.3.1] - 2017-09-02
+
 ### Added
+
 - Changelog
 
 ### Changed
+
 - added `sbVideoScript.settings.splitSettings.seperatorForSplitting`
 
 ### Fixed
+
 - Script had problems to handle '…' so replaced it with '...' at several locations; therefore added `sbVideoScript.settings.splitSettings.seperatorForSplitting`

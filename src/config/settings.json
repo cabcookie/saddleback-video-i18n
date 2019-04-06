@@ -1,97 +1,111 @@
 {
-    "compositionYouTubeNameExtension": " YouTube",
-    "compositionTemplates": {
-        "Lower Third": {
-            "youtubeAlternative": false,
-            "isSizeAlternative": true,
-            "sizeAlternative": "Full Screen",
-            "isSelectable": true
-        },
-        "Full Screen": {
-            "youtubeAlternative": false,
-            "isSizeAlternative": false,
-            "isSelectable": true
-        },
-        "Scripture": {
-            "youtubeAlternative": false,
-            "isSizeAlternative": false,
-            "splitLongTexts": true,
-            "isSelectable": true
-        }
+  "compositionYouTubeNameExtension": " YouTube",
+  "compositionTemplates": {
+    "Lower Third": {
+      "youtubeAlternative": false,
+      "isSizeAlternative": true,
+      "sizeAlternative": "Full Screen",
+      "isSelectable": true
     },
-    "splitSettings": {
-        "splitPositions": {
-            "allTexts": [". ", "? ", "! ", "; ", ", ", " - ", " – ", "...", "…", ". . ."],
-            "Text German": ["und"],
-            "Text English": ["and", "than", "then"],
-        },
-        "seperatorForSplitting": "...",
-        "markerForSplitPositions": "*{}*",
-        "bracketsForLayerCounting": "{#}",
-        "markSplittedCompsWith": " [splitted layers]",
-        "animationProtectionTime": 0.5,
+    "Full Screen": {
+      "youtubeAlternative": false,
+      "isSizeAlternative": false,
+      "isSelectable": true
     },
-    "badCharactersToBeReplaced": "''",
-    "compositionNameForInOuts": "Comp for In-Outs",
-    "folderNameForTrash": "ZZZ Temporary Items For Trash",
-    "CSVFileName": "fillins.csv",
-    "AEFootageFolderName": "Sermon Footage",
-    "mainCompositionsToBuild": {
-        "folderName": "Sermon  - DELETE BEFORE NEXT SCRIPT START",
-        "originalVideoLanguage": "English",
-        "additionalAudioFiles": {
-            "German": "german.mp3"
-        },
-        "compositionsConfig": [{
-            "name": "English Service",
-            "columnsToSwap": {
-                "German": 2,
-                "English": 1
-            },
-            "audioChannels": {
-                "German": "right",
-                "English": "left",
-            }
-        }],
-        "dateFormat": "dd.mm.yyyy"
-    },
-    "minimumSermonDurationInMin": 10,
-    "markersNeededInTemplateComps": 2,
-    "preferredSermonFormat": "PRPROJ",
-    "parentFolderFootageExtensions": " Footage [Script Results]",
-    "requiredFieldsInCSV": [],
-    "standardCSVDelimiter": "\t",
-    "maskLayerNamePrefix": "Mask",
-    "lineLayerNamePrefix": "Line",
-    "fillInHandling": {
-        "showFromBeginning": {
-            "delimiter": "&&&&",
-            "textMaskHandling": "show"
-        },
-        "showWithAnimation": {
-            "delimiter": "[]",
-            "textMaskHandling": "animate"
-        },
-        "hideText": {
-            "delimiter": "$$$$",
-            "textMaskHandling": "hide"
-        }
-    },
-    "delimiterForNewLines": "{n}",
-    "maximumFontSizeChange": -0.15,
-    "animationProtectionTime": 2,
-    "tolerancePxForMaskPositioning": 4,
-    "preComposedMaskLayerExtension": "-composed-",
-    "timeSeperator": ";",
-    "languageIndexNumber": 0,
-    "__comment": "the original language is used, otherwise index of the array will be set here",
-    "propertyTranslations": {
-        "languages": ["English", "German"],
-        "Effects": ["Effects", "Effekte"],
-        "Stereo Mixer": ["Stereo Mixer", "Stereo-Mischpult"],
-        "Left Level": ["Left Level", "Pegel links"],
-        "Right Level": ["Right Level", "Pegel rechts"],
-        "Left Pan": ["Left Pan", "Balance links"],
-        "Right Pan": ["Right Pan", "Balance rechts"]
+    "Scripture": {
+      "youtubeAlternative": false,
+      "isSizeAlternative": false,
+      "splitLongTexts": true,
+      "isSelectable": true
     }
+  },
+  "splitSettings": {
+    "splitPositions": {
+      "allTexts": [
+        ". ",
+        "? ",
+        "! ",
+        "; ",
+        ", ",
+        " - ",
+        " – ",
+        "...",
+        "…",
+        ". . ."
+      ],
+      "Text German": ["und"],
+      "Text English": ["and", "than", "then"]
+    },
+    "seperatorForSplitting": "...",
+    "markerForSplitPositions": "*{}*",
+    "bracketsForLayerCounting": "{#}",
+    "markSplittedCompsWith": " [splitted layers]",
+    "animationProtectionTime": 0.5
+  },
+  "badCharactersToBeReplaced": "''",
+  "compositionNameForInOuts": "Comp for In-Outs",
+  "folderNameForTrash": "ZZZ Temporary Items For Trash",
+  "CSVFileName": "fillins.csv",
+  "AEFootageFolderName": "Sermon Footage",
+  "mainCompositionsToBuild": {
+    "folderName": "Sermon  - DELETE BEFORE NEXT SCRIPT START",
+    "originalVideoLanguage": "English",
+    "additionalAudioFiles": {
+      "German": "german.mp3"
+    },
+    "compositionsConfig": [
+      {
+        "name": "English Service",
+        "columnsToSwap": {
+          "German": 2,
+          "English": 1
+        },
+        "audioChannels": {
+          "German": "right",
+          "English": "left"
+        }
+      }
+    ],
+    "dateFormat": "dd.mm.yyyy"
+  },
+  "minimumSermonDurationInMin": 2,
+  "markersNeededInTemplateComps": 2,
+  "preferredSermonFormat": "PRPROJ",
+  "parentFolderFootageExtensions": " Footage [Script Results]",
+  "requiredFieldsInCSV": [],
+  "standardCSVDelimiter": "\t",
+  "maskLayerNamePrefix": "Mask",
+  "lineLayerNamePrefix": "Line",
+  "fillInHandling": {
+    "showFromBeginning": {
+      "delimiter": "&&&&",
+      "textMaskHandling": "show"
+    },
+    "showWithAnimation": {
+      "delimiter": "[]",
+      "textMaskHandling": "animate"
+    },
+    "hideText": {
+      "delimiter": "$$$$",
+      "textMaskHandling": "hide"
+    }
+  },
+  "delimiterForNewLines": "{n}",
+  "maximumFontSizeChange": -0.15,
+  "animationProtectionTime": 2,
+  "tolerancePxForMaskPositioning": 4,
+  "preComposedMaskLayerExtension": "-composed-",
+  "timeSeperator": ";",
+  "languageIndexNumber": 0,
+  "__comment":
+    "the original language is used, otherwise index of the array will be set here",
+  "propertyTranslations": {
+    "languages": ["English", "German"],
+    "Effects": ["Effects", "Effekte"],
+    "Stereo Mixer": ["Stereo Mixer", "Stereo-Mischpult"],
+    "Left Level": ["Left Level", "Pegel links"],
+    "Right Level": ["Right Level", "Pegel rechts"],
+    "Left Pan": ["Left Pan", "Balance links"],
+    "Right Pan": ["Right Pan", "Balance rechts"]
+  }
 }
