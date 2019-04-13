@@ -26,6 +26,8 @@ In terms of this script the version number MAJOR.MINOR.PATCH would mean the foll
 
 ## [Work In Progress]
 
+- Trying to migrate to new CEP (Creative Cloud extension project) see [Status Quo on this](./CEP-status-quo.md)
+
 ## Unreleased
 
 ## [2.4.5] - 2019-04-06

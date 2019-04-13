@@ -1,9 +1,20 @@
-.idea
 .DS_store
 node_modules
-bundle.js
-SaddlebackVideoTranslation_*.jsx
-.imdone
-./.imdone
 
-trials
+lib-cov
+lcov.info
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+
+pids
+logs
+results
+build
+.grunt
+
+staging
