@@ -2,12 +2,18 @@
     "name": "saddleback-video-i18n",
     "version": "3.0.0",
     "description": "A script to help translate video components from one language into another in After Effects for Saddleback Church sermons.",
-    "main": "index.js",
+    "main": "src/saddleback-video-i18n.html",
     "repository": "git@github.com:cabcookie/saddleback-video-i18n.git",
     "author": "Carsten Koch<carsten.b.koch@gmail.com>",
     "license": "MIT",
     "devDependencies": {
         "grunt-cep": "~0.5.0",
-        "grunt": "~1.0.1"
+        "grunt": "~1.0.1",
+        "typescript": "^3.4.3",
+        "grunt-ts": "^6.0.0-beta.22",
+        "types-for-adobe": "^1.5.0"
+    },
+    "dependencies": {
+        "csinterface-ts": "^1.0.3"
     }
 }

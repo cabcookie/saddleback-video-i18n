@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "module": "none",
+        "noLib": true,
+        "types": [
+            "type-for-adobe/aftereffects/2018"
+        ]
+    }
+}
