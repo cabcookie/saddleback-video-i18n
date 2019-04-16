@@ -129,7 +129,7 @@ I created a basic `tsconfig.json` file that looks like this:
         "module": "none",
         "noLib": true,
         "types": [
-            "type-for-adobe/aftereffects/2018"
+            "types-for-adobe/aftereffects/2018"
         ]
     }
 }

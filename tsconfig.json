@@ -3,7 +3,9 @@
         "module": "none",
         "noLib": true,
         "types": [
-            "type-for-adobe/aftereffects/2018"
-        ]
+            "types-for-adobe/aftereffects/2018"
+        ],
+        "outDir": "src/build/js",
+        "rootDir": "src/ts"
     }
 }

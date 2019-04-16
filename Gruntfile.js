@@ -33,10 +33,9 @@ module.exports = function (grunt)
         },
     });
 
-    // Load grunt-cep tasks
-    grunt.loadNpmTasks('grunt-cep');
-
     // Load grunt-ts tasks
     grunt.loadNpmTasks('grunt-ts');
-    grunt.registerTask('default', ['ts']);
+
+    // Load grunt-cep tasks
+    grunt.loadNpmTasks('grunt-cep');
 };
