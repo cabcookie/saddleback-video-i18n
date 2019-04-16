@@ -3,7 +3,9 @@
  * All rights reserved.
  */
 
-body {
-    color: #8e8a8a;
+ body {
+    color: hsla(0, 2%, 75%, 1);
     background-color: #2b2b2b;
+    font-family: "Adobe Clean UX", "Lucida Grande", sans-serif;
+    font-size:small;
 }
