@@ -38,4 +38,8 @@ module.exports = function (grunt)
 
     // Load grunt-cep tasks
     grunt.loadNpmTasks('grunt-cep');
+
+    // create a build pipe
+    grunt.registerTask('debug', ['ts', 'cep:debug']);
+    grunt.registerTask('release', ['ts', 'cep:release']);
 };

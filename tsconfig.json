@@ -6,6 +6,6 @@
             "types-for-adobe/aftereffects/2018"
         ],
         "outDir": "src/build/js",
-        "rootDir": "src/ts"
+        "rootDir": "ts"
     }
 }
