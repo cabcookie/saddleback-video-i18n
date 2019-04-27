@@ -11,8 +11,9 @@ module.exports =
 
     extensions: [{
         version: '3.0.0',
+        type: 'Panel',
         id: 'org.saddlebackVideoI18n.panel',
-        name: 'saddleback-video-i18n',
+        name: 'Saddleback Video i18n',
         main_path: 'saddleback-video-i18n.html',
         script_path: 'extendscript/saddleback-video-i18n.jsx',
         icons: {
