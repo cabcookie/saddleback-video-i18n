@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "attach",
+            "name": "Attach to After Effects",
+            "port": 8003,
+            "webRoot": "${workspaceRoot}/dom_html/src/index.html",
+            "sourceMapPathOverrides": {
+                "webpack:///*": "${workspaceRoot}/*"
+            }
+        }
+    ]
+}
