@@ -5,7 +5,7 @@
         var file = new File(filePathAndName);
         file.open("r");
         var fileContent = file.read();
-        if (fileContent.length < 5) {
+        if (fileContent.length < 2) {
             throw new Error("File not found: "+filePathAndName);
         }
         file.close();
